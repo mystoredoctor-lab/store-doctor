@@ -43,10 +43,7 @@ export default function StoresPage() {
   };
 
   const handleRunScan = () => {
-    toast({
-      title: "Scan started",
-      description: "Your store is being analyzed...",
-    });
+    window.location.href = "/dashboard/scanning";
   };
 
   return (

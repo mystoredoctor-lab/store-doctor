@@ -12,6 +12,7 @@ import SetupGuidePage from "@/pages/setup-guide";
 import DashboardPage from "@/pages/dashboard/index";
 import StoresPage from "@/pages/dashboard/stores";
 import ScanPage from "@/pages/dashboard/scan";
+import ScanningPage from "@/pages/dashboard/scanning";
 import SettingsPage from "@/pages/dashboard/settings";
 import { DashboardLayout } from "@/pages/dashboard/layout";
 
@@ -40,6 +41,13 @@ function Router() {
         {() => (
           <DashboardLayout>
             <ScanPage />
+          </DashboardLayout>
+        )}
+      </Route>
+      <Route path="/dashboard/scanning">
+        {() => (
+          <DashboardLayout>
+            <ScanningPage />
           </DashboardLayout>
         )}
       </Route>

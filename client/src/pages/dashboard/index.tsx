@@ -16,10 +16,7 @@ export default function DashboardPage() {
   const { toast } = useToast();
 
   const handleRunScan = () => {
-    toast({
-      title: "Scan started",
-      description: "Your store is being analyzed...",
-    });
+    window.location.href = "/dashboard/scanning";
   };
 
   return (
