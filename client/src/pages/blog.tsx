@@ -130,7 +130,15 @@ export default function BlogPage() {
                   data-testid={`blog-post-${post.slug}`}
                 >
                   <div className="h-40 bg-muted overflow-hidden">
-                    <img src={post.image} alt={post.title} className="w-full h-full object-cover" />
+                    <img 
+                      src={post.image} 
+                      alt={post.title} 
+                      className="w-full h-full object-cover" 
+                      loading="lazy"
+                      width="400"
+                      height="300"
+                      decoding="async"
+                    />
                   </div>
                   <CardHeader>
                     <div className="flex items-center gap-2 mb-2">

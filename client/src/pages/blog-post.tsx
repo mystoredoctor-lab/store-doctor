@@ -606,7 +606,17 @@ export default function BlogPostPage() {
       <main className="flex-1">
         {/* Hero Image */}
         <div className="h-96 overflow-hidden bg-muted">
-          <img src={post.image} alt={post.title} className="w-full h-full object-cover" data-testid="blog-post-hero-image" />
+          <img 
+            src={post.image} 
+            alt={post.title} 
+            className="w-full h-full object-cover" 
+            data-testid="blog-post-hero-image"
+            loading="eager"
+            width="1200"
+            height="600"
+            decoding="async"
+            fetchPriority="high"
+          />
         </div>
 
         {/* Content */}
