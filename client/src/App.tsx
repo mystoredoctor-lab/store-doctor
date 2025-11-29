@@ -8,6 +8,9 @@ import NotFound from "@/pages/not-found";
 import LandingPage from "@/pages/landing";
 import PricingPage from "@/pages/pricing";
 import ContactPage from "@/pages/contact";
+import AboutPage from "@/pages/about";
+import TermsPage from "@/pages/terms";
+import PrivacyPage from "@/pages/privacy";
 import BlogPage from "@/pages/blog";
 import BlogPostPage from "@/pages/blog-post";
 import DashboardPage from "@/pages/dashboard/index";
@@ -23,6 +26,9 @@ function Router() {
       <Route path="/" component={LandingPage} />
       <Route path="/pricing" component={PricingPage} />
       <Route path="/contact" component={ContactPage} />
+      <Route path="/about" component={AboutPage} />
+      <Route path="/terms" component={TermsPage} />
+      <Route path="/privacy" component={PrivacyPage} />
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:slug" component={BlogPostPage} />
       <Route path="/dashboard">
