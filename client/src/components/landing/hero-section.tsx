@@ -55,43 +55,23 @@ export function HeroSection() {
           </div>
 
           <div className="relative lg:ml-8">
-            <div className="relative rounded-xl border bg-card p-6 shadow-2xl">
-              <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
-                <div>
-                  <p className="text-sm text-muted-foreground">Example Analysis</p>
-                  <h3 className="text-xl font-semibold">Your Store</h3>
-                </div>
-                <Badge className="bg-green-500/10 text-green-500 border-green-500/20">Healthy</Badge>
-              </div>
-
-              <div className="flex items-center justify-center py-8">
-                <HealthScoreGauge score={87} size="lg" />
-              </div>
-
-              <div className="grid grid-cols-3 gap-4 mt-6">
-                {[
-                  { label: "SEO", score: 92 },
-                  { label: "Speed", score: 78 },
-                  { label: "UX", score: 88 },
-                ].map((item) => (
-                  <div key={item.label} className="text-center p-3 rounded-lg bg-muted/50">
-                    <p className="text-xs text-muted-foreground">{item.label}</p>
-                    <p className="text-lg font-semibold">{item.score}</p>
+            <div className="space-y-4">
+              {[
+                { icon: CheckCircle, title: "AI-Powered Analysis", desc: "Automatically scan and analyze your entire store" },
+                { icon: CheckCircle, title: "Actionable Insights", desc: "Get specific, prioritized recommendations" },
+                { icon: CheckCircle, title: "Track Progress", desc: "Monitor improvements over time with detailed reports" },
+              ].map((item, index) => {
+                const Icon = item.icon;
+                return (
+                  <div key={index} className="flex gap-4 p-4 rounded-lg border bg-card/50">
+                    <Icon className="h-6 w-6 text-primary shrink-0 mt-1" />
+                    <div>
+                      <h4 className="font-semibold">{item.title}</h4>
+                      <p className="text-sm text-muted-foreground">{item.desc}</p>
+                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="absolute -bottom-4 -left-4 rounded-lg border bg-card p-4 shadow-lg max-w-[200px]">
-              <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-full bg-green-500/10 flex items-center justify-center shrink-0">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Issues Fixed</p>
-                  <p className="font-semibold">12 this week</p>
-                </div>
-              </div>
+                );
+              })}
             </div>
           </div>
         </div>
