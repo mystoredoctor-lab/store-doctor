@@ -58,8 +58,8 @@ export function HeroSection() {
             <div className="relative rounded-xl border bg-card p-6 shadow-2xl">
               <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
                 <div>
-                  <p className="text-sm text-muted-foreground">Store Health</p>
-                  <h3 className="text-xl font-semibold">Fashion Forward</h3>
+                  <p className="text-sm text-muted-foreground">Example Analysis</p>
+                  <h3 className="text-xl font-semibold">Your Store</h3>
                 </div>
                 <Badge className="bg-green-500/10 text-green-500 border-green-500/20">Healthy</Badge>
               </div>
