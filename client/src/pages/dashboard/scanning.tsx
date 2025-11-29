@@ -20,8 +20,9 @@ export default function ScanningPage() {
   const [, navigate] = useLocation();
   const [currentStep, setCurrentStep] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
-  const [startTime] = useState(Date.now());
+  const [startTime, setStartTime] = useState(Date.now());
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [scanId, setScanId] = useState(0);
 
   const store = mockStores[0];
   const progress = ((currentStep + 1) / scanSteps.length) * 100;
@@ -36,6 +37,8 @@ export default function ScanningPage() {
 
   // Main animation loop
   useEffect(() => {
+    if (isComplete) return;
+    
     let stepIndex = 0;
     let isMounted = true;
 
@@ -56,7 +59,7 @@ export default function ScanningPage() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [scanId, isComplete]);
 
   const formatTime = (seconds: number) => {
     return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
@@ -69,6 +72,9 @@ export default function ScanningPage() {
   const handleNewScan = () => {
     setCurrentStep(0);
     setIsComplete(false);
+    setStartTime(Date.now());
+    setElapsedTime(0);
+    setScanId((prev) => prev + 1);
   };
 
   const handleCancel = () => {
