@@ -43,7 +43,10 @@ export default function StoresPage() {
   };
 
   const handleRunScan = () => {
-    window.location.href = "/dashboard/scanning";
+    // Navigate to scanning page
+    const link = document.createElement('a');
+    link.href = '/dashboard/scanning';
+    link.click();
   };
 
   return (

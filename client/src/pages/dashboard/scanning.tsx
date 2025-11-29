@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "wouter";
+import { useNavigate } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -8,16 +8,16 @@ import { Search, Zap, Layout, TrendingUp, Shield, Smartphone, CheckCircle, Clock
 import { mockStores } from "@/lib/data";
 
 const scanSteps = [
-  { name: "SEO Analysis", icon: Search, duration: 2000 },
-  { name: "Speed Check", icon: Zap, duration: 2000 },
-  { name: "UX Evaluation", icon: Layout, duration: 2000 },
-  { name: "Conversion Rate", icon: TrendingUp, duration: 2000 },
-  { name: "Security Scan", icon: Shield, duration: 2000 },
-  { name: "Mobile Ready", icon: Smartphone, duration: 2000 },
+  { name: "SEO Analysis", icon: Search, duration: 1500 },
+  { name: "Speed Check", icon: Zap, duration: 1500 },
+  { name: "UX Evaluation", icon: Layout, duration: 1500 },
+  { name: "Conversion Rate", icon: TrendingUp, duration: 1500 },
+  { name: "Security Scan", icon: Shield, duration: 1500 },
+  { name: "Mobile Ready", icon: Smartphone, duration: 1500 },
 ];
 
 export default function ScanningPage() {
-  const [, navigate] = useLocation();
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [startTime] = useState(Date.now());
@@ -60,6 +60,10 @@ export default function ScanningPage() {
   const handleNewScan = () => {
     setCurrentStep(0);
     setIsComplete(false);
+  };
+
+  const handleCancel = () => {
+    navigate("/dashboard");
   };
 
   return (
