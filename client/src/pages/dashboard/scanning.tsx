@@ -83,20 +83,12 @@ export default function ScanningPage() {
 
   return (
     <div className="space-y-8" data-testid="page-scanning">
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold">Scanning Store</h1>
-          <p className="text-muted-foreground flex items-center gap-2 mt-1">
-            <Badge variant="outline">{store.name}</Badge>
-            <span className="text-sm">{store.url}</span>
-          </p>
-        </div>
-        <div className="text-right">
-          <div className="text-4xl font-bold tabular-nums" data-testid="text-scan-time">
-            {formatTime(elapsedTime)}
-          </div>
-          <p className="text-sm text-muted-foreground">Elapsed time</p>
-        </div>
+      <div>
+        <h1 className="text-3xl font-bold">Scanning Store</h1>
+        <p className="text-muted-foreground flex items-center gap-2 mt-1">
+          <Badge variant="outline">{store.name}</Badge>
+          <span className="text-sm">{store.url}</span>
+        </p>
       </div>
 
       <Card data-testid="card-scan-progress">
