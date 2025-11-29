@@ -51,7 +51,7 @@ export function Navbar() {
               <Link href="/dashboard" data-testid="button-login">Log In</Link>
             </Button>
             <Button asChild>
-              <Link href="/dashboard" data-testid="button-install">Install on Shopify</Link>
+              <Link href="/dashboard" data-testid="button-install">Get Started</Link>
             </Button>
           </div>
           <Button
@@ -83,7 +83,7 @@ export function Navbar() {
               <Link href="/dashboard">Log In</Link>
             </Button>
             <Button asChild>
-              <Link href="/dashboard">Install on Shopify</Link>
+              <Link href="/dashboard">Get Started</Link>
             </Button>
           </div>
         </div>
