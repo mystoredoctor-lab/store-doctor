@@ -4,11 +4,11 @@ const footerLinks = {
   Product: [
     { name: "Features", href: "/#features" },
     { name: "Pricing", href: "/pricing" },
-    { name: "Setup Guide", href: "/setup" },
+    { name: "Blog", href: "/blog" },
   ],
   Company: [
     { name: "About", href: "#" },
-    { name: "Blog", href: "#" },
+    { name: "Resources", href: "/blog" },
     { name: "Contact", href: "/contact" },
   ],
   Legal: [
