@@ -13,115 +13,84 @@ export default function PrivacyPage() {
             <div>
               <h2 className="text-2xl font-bold text-foreground mb-4">Introduction</h2>
               <p>
-                Store Doctor ("we," "us," "our," or "Company") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and otherwise handle your information when you use our website, mobile applications, and services (collectively, the "Services").
+                Store Doctor is an AI-powered store analysis service. This Privacy Policy explains what information we collect when you use our service to analyze your e-commerce store, and how we handle that information.
               </p>
             </div>
 
             <div>
               <h2 className="text-2xl font-bold text-foreground mb-4">1. Information We Collect</h2>
               
-              <h3 className="text-xl font-semibold text-foreground mb-3 mt-4">Information You Provide</h3>
-              <p className="mb-3">We collect information you provide directly to us, such as when you:</p>
+              <h3 className="text-xl font-semibold text-foreground mb-3 mt-4">Account Information</h3>
+              <p className="mb-3">When you create an account with Store Doctor, we collect:</p>
               <ul className="list-disc list-inside space-y-2 ml-4 mb-4">
-                <li>Create an account</li>
-                <li>Subscribe to our services</li>
-                <li>Submit forms or contact us</li>
-                <li>Provide store information for analysis</li>
+                <li>Your email address</li>
+                <li>Your store URL</li>
+                <li>Basic account credentials</li>
               </ul>
 
-              <h3 className="text-xl font-semibold text-foreground mb-3">Information Collected Automatically</h3>
-              <p className="mb-3">When you access our Services, we automatically collect certain information about your device and usage, including:</p>
+              <h3 className="text-xl font-semibold text-foreground mb-3">Store Data for Analysis</h3>
+              <p className="mb-3">When you initiate a store analysis, we collect publicly accessible information from your store, including:</p>
               <ul className="list-disc list-inside space-y-2 ml-4">
-                <li>Log data and usage information</li>
-                <li>Device information (IP address, browser type)</li>
-                <li>Cookies and similar tracking technologies</li>
-                <li>Analytics data about how you interact with our Services</li>
+                <li>Product information (descriptions, prices, images)</li>
+                <li>Store structure and page content</li>
+                <li>Publicly available meta information</li>
+                <li>Store performance metrics</li>
               </ul>
             </div>
 
             <div>
               <h2 className="text-2xl font-bold text-foreground mb-4">2. How We Use Your Information</h2>
-              <p className="mb-3">We use the information we collect for various purposes, including:</p>
+              <p className="mb-3">We use the information we collect solely for:</p>
               <ul className="list-disc list-inside space-y-2 ml-4">
-                <li>Providing and improving our Services</li>
-                <li>Processing transactions and sending related information</li>
-                <li>Sending transactional and promotional communications</li>
-                <li>Analyzing usage patterns and troubleshooting</li>
-                <li>Detecting and preventing fraud or security issues</li>
-                <li>Complying with legal obligations</li>
+                <li>Analyzing your store and generating health reports</li>
+                <li>Providing diagnostic recommendations</li>
+                <li>Maintaining your account and service access</li>
+                <li>Sending service-related updates and analysis results</li>
               </ul>
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-foreground mb-4">3. How We Share Your Information</h2>
-              <p className="mb-3">We do not sell your personal information. We may share your information in the following circumstances:</p>
+              <h2 className="text-2xl font-bold text-foreground mb-4">3. Data Security and Storage</h2>
+              <p>
+                We store your account information and analysis results securely. We do not access sensitive customer data or payment information from your store. All data collected is used only for generating your analysis reports.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-2xl font-bold text-foreground mb-4">4. What We Do Not Collect</h2>
+              <p className="mb-3">Store Doctor does not collect:</p>
               <ul className="list-disc list-inside space-y-2 ml-4">
-                <li>With service providers who assist us in operating our Services</li>
-                <li>With your consent or at your direction</li>
-                <li>To comply with legal obligations or enforce our agreements</li>
-                <li>In connection with a merger, acquisition, or sale of assets</li>
+                <li>Customer personal information or payment data</li>
+                <li>Cookies or tracking technology</li>
+                <li>Marketing or promotional data</li>
+                <li>Information beyond what's necessary for store analysis</li>
               </ul>
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-foreground mb-4">4. Data Security</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-4">5. Data Retention</h2>
               <p>
-                We implement appropriate technical and organizational measures designed to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet is 100% secure, and we cannot guarantee absolute security.
+                We retain your account information and analysis results for as long as your account is active. You may request deletion of your data at any time by contacting us through the contact form on our website.
               </p>
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-foreground mb-4">5. Your Privacy Rights</h2>
-              <p className="mb-3">Depending on your location, you may have certain rights regarding your personal information, including:</p>
-              <ul className="list-disc list-inside space-y-2 ml-4">
-                <li>The right to access your personal information</li>
-                <li>The right to correct inaccurate data</li>
-                <li>The right to delete your personal information</li>
-                <li>The right to opt-out of certain communications</li>
-              </ul>
-              <p className="mt-4">
-                To exercise any of these rights, please contact us at the information provided below.
+              <h2 className="text-2xl font-bold text-foreground mb-4">6. Changes to This Privacy Policy</h2>
+              <p>
+                We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the updated Privacy Policy on our website.
               </p>
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-foreground mb-4">6. Cookies and Tracking</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-4">7. Contact Us</h2>
               <p>
-                We use cookies, web beacons, and similar technologies to enhance your experience, remember your preferences, and understand how you use our Services. You can control cookies through your browser settings, though disabling cookies may affect functionality.
-              </p>
-            </div>
-
-            <div>
-              <h2 className="text-2xl font-bold text-foreground mb-4">7. Third-Party Links</h2>
-              <p>
-                Our Services may contain links to third-party websites and services that are not operated by us. This Privacy Policy does not apply to third-party services, and we are not responsible for their privacy practices. We encourage you to review their privacy policies.
-              </p>
-            </div>
-
-            <div>
-              <h2 className="text-2xl font-bold text-foreground mb-4">8. Children's Privacy</h2>
-              <p>
-                Our Services are not directed to children under 13 years of age. We do not knowingly collect personal information from children under 13. If we become aware that we have collected such information, we will take steps to delete it promptly.
-              </p>
-            </div>
-
-            <div>
-              <h2 className="text-2xl font-bold text-foreground mb-4">9. Changes to This Privacy Policy</h2>
-              <p>
-                We may update this Privacy Policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. We will notify you of any material changes by posting the updated Privacy Policy on our website and updating the "Last Updated" date.
-              </p>
-            </div>
-
-            <div>
-              <h2 className="text-2xl font-bold text-foreground mb-4">10. Contact Us</h2>
-              <p>
-                If you have questions about this Privacy Policy or our privacy practices, please contact us through the contact form on our website.
+                If you have questions about this Privacy Policy, please contact us through the contact form on our website.
               </p>
             </div>
 
             <div className="pt-8 border-t">
               <p className="text-sm">
-                Last updated: January 2025
+                Last updated: August 2024
               </p>
             </div>
           </div>

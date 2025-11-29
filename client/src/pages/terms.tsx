@@ -75,7 +75,7 @@ export default function TermsPage() {
 
             <div className="pt-8 border-t">
               <p className="text-sm">
-                Last updated: January 2025
+                Last updated: August 2024
               </p>
             </div>
           </div>
