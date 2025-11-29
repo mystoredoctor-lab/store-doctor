@@ -25,7 +25,6 @@ export default function ScanningPage() {
 
   const store = mockStores[0];
   const progress = ((currentStep + 1) / scanSteps.length) * 100;
-  const totalDuration = scanSteps.reduce((acc, step) => acc + step.duration, 0);
 
   // Update elapsed time
   useEffect(() => {
@@ -37,17 +36,18 @@ export default function ScanningPage() {
 
   // Auto-progress through steps
   useEffect(() => {
-    if (currentStep < scanSteps.length) {
-      const timer = setTimeout(() => {
-        if (currentStep === scanSteps.length - 1) {
-          setIsComplete(true);
-        } else {
-          setCurrentStep((prev) => prev + 1);
-        }
-      }, scanSteps[currentStep].duration);
-      return () => clearTimeout(timer);
-    }
-  }, [currentStep]);
+    if (isComplete) return;
+    
+    const timer = setTimeout(() => {
+      if (currentStep >= scanSteps.length - 1) {
+        setIsComplete(true);
+      } else {
+        setCurrentStep((prev) => prev + 1);
+      }
+    }, scanSteps[currentStep].duration);
+    
+    return () => clearTimeout(timer);
+  }, [currentStep, isComplete]);
 
   const formatTime = (seconds: number) => {
     return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
