@@ -58,6 +58,7 @@ export const dashboardStats = {
   averageHealthScore: 65,
   totalStores: 3,
   totalIssuesFound: 39,
+  scanStrategy: "Smart sampling - analyzes top products, key pages, and critical areas only to minimize token usage and scanning time for large stores"
 };
 
 export const mockScanCategories: ScanCategory[] = [
