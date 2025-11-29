@@ -16,7 +16,7 @@ const blogPosts = [
     author: "Sarah Chen",
     date: "January 15, 2025",
     readTime: "8 min read",
-    image: "🤖",
+    image: "https://images.unsplash.com/photo-1677442d019cecf8920f254b09b04b24143f3f7fa?w=400&h=300&fit=crop",
   },
   {
     id: 2,
@@ -28,7 +28,7 @@ const blogPosts = [
     author: "Marcus Johnson",
     date: "January 12, 2025",
     readTime: "12 min read",
-    image: "🔍",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop",
   },
   {
     id: 3,
@@ -40,7 +40,7 @@ const blogPosts = [
     author: "Emma Williams",
     date: "January 10, 2025",
     readTime: "10 min read",
-    image: "📈",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop",
   },
   {
     id: 4,
@@ -52,7 +52,7 @@ const blogPosts = [
     author: "John Smith",
     date: "January 8, 2025",
     readTime: "7 min read",
-    image: "📱",
+    image: "https://images.unsplash.com/photo-1512941691920-25bda36dc643?w=400&h=300&fit=crop",
   },
   {
     id: 5,
@@ -64,7 +64,7 @@ const blogPosts = [
     author: "Lisa Rodriguez",
     date: "January 5, 2025",
     readTime: "11 min read",
-    image: "⚡",
+    image: "https://images.unsplash.com/photo-1460925895917-adf4e565c472?w=400&h=300&fit=crop",
   },
   {
     id: 6,
@@ -76,7 +76,7 @@ const blogPosts = [
     author: "David Kim",
     date: "January 2, 2025",
     readTime: "9 min read",
-    image: "🔐",
+    image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=300&fit=crop",
   },
 ];
 
@@ -129,8 +129,8 @@ export default function BlogPage() {
                   className="overflow-hidden hover:border-primary/50 transition-all"
                   data-testid={`blog-post-${post.slug}`}
                 >
-                  <div className="h-40 bg-primary/10 flex items-center justify-center text-6xl">
-                    {post.image}
+                  <div className="h-40 bg-muted overflow-hidden">
+                    <img src={post.image} alt={post.title} className="w-full h-full object-cover" />
                   </div>
                   <CardHeader>
                     <div className="flex items-center gap-2 mb-2">

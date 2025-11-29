@@ -9,6 +9,7 @@ import LandingPage from "@/pages/landing";
 import PricingPage from "@/pages/pricing";
 import ContactPage from "@/pages/contact";
 import BlogPage from "@/pages/blog";
+import BlogPostPage from "@/pages/blog-post";
 import DashboardPage from "@/pages/dashboard/index";
 import StoresPage from "@/pages/dashboard/stores";
 import ScanPage from "@/pages/dashboard/scan";
@@ -23,6 +24,7 @@ function Router() {
       <Route path="/pricing" component={PricingPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/blog" component={BlogPage} />
+      <Route path="/blog/:slug" component={BlogPostPage} />
       <Route path="/dashboard">
         {() => (
           <DashboardLayout>
