@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "wouter";
+import { useLocation } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -17,7 +17,7 @@ const scanSteps = [
 ];
 
 export default function ScanningPage() {
-  const navigate = useNavigate();
+  const [, navigate] = useLocation();
   const [currentStep, setCurrentStep] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [startTime] = useState(Date.now());
