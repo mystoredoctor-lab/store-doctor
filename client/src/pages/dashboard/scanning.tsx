@@ -34,20 +34,29 @@ export default function ScanningPage() {
     return () => clearInterval(interval);
   }, [startTime]);
 
-  // Auto-progress through steps
+  // Main animation loop
   useEffect(() => {
-    if (isComplete) return;
-    
-    const timer = setTimeout(() => {
-      if (currentStep >= scanSteps.length - 1) {
-        setIsComplete(true);
-      } else {
-        setCurrentStep((prev) => prev + 1);
+    let stepIndex = 0;
+    let isMounted = true;
+
+    const runAnimation = async () => {
+      while (stepIndex < scanSteps.length && isMounted) {
+        setCurrentStep(stepIndex);
+        await new Promise((resolve) => setTimeout(resolve, scanSteps[stepIndex].duration));
+        stepIndex += 1;
       }
-    }, scanSteps[currentStep].duration);
-    
-    return () => clearTimeout(timer);
-  }, [currentStep, isComplete]);
+
+      if (isMounted && stepIndex >= scanSteps.length) {
+        setIsComplete(true);
+      }
+    };
+
+    runAnimation();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const formatTime = (seconds: number) => {
     return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
