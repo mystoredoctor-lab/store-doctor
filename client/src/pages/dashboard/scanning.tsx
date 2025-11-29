@@ -101,7 +101,7 @@ export default function ScanningPage() {
             {scanSteps.map((step, index) => {
               const Icon = step.icon;
               const isActive = currentStep === index;
-              const isComplete = index < currentStep || isComplete;
+              const isStepComplete = index < currentStep;
               const isPending = index > currentStep;
 
               return (
@@ -114,7 +114,7 @@ export default function ScanningPage() {
                     className={`p-2 rounded-lg shrink-0 transition-all ${
                       isActive
                         ? "bg-primary/20 text-primary animate-pulse"
-                        : isComplete
+                        : isStepComplete
                         ? "bg-green-500/10 text-green-500"
                         : "bg-muted text-muted-foreground"
                     }`}
@@ -125,11 +125,11 @@ export default function ScanningPage() {
                     <p className="font-medium">{step.name}</p>
                     <p className="text-xs text-muted-foreground">
                       {isActive && "In progress..."}
-                      {isComplete && !isActive && "Complete"}
+                      {isStepComplete && !isActive && "Complete"}
                       {isPending && "Waiting..."}
                     </p>
                   </div>
-                  {isComplete && !isActive && (
+                  {isStepComplete && !isActive && (
                     <CheckCircle className="h-5 w-5 text-green-500 shrink-0" data-testid={`check-${step.name.toLowerCase().replace(/\s+/g, '-')}`} />
                   )}
                   {isActive && (
