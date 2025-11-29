@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -16,23 +17,12 @@ import { RefreshCw, Download, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function ScanPage() {
-  const [isScanning, setIsScanning] = useState(false);
+  const [, navigate] = useLocation();
   const { toast } = useToast();
   const store = mockStores[0];
 
   const handleRunScan = () => {
-    setIsScanning(true);
-    toast({
-      title: "Scan started",
-      description: "This may take a few minutes...",
-    });
-    setTimeout(() => {
-      setIsScanning(false);
-      toast({
-        title: "Scan complete",
-        description: "Your store has been analyzed successfully.",
-      });
-    }, 3000);
+    navigate("/dashboard/scanning");
   };
 
   const handleExportReport = () => {
@@ -59,9 +49,9 @@ export default function ScanPage() {
             <Download className="mr-2 h-4 w-4" />
             Export Report
           </Button>
-          <Button onClick={handleRunScan} disabled={isScanning} data-testid="button-run-scan">
-            <RefreshCw className={`mr-2 h-4 w-4 ${isScanning ? "animate-spin" : ""}`} />
-            {isScanning ? "Scanning..." : "Run New Scan"}
+          <Button onClick={handleRunScan} data-testid="button-run-scan">
+            <RefreshCw className="mr-2 h-4 w-4" />
+            Run New Scan
           </Button>
         </div>
       </div>
