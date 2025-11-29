@@ -8,7 +8,7 @@ import NotFound from "@/pages/not-found";
 import LandingPage from "@/pages/landing";
 import PricingPage from "@/pages/pricing";
 import ContactPage from "@/pages/contact";
-import SetupGuidePage from "@/pages/setup-guide";
+import BlogPage from "@/pages/blog";
 import DashboardPage from "@/pages/dashboard/index";
 import StoresPage from "@/pages/dashboard/stores";
 import ScanPage from "@/pages/dashboard/scan";
@@ -22,7 +22,7 @@ function Router() {
       <Route path="/" component={LandingPage} />
       <Route path="/pricing" component={PricingPage} />
       <Route path="/contact" component={ContactPage} />
-      <Route path="/setup" component={SetupGuidePage} />
+      <Route path="/blog" component={BlogPage} />
       <Route path="/dashboard">
         {() => (
           <DashboardLayout>
