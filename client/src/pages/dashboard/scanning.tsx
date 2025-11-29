@@ -85,10 +85,10 @@ export default function ScanningPage() {
     <div className="space-y-8" data-testid="page-scanning">
       <div>
         <h1 className="text-3xl font-bold">Scanning Store</h1>
-        <p className="text-muted-foreground flex items-center gap-2 mt-1">
+        <div className="flex items-center gap-2 mt-2">
           <Badge variant="outline">{store.name}</Badge>
-          <span className="text-sm">{store.url}</span>
-        </p>
+          <span className="text-sm text-muted-foreground">{store.url}</span>
+        </div>
       </div>
 
       <Card data-testid="card-scan-progress">
