@@ -15,25 +15,25 @@ const stats: StatItem[] = [
   {
     value: "94%",
     label: "Health Improvement",
-    color: "purple",
+    color: "green",
   },
   {
     value: "$2.4M",
     label: "Revenue Recovered",
-    color: "pink",
+    color: "green",
   },
 ];
 
 const colorClasses = {
-  green: "bg-emerald-50 dark:bg-emerald-950/20",
-  purple: "bg-purple-50 dark:bg-purple-950/20",
-  pink: "bg-pink-50 dark:bg-pink-950/20",
+  green: "bg-primary/10 dark:bg-primary/10",
+  purple: "bg-primary/10 dark:bg-primary/10",
+  pink: "bg-primary/10 dark:bg-primary/10",
 };
 
 const textColorClasses = {
-  green: "text-emerald-700 dark:text-emerald-400",
-  purple: "text-purple-700 dark:text-purple-400",
-  pink: "text-pink-700 dark:text-pink-400",
+  green: "text-primary",
+  purple: "text-primary",
+  pink: "text-primary",
 };
 
 export function StatsSection() {

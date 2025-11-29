@@ -164,7 +164,7 @@ export const testimonials = [
   {
     name: "Sarah Chen",
     role: "Owner, Luxe Boutique",
-    avatar: "/professional-woman-headshot.png",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
     content:
       "Store Doctor helped me identify critical SEO issues I didn't even know existed. My organic traffic increased by 40% after implementing their recommendations.",
     rating: 5,
@@ -172,18 +172,18 @@ export const testimonials = [
   {
     name: "Marcus Johnson",
     role: "Founder, Tech Gadgets Pro",
-    avatar: "/professional-man-headshot.png",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
     content:
       "The speed optimization suggestions alone were worth it. My store loads 3 seconds faster now, and I've seen a noticeable drop in bounce rates.",
-    rating: 5,
+    rating: 4,
   },
   {
     name: "Emma Williams",
     role: "E-commerce Manager",
-    avatar: "/business-woman-headshot.png",
+    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop",
     content:
-      "Finally, a tool that gives actionable insights instead of vague suggestions. The conversion rate analysis helped us improve checkout by 25%.",
-    rating: 5,
+      "Good actionable insights and the conversion rate analysis helped us improve checkout by 25%. A bit of a learning curve with the interface though.",
+    rating: 4,
   },
 ];
 
