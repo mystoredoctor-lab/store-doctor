@@ -1,0 +1,253 @@
+import type { Store, Scan, User, ScanIssue, ScanRecommendation, ScanCategory } from "@shared/schema";
+import { pricingPlans } from "@shared/schema";
+
+export { pricingPlans };
+
+export const mockUser: User = {
+  id: "user_123",
+  email: "john@mystore.com",
+  name: "John Merchant",
+  avatar: null,
+  plan: "pro",
+  createdAt: new Date("2024-01-15"),
+};
+
+export const mockStores: Store[] = [
+  {
+    id: "store_1",
+    userId: "user_123",
+    name: "Fashion Forward",
+    url: "fashionforward.myshopify.com",
+    shopifyAccessToken: null,
+    healthScore: 87,
+    status: "healthy",
+    issuesCount: 3,
+    lastScanAt: new Date("2024-01-20"),
+    createdAt: new Date("2024-01-10"),
+  },
+  {
+    id: "store_2",
+    userId: "user_123",
+    name: "Tech Gadgets Pro",
+    url: "techgadgetspro.myshopify.com",
+    shopifyAccessToken: null,
+    healthScore: 62,
+    status: "warning",
+    issuesCount: 12,
+    lastScanAt: new Date("2024-01-18"),
+    createdAt: new Date("2024-01-05"),
+  },
+  {
+    id: "store_3",
+    userId: "user_123",
+    name: "Home & Garden Hub",
+    url: "homegardenhub.myshopify.com",
+    shopifyAccessToken: null,
+    healthScore: 45,
+    status: "critical",
+    issuesCount: 24,
+    lastScanAt: new Date("2024-01-15"),
+    createdAt: new Date("2024-01-01"),
+  },
+];
+
+export const dashboardStats = {
+  scansLeft: 7,
+  totalScans: 10,
+  lastScanDate: "2024-01-20",
+  averageHealthScore: 65,
+  totalStores: 3,
+  totalIssuesFound: 39,
+};
+
+export const mockScanCategories: ScanCategory[] = [
+  { name: "SEO", score: 78, icon: "search", color: "#10b981" },
+  { name: "Speed", score: 65, icon: "zap", color: "#f59e0b" },
+  { name: "UX", score: 82, icon: "layout", color: "#10b981" },
+  { name: "CRO", score: 58, icon: "trending-up", color: "#f59e0b" },
+  { name: "Security", score: 91, icon: "shield", color: "#10b981" },
+  { name: "Mobile", score: 69, icon: "smartphone", color: "#f59e0b" },
+];
+
+export const mockScanIssues: ScanIssue[] = [
+  {
+    id: "issue_1",
+    title: "Missing meta descriptions on 15 product pages",
+    category: "SEO",
+    severity: "high",
+    impact: "Can reduce click-through rates from search results by up to 30%",
+    recommendation: "Add unique, compelling meta descriptions (150-160 chars) to each product page",
+  },
+  {
+    id: "issue_2",
+    title: "Large unoptimized images causing slow load times",
+    category: "Speed",
+    severity: "high",
+    impact: "Page load time increased by 3.2 seconds, potentially losing 40% of visitors",
+    recommendation: "Compress images and use WebP format. Consider lazy loading for below-fold images",
+  },
+  {
+    id: "issue_3",
+    title: "No trust badges on checkout page",
+    category: "CRO",
+    severity: "medium",
+    impact: "Cart abandonment may increase by 15-20% without visible security indicators",
+    recommendation: "Add SSL badge, payment icons, and money-back guarantee near checkout button",
+  },
+  {
+    id: "issue_4",
+    title: "Mobile menu not accessible via keyboard",
+    category: "UX",
+    severity: "medium",
+    impact: "Accessibility issues affecting 15% of users",
+    recommendation: "Ensure all interactive elements are keyboard-navigable",
+  },
+  {
+    id: "issue_5",
+    title: "Missing alt text on hero images",
+    category: "SEO",
+    severity: "low",
+    impact: "Reduced image search visibility and accessibility concerns",
+    recommendation: "Add descriptive alt text to all images",
+  },
+];
+
+export const mockScanRecommendations: ScanRecommendation[] = [
+  {
+    category: "Quick Wins",
+    items: ["Add meta descriptions to product pages", "Compress hero images", "Add trust badges to checkout"],
+  },
+  {
+    category: "Medium Priority",
+    items: ["Implement lazy loading for images", "Improve mobile navigation", "Add structured data markup"],
+  },
+  {
+    category: "Long Term",
+    items: ["Complete accessibility audit", "Implement CDN for global performance", "A/B test checkout flow"],
+  },
+];
+
+export const mockScanResults = {
+  overallScore: 72,
+  scanDate: "2024-01-20T14:30:00Z",
+  categories: mockScanCategories,
+  criticalIssues: mockScanIssues,
+  recommendations: mockScanRecommendations,
+};
+
+export const scanHistoryData = [
+  { date: "Jan 1", score: 45 },
+  { date: "Jan 5", score: 52 },
+  { date: "Jan 10", score: 58 },
+  { date: "Jan 15", score: 65 },
+  { date: "Jan 20", score: 72 },
+];
+
+export const issueSeverityData = [
+  { severity: "Critical", count: 2, color: "#ef4444" },
+  { severity: "High", count: 5, color: "#f97316" },
+  { severity: "Medium", count: 12, color: "#f59e0b" },
+  { severity: "Low", count: 20, color: "#10b981" },
+];
+
+export const categoryBreakdownData = [
+  { name: "SEO", value: 25, color: "#3b82f6" },
+  { name: "Speed", value: 20, color: "#10b981" },
+  { name: "UX", value: 18, color: "#8b5cf6" },
+  { name: "CRO", value: 15, color: "#f59e0b" },
+  { name: "Security", value: 12, color: "#ef4444" },
+  { name: "Mobile", value: 10, color: "#06b6d4" },
+];
+
+export const testimonials = [
+  {
+    name: "Sarah Chen",
+    role: "Owner, Luxe Boutique",
+    avatar: "/professional-woman-headshot.png",
+    content:
+      "Store Doctor helped me identify critical SEO issues I didn't even know existed. My organic traffic increased by 40% after implementing their recommendations.",
+    rating: 5,
+  },
+  {
+    name: "Marcus Johnson",
+    role: "Founder, Tech Gadgets Pro",
+    avatar: "/professional-man-headshot.png",
+    content:
+      "The speed optimization suggestions alone were worth it. My store loads 3 seconds faster now, and I've seen a noticeable drop in bounce rates.",
+    rating: 5,
+  },
+  {
+    name: "Emma Williams",
+    role: "E-commerce Manager",
+    avatar: "/business-woman-headshot.png",
+    content:
+      "Finally, a tool that gives actionable insights instead of vague suggestions. The conversion rate analysis helped us improve checkout by 25%.",
+    rating: 5,
+  },
+];
+
+export const features = [
+  {
+    title: "SEO Analysis",
+    description: "Optimize meta tags, headings, alt text, and structured data for better search rankings.",
+    icon: "search",
+  },
+  {
+    title: "Speed Optimization",
+    description: "Identify slow-loading elements, large images, and render-blocking resources.",
+    icon: "zap",
+  },
+  {
+    title: "UX Evaluation",
+    description: "Assess navigation, accessibility, and overall user experience patterns.",
+    icon: "layout",
+  },
+  {
+    title: "Conversion Rate",
+    description: "Find friction points in your checkout and boost your conversion rates.",
+    icon: "trending-up",
+  },
+  {
+    title: "Security Check",
+    description: "Ensure SSL, secure payments, and protection against common vulnerabilities.",
+    icon: "shield",
+  },
+  {
+    title: "Mobile Ready",
+    description: "Test mobile responsiveness and touch-friendly interactions.",
+    icon: "smartphone",
+  },
+  {
+    title: "Competition Benchmark",
+    description: "Compare your store against industry standards and top competitors.",
+    icon: "bar-chart-2",
+  },
+  {
+    title: "Autofix Suggestions",
+    description: "One-click fixes for common issues to save time and effort.",
+    icon: "wand",
+  },
+];
+
+export const howItWorksSteps = [
+  {
+    step: "01",
+    title: "Connect Your Store",
+    description: "Install Store Doctor from the Shopify App Store with one click. No coding required.",
+  },
+  {
+    step: "02",
+    title: "Run Your First Scan",
+    description: "Our AI analyzes your entire store across 6 critical categories in just minutes.",
+  },
+  {
+    step: "03",
+    title: "Get Recommendations",
+    description: "Receive prioritized, actionable recommendations tailored to your store.",
+  },
+  {
+    step: "04",
+    title: "Implement & Track",
+    description: "Apply fixes, track improvements, and watch your health score rise.",
+  },
+];

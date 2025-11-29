@@ -3,14 +3,51 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeProvider } from "@/components/theme-provider";
 import NotFound from "@/pages/not-found";
+import LandingPage from "@/pages/landing";
+import PricingPage from "@/pages/pricing";
+import ContactPage from "@/pages/contact";
+import DashboardPage from "@/pages/dashboard/index";
+import StoresPage from "@/pages/dashboard/stores";
+import ScanPage from "@/pages/dashboard/scan";
+import SettingsPage from "@/pages/dashboard/settings";
+import { DashboardLayout } from "@/pages/dashboard/layout";
 
 function Router() {
   return (
     <Switch>
-      {/* Add pages below */}
-      {/* <Route path="/" component={Home}/> */}
-      {/* Fallback to 404 */}
+      <Route path="/" component={LandingPage} />
+      <Route path="/pricing" component={PricingPage} />
+      <Route path="/contact" component={ContactPage} />
+      <Route path="/dashboard">
+        {() => (
+          <DashboardLayout>
+            <DashboardPage />
+          </DashboardLayout>
+        )}
+      </Route>
+      <Route path="/dashboard/stores">
+        {() => (
+          <DashboardLayout>
+            <StoresPage />
+          </DashboardLayout>
+        )}
+      </Route>
+      <Route path="/dashboard/scan">
+        {() => (
+          <DashboardLayout>
+            <ScanPage />
+          </DashboardLayout>
+        )}
+      </Route>
+      <Route path="/dashboard/settings">
+        {() => (
+          <DashboardLayout>
+            <SettingsPage />
+          </DashboardLayout>
+        )}
+      </Route>
       <Route component={NotFound} />
     </Switch>
   );
@@ -19,10 +56,12 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
+      <ThemeProvider defaultTheme="dark" storageKey="storedoctor-theme">
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
