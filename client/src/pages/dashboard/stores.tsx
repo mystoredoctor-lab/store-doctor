@@ -19,7 +19,7 @@ import { Plus, Search, Store, Shield, Zap, BarChart3, Lock } from "lucide-react"
 import { useToast } from "@/hooks/use-toast";
 import type { Store as StoreType } from "@shared/schema";
 
-const STORES_STORAGE_KEY = "storedoctor_connected_stores_v1";
+export const STORES_STORAGE_KEY = "storedoctor_connected_stores_v1";
 
 export default function StoresPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -102,7 +102,7 @@ export default function StoresPage() {
               Connect Store
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg rounded-2xl">
             <DialogHeader>
               <DialogTitle className="text-2xl">Connect Your Shopify Store</DialogTitle>
               <DialogDescription>

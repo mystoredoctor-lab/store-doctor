@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,13 +18,39 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { mockUser, pricingPlans } from "@/lib/data";
-import { User, CreditCard, Mail, Key, AlertTriangle, Trash2 } from "lucide-react";
+import { User, CreditCard, Mail, Key, AlertTriangle, Trash2, Store, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { STORES_STORAGE_KEY } from "@/pages/dashboard/stores";
+import type { Store as StoreType } from "@shared/schema";
 
 export default function SettingsPage() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [stores, setStores] = useState<StoreType[]>([]);
   const { toast } = useToast();
   const currentPlan = pricingPlans.find((p) => p.id === mockUser.plan);
+
+  // Load stores from localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem(STORES_STORAGE_KEY);
+    if (stored) {
+      try {
+        setStores(JSON.parse(stored));
+      } catch {
+        setStores([]);
+      }
+    }
+  }, []);
+
+  const handleRemoveStore = (storeId: string) => {
+    const storeName = stores.find(s => s.id === storeId)?.url || "Store";
+    const updatedStores = stores.filter(s => s.id !== storeId);
+    setStores(updatedStores);
+    localStorage.setItem(STORES_STORAGE_KEY, JSON.stringify(updatedStores));
+    toast({
+      title: "Store removed",
+      description: `${storeName} has been disconnected.`,
+    });
+  };
 
   const handleSaveProfile = () => {
     toast({
@@ -128,6 +154,47 @@ export default function SettingsPage() {
                   Update
                 </Button>
               </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Store className="h-5 w-5" />
+            <CardTitle>Connected Stores</CardTitle>
+          </div>
+          <CardDescription>Manage your connected Shopify stores.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {stores.length > 0 ? (
+            <div className="space-y-3">
+              {stores.map((store) => (
+                <div
+                  key={store.id}
+                  className="flex items-center justify-between p-4 rounded-lg border bg-muted/30"
+                >
+                  <div className="min-w-0">
+                    <p className="font-medium truncate">{store.name}</p>
+                    <p className="text-sm text-muted-foreground truncate">{store.url}</p>
+                  </div>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="shrink-0 text-destructive hover:text-destructive"
+                    onClick={() => handleRemoveStore(store.id)}
+                    data-testid={`button-remove-store-${store.id}`}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <Store className="h-12 w-12 mx-auto text-muted-foreground mb-4 opacity-50" />
+              <p className="text-muted-foreground">No stores connected yet</p>
             </div>
           )}
         </CardContent>
