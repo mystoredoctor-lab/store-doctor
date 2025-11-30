@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { HealthScoreGauge } from "@/components/ui/health-score-gauge";
 import { ArrowRight, CheckCircle, Sparkles } from "lucide-react";
+import dashboardImage from "@assets/generated_images/store_health_dashboard_scan_results.png";
 
 export function HeroSection() {
   return (
@@ -52,24 +53,12 @@ export function HeroSection() {
           </div>
 
           <div className="relative lg:ml-8">
-            <div className="space-y-4">
-              {[
-                { icon: CheckCircle, title: "AI-Powered Analysis", desc: "Automatically scan and analyze your entire store" },
-                { icon: CheckCircle, title: "Actionable Insights", desc: "Get specific, prioritized recommendations" },
-                { icon: CheckCircle, title: "Track Progress", desc: "Monitor improvements over time with detailed reports" },
-              ].map((item, index) => {
-                const Icon = item.icon;
-                return (
-                  <div key={index} className="flex gap-4 p-4 rounded-lg border bg-card/50">
-                    <Icon className="h-6 w-6 text-primary shrink-0 mt-1" />
-                    <div>
-                      <h4 className="font-semibold">{item.title}</h4>
-                      <p className="text-sm text-muted-foreground">{item.desc}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <img 
+              src={dashboardImage} 
+              alt="Store health analysis dashboard showing scan results with scores for SEO, Speed, UX, CRO, Security, and Mobile"
+              className="rounded-lg border shadow-lg"
+              data-testid="img-dashboard-preview"
+            />
           </div>
         </div>
       </div>
