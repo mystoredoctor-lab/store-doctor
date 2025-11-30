@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Loader2, Store, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { mockUser } from "@/lib/data";
 
 const connectStoreSchema = z.object({
   shopUrl: z.string().min(1, "Store URL is required").regex(/\.myshopify\.com$/, "Must be a valid Shopify store URL"),
@@ -161,7 +162,14 @@ export default function ConnectStorePage() {
               <Button
                 variant="outline"
                 className="mt-4 w-full"
-                onClick={() => setShowAddStore(true)}
+                onClick={() => {
+                  const maxStores = mockUser.plan === "free" ? 1 : mockUser.plan === "pro" ? 2 : 5;
+                  if (stores.length >= maxStores) {
+                    navigate("/pricing");
+                  } else {
+                    setShowAddStore(true);
+                  }
+                }}
                 data-testid="button-add-another-store"
               >
                 <ArrowRight className="mr-2 h-4 w-4" />
