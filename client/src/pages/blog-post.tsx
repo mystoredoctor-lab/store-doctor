@@ -1,12 +1,12 @@
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, Calendar, User } from "lucide-react";
-import { Link } from "wouter";
+import { useBlogPosts } from "@/hooks/useBlogPosts";
 
-const blogPosts: Record<string, any> = {
+const staticBlogPostContent: Record<string, any> = {
   "ai-powered-store-analysis": {
     title: "How AI-Powered Store Analysis is Revolutionizing E-commerce in 2025",
     category: "Technology",

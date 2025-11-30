@@ -5,32 +5,34 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Search, Plus, Edit, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useBlogPosts, type BlogPost } from "@/hooks/useBlogPosts";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
-const initialPosts = [
-  { id: 1, title: "How AI-Powered Store Analysis is Revolutionizing E-commerce in 2025", date: "November 15, 2025", author: "Sarah Chen", views: 2340 },
-  { id: 2, title: "The Complete Guide to E-commerce SEO: Strategies That Drive Organic Traffic in 2025", date: "November 12, 2025", author: "Marcus Johnson", views: 1850 },
-  { id: 3, title: "5 Critical Issues Killing Your Online Store's Conversion Rate and How to Fix Them", date: "October 28, 2025", author: "Emma Williams", views: 1620 },
-  { id: 4, title: "Mobile Optimization in E-commerce: Why Your Store Must Be Mobile-First in 2025", date: "October 22, 2025", author: "John Smith", views: 1450 },
-];
-
 export default function AdminBlogPage() {
-  const [posts, setPosts] = useLocalStorage("storedoctor_blog_posts", initialPosts);
+  const defaultBlogPosts = useBlogPosts();
+  const [posts, setPosts] = useLocalStorage<BlogPost[]>("storedoctor_blog_posts", defaultBlogPosts);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formData, setFormData] = useState({ title: "", author: "", category: "", content: "" });
 
   const handleSubmit = () => {
     if (editingId) {
-      setPosts(posts.map(p => p.id === editingId ? { ...p, title: formData.title, author: formData.author } : p));
+      setPosts(posts.map(p => p.id === editingId ? { ...p, title: formData.title, author: formData.author, excerpt: formData.title.substring(0, 80), content: formData.content } : p));
       setEditingId(null);
     } else {
+      const newId = posts.length > 0 ? Math.max(...posts.map(p => p.id)) + 1 : 1;
+      const slug = formData.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
       setPosts([...posts, { 
-        id: Math.max(...posts.map(p => p.id)) + 1, 
+        id: newId, 
         title: formData.title, 
-        author: formData.author, 
+        author: formData.author,
+        slug,
+        excerpt: formData.title.substring(0, 80),
+        content: formData.content,
+        category: formData.category || 'General',
         date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-        views: 0
+        readTime: '10 min read',
+        image: 'https://images.unsplash.com/photo-1677442d019cecf8920f254b09b04b24143f3f7fa?w=400&h=300&fit=crop'
       }]);
     }
     setFormData({ title: "", author: "", category: "", content: "" });
