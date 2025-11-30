@@ -102,7 +102,7 @@ export default function StoresPage() {
               Connect Store
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg rounded-3xl shadow-2xl border-0 bg-gradient-to-br from-card to-card/95">
+          <DialogContent>
             <DialogHeader>
               <DialogTitle className="text-2xl">Connect Your Shopify Store</DialogTitle>
               <DialogDescription>
