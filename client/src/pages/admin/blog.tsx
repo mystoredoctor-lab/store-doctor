@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Search, Plus, Edit, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { Search, Plus, Edit, Trash2, X } from "lucide-react";
+import { useState, useRef } from "react";
 import { useBlogPosts, type BlogPost } from "@/hooks/useBlogPosts";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
@@ -13,11 +13,13 @@ export default function AdminBlogPage() {
   const [posts, setPosts] = useLocalStorage<BlogPost[]>("storedoctor_blog_posts_v2", defaultBlogPosts);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [formData, setFormData] = useState({ title: "", author: "", category: "", content: "" });
+  const [formData, setFormData] = useState({ title: "", author: "", category: "", content: "", imageUrl: "" });
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
 
   const handleSubmit = () => {
     if (editingId) {
-      setPosts(posts.map(p => p.id === editingId ? { ...p, title: formData.title, author: formData.author, excerpt: formData.title.substring(0, 80), content: formData.content } : p));
+      setPosts(posts.map(p => p.id === editingId ? { ...p, title: formData.title, author: formData.author, excerpt: formData.title.substring(0, 80), content: formData.content, image: formData.imageUrl } : p));
       setEditingId(null);
     } else {
       const newId = posts.length > 0 ? Math.max(...posts.map(p => p.id)) + 1 : 1;
@@ -32,21 +34,36 @@ export default function AdminBlogPage() {
         category: formData.category || 'General',
         date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
         readTime: '10 min read',
-        image: 'https://images.unsplash.com/photo-1677442d019cecf8920f254b09b04b24143f3f7fa?w=400&h=300&fit=crop'
+        image: formData.imageUrl || 'https://images.unsplash.com/photo-1677442d019cecf8920f254b09b04b24143f3f7fa?w=400&h=300&fit=crop'
       }]);
     }
-    setFormData({ title: "", author: "", category: "", content: "" });
+    setFormData({ title: "", author: "", category: "", content: "", imageUrl: "" });
+    setImagePreview("");
     setShowForm(false);
   };
 
   const handleEdit = (post: typeof posts[0]) => {
-    setFormData({ title: post.title, author: post.author, category: "", content: "" });
+    setFormData({ title: post.title, author: post.author, category: post.category, content: post.content, imageUrl: post.image });
+    setImagePreview(post.image);
     setEditingId(post.id);
     setShowForm(true);
   };
 
   const handleDelete = (id: number) => {
     setPosts(posts.filter(p => p.id !== id));
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const dataUrl = event.target?.result as string;
+        setImagePreview(dataUrl);
+        setFormData({ ...formData, imageUrl: dataUrl });
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -56,7 +73,7 @@ export default function AdminBlogPage() {
           <h1 className="text-3xl font-bold">Blog Management</h1>
           <p className="text-muted-foreground">Create, edit, and manage blog posts.</p>
         </div>
-        <Button onClick={() => { setShowForm(!showForm); setEditingId(null); setFormData({ title: "", author: "", category: "", content: "" }); }} data-testid="button-new-post">
+        <Button onClick={() => { setShowForm(!showForm); setEditingId(null); setFormData({ title: "", author: "", category: "", content: "", imageUrl: "" }); setImagePreview(""); }} data-testid="button-new-post">
           <Plus className="h-4 w-4 mr-2" />
           New Post
         </Button>
@@ -68,25 +85,27 @@ export default function AdminBlogPage() {
             <CardTitle>{editingId ? "Edit Post" : "Create New Post"}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div>
-              <Label>Title</Label>
-              <Input 
-                value={formData.title}
-                onChange={(e) => setFormData({...formData, title: e.target.value})}
-                placeholder="Post title"
-                className="mt-2"
-                data-testid="input-post-title"
-              />
-            </div>
-            <div>
-              <Label>Author</Label>
-              <Input 
-                value={formData.author}
-                onChange={(e) => setFormData({...formData, author: e.target.value})}
-                placeholder="Author name"
-                className="mt-2"
-                data-testid="input-post-author"
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Title</Label>
+                <Input 
+                  value={formData.title}
+                  onChange={(e) => setFormData({...formData, title: e.target.value})}
+                  placeholder="Post title"
+                  className="mt-2"
+                  data-testid="input-post-title"
+                />
+              </div>
+              <div>
+                <Label>Author</Label>
+                <Input 
+                  value={formData.author}
+                  onChange={(e) => setFormData({...formData, author: e.target.value})}
+                  placeholder="Author name"
+                  className="mt-2"
+                  data-testid="input-post-author"
+                />
+              </div>
             </div>
             <div>
               <Label>Category</Label>
@@ -97,6 +116,32 @@ export default function AdminBlogPage() {
                 className="mt-2"
                 data-testid="input-post-category"
               />
+            </div>
+            <div>
+              <Label>Featured Image</Label>
+              <div className="mt-2 space-y-3">
+                {imagePreview && (
+                  <div className="relative w-32 h-24 rounded-lg overflow-hidden border">
+                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                    <button
+                      onClick={() => { setImagePreview(""); setFormData({...formData, imageUrl: ""}); if(fileInputRef.current) fileInputRef.current.value = ""; }}
+                      className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full"
+                      data-testid="button-remove-image"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                )}
+                <Input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="mt-2"
+                  data-testid="input-post-image"
+                />
+                <p className="text-xs text-muted-foreground">Upload an image for this post. JPG, PNG supported.</p>
+              </div>
             </div>
             <div>
               <Label>Content</Label>
@@ -110,7 +155,7 @@ export default function AdminBlogPage() {
             </div>
             <div className="flex gap-2">
               <Button onClick={handleSubmit} data-testid="button-save-post">{editingId ? "Update" : "Create"} Post</Button>
-              <Button variant="outline" onClick={() => { setShowForm(false); setEditingId(null); }} data-testid="button-cancel-post">
+              <Button variant="outline" onClick={() => { setShowForm(false); setEditingId(null); setFormData({ title: "", author: "", category: "", content: "", imageUrl: "" }); setImagePreview(""); }} data-testid="button-cancel-post">
                 Cancel
               </Button>
             </div>
@@ -133,47 +178,45 @@ export default function AdminBlogPage() {
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b">
-                  <th className="text-left py-3 px-4 font-semibold">Title</th>
-                  <th className="text-left py-3 px-4 font-semibold">Author</th>
-                  <th className="text-left py-3 px-4 font-semibold">Date</th>
-                  <th className="text-left py-3 px-4 font-semibold">Category</th>
-                  <th className="text-left py-3 px-4 font-semibold">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {posts.map((post) => (
-                  <tr key={post.id} className="border-b hover:bg-muted/50" data-testid={`post-row-${post.id}`}>
-                    <td className="py-3 px-4">{post.title}</td>
-                    <td className="py-3 px-4 text-muted-foreground">{post.author}</td>
-                    <td className="py-3 px-4 text-muted-foreground">{post.date}</td>
-                    <td className="py-3 px-4 text-muted-foreground">{post.category}</td>
-                    <td className="py-3 px-4">
-                      <div className="flex gap-2">
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          onClick={() => handleEdit(post)}
-                          data-testid={`button-edit-post-${post.id}`}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          onClick={() => handleDelete(post.id)}
-                          data-testid={`button-delete-post-${post.id}`}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className="space-y-3">
+              {posts.map((post) => (
+                <div key={post.id} className="flex items-center gap-4 p-4 border rounded-lg hover:bg-muted/50" data-testid={`post-row-${post.id}`}>
+                  <div className="w-20 h-20 rounded-md overflow-hidden bg-muted flex-shrink-0">
+                    {post.image ? (
+                      <img src={post.image} alt={post.title} className="w-full h-full object-cover" data-testid={`post-image-${post.id}`} />
+                    ) : (
+                      <div className="w-full h-full bg-muted" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold truncate">{post.title}</h3>
+                    <p className="text-sm text-muted-foreground">{post.author}</p>
+                    <div className="flex gap-3 mt-1 text-xs text-muted-foreground">
+                      <span>{post.date}</span>
+                      <span>{post.category}</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 flex-shrink-0">
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => handleEdit(post)}
+                      data-testid={`button-edit-post-${post.id}`}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => handleDelete(post.id)}
+                      data-testid={`button-delete-post-${post.id}`}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>
