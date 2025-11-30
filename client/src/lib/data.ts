@@ -1,5 +1,6 @@
 import type { Store, Scan, User, ScanIssue, ScanRecommendation, ScanCategory } from "@shared/schema";
 import { pricingPlans } from "@shared/schema";
+import profileImage from "@assets/generated_images/professional_male_profile_picture.png";
 
 export { pricingPlans };
 
@@ -7,7 +8,7 @@ export const mockUser: User = {
   id: "user_123",
   email: "john@mystore.com",
   name: "John Merchant",
-  avatar: null,
+  avatar: profileImage,
   plan: "pro",
   createdAt: new Date("2024-01-15"),
 };
