@@ -238,7 +238,7 @@ export async function registerRoutes(
       if (!scan) return res.status(404).json({ error: "Scan not found" });
 
       // Verify issue exists
-      const issue = scan.issues.find((i: any) => i.id === req.params.issueId);
+      const issue = scan.issues?.find((i: any) => i.id === req.params.issueId);
       if (!issue) return res.status(404).json({ error: "Issue not found" });
 
       // Apply auto-fix (simulated)
@@ -319,7 +319,7 @@ export async function registerRoutes(
       const scan = await storage.getScan(req.params.scanId);
       if (!scan) return res.status(404).json({ error: "Scan not found" });
 
-      const issue = scan.issues.find((i: any) => i.id === req.params.issueId);
+      const issue = scan.issues?.find((i: any) => i.id === req.params.issueId);
       if (!issue) return res.status(404).json({ error: "Issue not found" });
 
       res.json({

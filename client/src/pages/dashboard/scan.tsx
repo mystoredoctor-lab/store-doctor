@@ -186,7 +186,7 @@ export default function ScanPage() {
           <Tabs defaultValue="issues">
             <TabsList className="mb-4">
               <TabsTrigger value="issues" data-testid="tab-issues">
-                Critical Issues ({mockScanResults.criticalIssues.length})
+                Critical Issues ({scanResults.criticalIssues.length})
               </TabsTrigger>
               <TabsTrigger value="recommendations" data-testid="tab-recommendations">
                 Recommendations
