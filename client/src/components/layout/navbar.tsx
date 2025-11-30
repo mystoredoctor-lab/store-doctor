@@ -12,6 +12,18 @@ const navItems = [
   { name: "Contact", href: "/contact" },
 ];
 
+const handleNavClick = (href: string) => {
+  if (href.includes("#")) {
+    setTimeout(() => {
+      const id = href.split("#")[1];
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+  }
+};
+
 export function Navbar() {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -33,6 +45,7 @@ export function Navbar() {
             <Link
               key={item.name}
               href={item.href}
+              onClick={() => handleNavClick(item.href)}
               className={cn(
                 "text-sm font-medium transition-colors hover:text-primary",
                 location === item.href ? "text-primary" : "text-muted-foreground"
@@ -73,7 +86,10 @@ export function Navbar() {
               key={item.name}
               href={item.href}
               className="block text-sm font-medium text-muted-foreground hover:text-primary"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleNavClick(item.href);
+              }}
             >
               {item.name}
             </Link>
