@@ -1,6 +1,5 @@
 import { Link } from "wouter";
 import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, User } from "lucide-react";
@@ -114,7 +113,6 @@ export default function BlogPage() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 }

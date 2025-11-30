@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, Calendar, User } from "lucide-react";
@@ -656,7 +655,6 @@ export default function BlogPostPage() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 }
