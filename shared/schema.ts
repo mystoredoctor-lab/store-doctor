@@ -96,6 +96,9 @@ export interface ScanIssue {
   severity: "high" | "medium" | "low";
   impact: string;
   recommendation: string;
+  app?: string;
+  theme?: string;
+  description?: string;
   location?: {
     url: string;
     page?: string;

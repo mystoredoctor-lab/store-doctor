@@ -135,17 +135,46 @@ export function IssuesList({ issues, limitToFree = false, showAutoFix = false }:
                 </div>
 
                 {/* Key Info Grid (shown by default) */}
-                <div className="ml-12 grid grid-cols-2 gap-3">
-                  <div className="space-y-1">
-                    <p className="text-xs font-medium text-muted-foreground">Impact</p>
-                    <p className="text-sm line-clamp-2">{issue.impact}</p>
-                  </div>
-                  {showAutoFix && issue.location?.page && (
-                    <div className="space-y-1">
-                      <p className="text-xs font-medium text-muted-foreground">Location</p>
-                      <p className="text-sm line-clamp-2">{issue.location.page}</p>
+                <div className="ml-12 space-y-3">
+                  {/* App/Theme Info */}
+                  {showAutoFix && (issue.app || issue.theme) && (
+                    <div className="grid grid-cols-2 gap-3">
+                      {issue.app && (
+                        <div className="space-y-1">
+                          <p className="text-xs font-medium text-muted-foreground">App</p>
+                          <p className="text-sm font-medium text-primary">{issue.app}</p>
+                        </div>
+                      )}
+                      {issue.theme && (
+                        <div className="space-y-1">
+                          <p className="text-xs font-medium text-muted-foreground">Theme</p>
+                          <p className="text-sm font-medium text-primary">{issue.theme}</p>
+                        </div>
+                      )}
                     </div>
                   )}
+
+                  {/* Description */}
+                  {showAutoFix && issue.description && (
+                    <div className="space-y-1">
+                      <p className="text-xs font-medium text-muted-foreground">Details</p>
+                      <p className="text-sm">{issue.description}</p>
+                    </div>
+                  )}
+
+                  {/* Impact & Location */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <p className="text-xs font-medium text-muted-foreground">Impact</p>
+                      <p className="text-sm line-clamp-2">{issue.impact}</p>
+                    </div>
+                    {showAutoFix && issue.location?.page && (
+                      <div className="space-y-1">
+                        <p className="text-xs font-medium text-muted-foreground">Location</p>
+                        <p className="text-sm line-clamp-2">{issue.location.page}</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </button>
