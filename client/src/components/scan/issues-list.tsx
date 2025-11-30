@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, AlertCircle, Info, Lock, ChevronDown, ChevronUp, Wand2, MapPin, Code } from "lucide-react";
-import { useState } from "react";
+import { AlertTriangle, AlertCircle, Info, Lock, ChevronDown, ChevronUp, Wand2, MapPin, Code, Loader2, CheckCircle2 } from "lucide-react";
+import { useState, useEffect } from "react";
 import type { ScanIssue } from "@shared/schema";
 import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
@@ -17,12 +17,63 @@ interface IssuesListProps {
   showAutoFix?: boolean;
 }
 
+interface AutoFixState {
+  issueId: string | null;
+  status: "idle" | "loading" | "success" | "error";
+  message?: string;
+}
+
 export function IssuesList({ issues, limitToFree = false, showAutoFix = false }: IssuesListProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [autoFixState, setAutoFixState] = useState<AutoFixState>({ issueId: null, status: "idle" });
   const { toast } = useToast();
 
   const displayedIssues = limitToFree ? issues.slice(0, 3) : issues;
   const hiddenCount = limitToFree ? issues.length - 3 : 0;
+
+  const handleAutoFix = async (issueId: string, issueTitle: string) => {
+    // Start loading
+    setAutoFixState({ issueId, status: "loading", message: "Processing..." });
+
+    try {
+      // Simulate API call with delay (replace with actual API call later)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // Success state
+      setAutoFixState({ issueId, status: "success", message: "Auto-fix applied successfully!" });
+      
+      // Show success toast
+      toast({
+        title: "Auto-fix Applied",
+        description: `Successfully fixed: ${issueTitle}`,
+        variant: "default",
+      });
+
+      // Reset state after 3 seconds
+      setTimeout(() => {
+        setAutoFixState({ issueId: null, status: "idle" });
+      }, 3000);
+    } catch (error) {
+      // Error state
+      setAutoFixState({ 
+        issueId, 
+        status: "error", 
+        message: error instanceof Error ? error.message : "Failed to apply auto-fix" 
+      });
+      
+      // Show error toast
+      toast({
+        title: "Auto-fix Failed",
+        description: "There was an error applying the auto-fix. Please try again.",
+        variant: "destructive",
+      });
+
+      // Reset state after 3 seconds
+      setTimeout(() => {
+        setAutoFixState({ issueId: null, status: "idle" });
+      }, 3000);
+    }
+  };
 
   const getSeverityConfig = (severity: string) => {
     switch (severity) {
@@ -171,11 +222,26 @@ export function IssuesList({ issues, limitToFree = false, showAutoFix = false }:
                       <Button 
                         size="sm" 
                         className="bg-primary hover:bg-primary/90 gap-2"
-                        onClick={() => toast({ title: "Auto-fix applied", description: `Fixing: ${issue.title}` })}
+                        onClick={() => handleAutoFix(issue.id, issue.title)}
+                        disabled={autoFixState.status === "loading"}
                         data-testid={`button-autofix-${issue.id}`}
                       >
-                        <Wand2 className="h-4 w-4" />
-                        Apply Auto-Fix
+                        {autoFixState.issueId === issue.id && autoFixState.status === "loading" ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Applying...
+                          </>
+                        ) : autoFixState.issueId === issue.id && autoFixState.status === "success" ? (
+                          <>
+                            <CheckCircle2 className="h-4 w-4" />
+                            Applied!
+                          </>
+                        ) : (
+                          <>
+                            <Wand2 className="h-4 w-4" />
+                            Apply Auto-Fix
+                          </>
+                        )}
                       </Button>
                       <span className="text-xs text-muted-foreground">Advanced Plan</span>
                     </div>
