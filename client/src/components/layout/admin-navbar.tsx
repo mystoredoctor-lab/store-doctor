@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { LayoutDashboard, Users, BarChart2, Settings, ArrowLeft, FileText, DollarSign, Menu, X, LogOut } from "lucide-react";
 import { useState } from "react";
-import { useAdminAuth } from "@/hooks/useAdminAuth";
+import { useAdminAuth } from "@/hooks/AdminAuthContext";
 import {
   DropdownMenu,
   DropdownMenuContent,

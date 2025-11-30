@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAdminAuth } from "@/hooks/useAdminAuth";
+import { useAdminAuth } from "@/hooks/AdminAuthContext";
 import { AlertCircle } from "lucide-react";
 
 export default function AdminLoginPage() {

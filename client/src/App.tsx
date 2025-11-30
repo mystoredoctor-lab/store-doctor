@@ -27,7 +27,7 @@ import AdminPricing from "@/pages/admin/pricing";
 import AdminAnalytics from "@/pages/admin/analytics";
 import AdminSettings from "@/pages/admin/settings";
 import AdminLayout from "@/pages/admin/layout";
-import { useAdminAuth } from "@/hooks/useAdminAuth";
+import { useAdminAuth, AdminAuthProvider } from "@/hooks/AdminAuthContext";
 
 function ProtectedAdminRoute({ children }: { children: React.ReactNode }) {
   const { isLoggedIn, isLoading } = useAdminAuth();
@@ -146,10 +146,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="storedoctor-theme">
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+        <AdminAuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </AdminAuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
