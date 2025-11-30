@@ -68,7 +68,6 @@ export function PricingSection() {
                 )}
                 <CardHeader>
                   <CardTitle className="text-2xl">{plan.name}</CardTitle>
-                  <CardDescription>{plan.description}</CardDescription>
                   <div className="mt-6">
                     <span className="text-5xl font-bold">{plan.price === 0 ? "Free" : `$${plan.price}`}</span>
                     {plan.price > 0 && <span className="text-muted-foreground text-lg">/month</span>}
@@ -107,7 +106,7 @@ export function PricingSection() {
             All plans include core diagnostics and recommendations. Advanced includes auto-fix.
           </p>
           <p className="text-sm text-muted-foreground">
-            Have questions? <a href="#contact" className="text-primary hover:underline">Contact us</a>
+            Have questions? <a href="/contact" className="text-primary hover:underline">Contact us</a>
           </p>
         </div>
       </div>
