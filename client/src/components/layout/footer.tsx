@@ -16,13 +16,20 @@ const footerLinks = {
   ],
 };
 
+const handleLinkClick = (href: string) => {
+  // Scroll to top unless it's a hash link
+  if (!href.includes("#")) {
+    window.scrollTo(0, 0);
+  }
+};
+
 export function Footer() {
   return (
     <footer className="border-t bg-card">
       <div className="container py-12">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2">
+            <Link href="/" onClick={() => handleLinkClick("/")} className="flex items-center gap-2">
               <img 
                 src="/logo.jpg" 
                 alt="Store Doctor Logo" 
@@ -43,7 +50,9 @@ export function Footer() {
                   <li key={link.name}>
                     <Link
                       href={link.href}
+                      onClick={() => handleLinkClick(link.href)}
                       className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                      data-testid={`footer-link-${link.name.toLowerCase().replace(/\s+/g, "-")}`}
                     >
                       {link.name}
                     </Link>
