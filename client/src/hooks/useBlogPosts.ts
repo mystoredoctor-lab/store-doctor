@@ -11,7 +11,6 @@ export interface BlogPost {
   date: string;
   readTime: string;
   image: string;
-  views?: number;
 }
 
 const defaultPosts: BlogPost[] = [
@@ -82,10 +81,10 @@ const defaultPosts: BlogPost[] = [
     excerpt: "Essential security practices every e-commerce merchant needs to implement to protect customer data and build customer trust.",
     content: "E-commerce security breaches are costly. The average data breach costs businesses $3.86 million. Beyond financial costs, breaches damage reputation and erode customer trust.",
     category: "Security",
-    author: "Alex Martinez",
+    author: "David Kim",
     date: "October 8, 2025",
-    readTime: "11 min read",
-    image: "https://images.unsplash.com/photo-1526374965328-7f5ae4e8a5b7?w=400&h=300&fit=crop",
+    readTime: "14 min read",
+    image: "https://images.unsplash.com/photo-1563986768711-b3bbb3c0ae2e?w=400&h=300&fit=crop",
   },
 ];
 
