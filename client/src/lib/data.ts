@@ -129,6 +129,39 @@ export const mockScanRecommendations: ScanRecommendation[] = [
   },
 ];
 
+export const competitionBenchmark = {
+  yourStore: {
+    name: "Fashion Forward",
+    overallScore: 72,
+    seo: 78,
+    speed: 65,
+    ux: 82,
+    cro: 58,
+    security: 91,
+    mobile: 69,
+  },
+  industry: {
+    name: "Industry Average",
+    overallScore: 68,
+    seo: 72,
+    speed: 70,
+    ux: 75,
+    cro: 65,
+    security: 88,
+    mobile: 71,
+  },
+  topPerformer: {
+    name: "Top Performer",
+    overallScore: 85,
+    seo: 88,
+    speed: 82,
+    ux: 89,
+    cro: 81,
+    security: 94,
+    mobile: 86,
+  },
+};
+
 export const mockScanResults = {
   overallScore: 72,
   scanDate: "2025-11-20T14:30:00Z",

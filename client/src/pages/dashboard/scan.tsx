@@ -12,8 +12,8 @@ import { RecommendationsList } from "@/components/scan/recommendations-list";
 import { ScanHistoryChart } from "@/components/scan/scan-history-chart";
 import { IssueSeverityChart } from "@/components/scan/issue-severity-chart";
 import { CategoryBreakdownChart } from "@/components/scan/category-breakdown-chart";
-import { mockScanResults, mockStores, mockUser } from "@/lib/data";
-import { RefreshCw, Download, ExternalLink } from "lucide-react";
+import { mockScanResults, mockStores, mockUser, competitionBenchmark } from "@/lib/data";
+import { RefreshCw, Download, ExternalLink, TrendingUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function ScanPage() {
@@ -129,6 +129,95 @@ export default function ScanPage() {
           </CardContent>
         </Card>
       </div>
+
+      {mockUser.plan === "advanced" && (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              <div>
+                <CardTitle>Competition Benchmark</CardTitle>
+                <CardDescription>How your store compares to industry standards</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-6">
+              {/* Overall Score Comparison */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="font-medium">{competitionBenchmark.yourStore.name}</span>
+                  <div className="flex items-center gap-2">
+                    <div className="w-48 bg-muted rounded-full h-2">
+                      <div 
+                        className="bg-primary h-2 rounded-full" 
+                        style={{ width: `${(competitionBenchmark.yourStore.overallScore / 100) * 100}%` }}
+                      />
+                    </div>
+                    <span className="font-bold text-primary min-w-fit">{competitionBenchmark.yourStore.overallScore}/100</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">{competitionBenchmark.industry.name}</span>
+                  <div className="flex items-center gap-2">
+                    <div className="w-48 bg-muted rounded-full h-2">
+                      <div 
+                        className="bg-yellow-500 h-2 rounded-full" 
+                        style={{ width: `${(competitionBenchmark.industry.overallScore / 100) * 100}%` }}
+                      />
+                    </div>
+                    <span className="text-muted-foreground min-w-fit">{competitionBenchmark.industry.overallScore}/100</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">{competitionBenchmark.topPerformer.name}</span>
+                  <div className="flex items-center gap-2">
+                    <div className="w-48 bg-muted rounded-full h-2">
+                      <div 
+                        className="bg-green-500 h-2 rounded-full" 
+                        style={{ width: `${(competitionBenchmark.topPerformer.overallScore / 100) * 100}%` }}
+                      />
+                    </div>
+                    <span className="text-green-600 dark:text-green-400 min-w-fit font-semibold">{competitionBenchmark.topPerformer.overallScore}/100</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Category Breakdown */}
+              <div className="border-t pt-6">
+                <p className="text-sm font-semibold mb-4">Category Performance</p>
+                <div className="grid grid-cols-2 gap-4">
+                  {["seo", "speed", "ux", "cro", "security", "mobile"].map((category) => {
+                    const categoryName = category.toUpperCase();
+                    const yourScore = competitionBenchmark.yourStore[category as keyof typeof competitionBenchmark.yourStore] as number;
+                    const industryScore = competitionBenchmark.industry[category as keyof typeof competitionBenchmark.industry] as number;
+                    const diff = yourScore - industryScore;
+                    
+                    return (
+                      <div key={category} className="p-3 rounded-lg bg-muted/30 border border-border/50">
+                        <p className="text-xs font-medium text-muted-foreground mb-2">{categoryName}</p>
+                        <div className="flex items-baseline justify-between">
+                          <span className="text-lg font-bold">{yourScore}</span>
+                          <span className={`text-xs font-medium ${diff > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                            {diff > 0 ? '+' : ''}{diff}
+                          </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1">vs {industryScore} avg</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="rounded-lg bg-primary/5 border border-primary/10 p-3">
+                <p className="text-sm text-foreground">
+                  <span className="font-medium">Insight:</span> Your store is performing {competitionBenchmark.yourStore.overallScore > competitionBenchmark.industry.overallScore ? 'above' : 'below'} industry average. Focus on {competitionBenchmark.yourStore.cro < 65 ? 'conversion optimization' : 'mobile experience'} to close the gap with top performers.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardHeader>
