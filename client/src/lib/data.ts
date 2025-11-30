@@ -10,7 +10,7 @@ export const mockUser: User = {
   name: "John Merchant",
   avatar: profileImage,
   plan: "pro",
-  createdAt: new Date("2024-01-15"),
+  createdAt: new Date("2025-11-20"),
 };
 
 export const mockStores: Store[] = [
@@ -23,8 +23,8 @@ export const mockStores: Store[] = [
     healthScore: 87,
     status: "healthy",
     issuesCount: 3,
-    lastScanAt: new Date("2024-01-20"),
-    createdAt: new Date("2024-01-10"),
+    lastScanAt: new Date("2025-11-20"),
+    createdAt: new Date("2025-11-20"),
   },
   {
     id: "store_2",
@@ -35,8 +35,8 @@ export const mockStores: Store[] = [
     healthScore: 62,
     status: "warning",
     issuesCount: 12,
-    lastScanAt: new Date("2024-01-18"),
-    createdAt: new Date("2024-01-05"),
+    lastScanAt: new Date("2025-11-20"),
+    createdAt: new Date("2025-11-20"),
   },
   {
     id: "store_3",
@@ -47,15 +47,15 @@ export const mockStores: Store[] = [
     healthScore: 45,
     status: "critical",
     issuesCount: 24,
-    lastScanAt: new Date("2024-01-15"),
-    createdAt: new Date("2024-01-01"),
+    lastScanAt: new Date("2025-11-20"),
+    createdAt: new Date("2025-11-20"),
   },
 ];
 
 export const dashboardStats = {
   scansLeft: 7,
   totalScans: 10,
-  lastScanDate: "2024-01-20",
+  lastScanDate: "2025-11-20",
   averageHealthScore: 65,
   totalStores: 3,
   totalIssuesFound: 39,
@@ -131,18 +131,18 @@ export const mockScanRecommendations: ScanRecommendation[] = [
 
 export const mockScanResults = {
   overallScore: 72,
-  scanDate: "2024-01-20T14:30:00Z",
+  scanDate: "2025-11-20T14:30:00Z",
   categories: mockScanCategories,
   criticalIssues: mockScanIssues,
   recommendations: mockScanRecommendations,
 };
 
 export const scanHistoryData = [
-  { date: "Jan 1", score: 45 },
-  { date: "Jan 5", score: 52 },
-  { date: "Jan 10", score: 58 },
-  { date: "Jan 15", score: 65 },
-  { date: "Jan 20", score: 72 },
+  { date: "Nov 16", score: 45 },
+  { date: "Nov 17", score: 52 },
+  { date: "Nov 18", score: 58 },
+  { date: "Nov 19", score: 65 },
+  { date: "Nov 20", score: 72 },
 ];
 
 export const issueSeverityData = [
