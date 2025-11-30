@@ -1,11 +1,13 @@
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Activity, LayoutDashboard, Users, BarChart2, Settings, ArrowLeft } from "lucide-react";
+import { LayoutDashboard, Users, BarChart2, Settings, ArrowLeft, FileText, DollarSign } from "lucide-react";
 
 const sidebarItems = [
   { name: "Overview", href: "/admin", icon: LayoutDashboard },
   { name: "Users", href: "/admin/users", icon: Users },
+  { name: "Blog", href: "/admin/blog", icon: FileText },
+  { name: "Pricing", href: "/admin/pricing", icon: DollarSign },
   { name: "Analytics", href: "/admin/analytics", icon: BarChart2 },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
@@ -18,9 +20,11 @@ export function AdminSidebar() {
       <div className="flex h-full flex-col">
         <div className="flex h-16 items-center border-b px-6">
           <Link href="/admin" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <Activity className="h-5 w-5 text-primary-foreground" />
-            </div>
+            <img 
+              src="/logo.jpg" 
+              alt="Store Doctor Logo" 
+              className="h-8 w-8 rounded-lg object-cover"
+            />
             <div>
               <span className="text-xl font-bold">Store Doctor</span>
               <span className="text-xs text-muted-foreground block">Admin</span>

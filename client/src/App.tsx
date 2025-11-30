@@ -21,6 +21,8 @@ import SettingsPage from "@/pages/dashboard/settings";
 import { DashboardLayout } from "@/pages/dashboard/layout";
 import AdminDashboard from "@/pages/admin/index";
 import AdminUsers from "@/pages/admin/users";
+import AdminBlog from "@/pages/admin/blog";
+import AdminPricing from "@/pages/admin/pricing";
 import AdminAnalytics from "@/pages/admin/analytics";
 import AdminSettings from "@/pages/admin/settings";
 import AdminLayout from "@/pages/admin/layout";
@@ -82,6 +84,20 @@ function Router() {
         {() => (
           <AdminLayout>
             <AdminUsers />
+          </AdminLayout>
+        )}
+      </Route>
+      <Route path="/admin/blog">
+        {() => (
+          <AdminLayout>
+            <AdminBlog />
+          </AdminLayout>
+        )}
+      </Route>
+      <Route path="/admin/pricing">
+        {() => (
+          <AdminLayout>
+            <AdminPricing />
           </AdminLayout>
         )}
       </Route>
