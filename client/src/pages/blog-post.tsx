@@ -581,8 +581,10 @@ const staticBlogPostContent: Record<string, any> = {
 
 export default function BlogPostPage() {
   const [location] = useLocation();
+  const allPosts = useBlogPosts();
   const slug = location.split("/blog/")[1];
-  const post = blogPosts[slug];
+  const post = allPosts.find(p => p.slug === slug);
+  const content = staticBlogPostContent[slug];
 
   if (!post) {
     return (
@@ -645,7 +647,7 @@ export default function BlogPostPage() {
               </div>
             </div>
 
-            <div className="prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: post.content }} data-testid="blog-post-content" />
+            <div className="prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: content?.content || "" }} data-testid="blog-post-content" />
           </div>
         </article>
 
