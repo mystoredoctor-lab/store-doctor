@@ -1,14 +1,15 @@
 import { useLocalStorage } from './useLocalStorage';
-import img1 from '@assets/stock_images/professional_e-comme_9e7deaa5.jpg';
-import img2 from '@assets/stock_images/seo_optimization_sea_af543c13.jpg';
-import img3 from '@assets/stock_images/professional_e-comme_a3dba94b.jpg';
-import img4 from '@assets/stock_images/mobile_phone_e-comme_f19edd8d.jpg';
-import img5 from '@assets/stock_images/professional_e-comme_237bd240.jpg';
-import img6 from '@assets/stock_images/seo_optimization_sea_2c775c86.jpg';
-import img7 from '@assets/stock_images/mobile_phone_e-comme_55f8bfac.jpg';
-import img8 from '@assets/stock_images/web_development_code_c7923660.jpg';
-import img9 from '@assets/stock_images/web_development_code_0edd9fde.jpg';
-import img10 from '@assets/stock_images/seo_optimization_sea_af543c13.jpg';
+
+const img1 = new URL('@assets/stock_images/professional_e-comme_9e7deaa5.jpg', import.meta.url).href;
+const img2 = new URL('@assets/stock_images/seo_optimization_sea_af543c13.jpg', import.meta.url).href;
+const img3 = new URL('@assets/stock_images/professional_e-comme_a3dba94b.jpg', import.meta.url).href;
+const img4 = new URL('@assets/stock_images/mobile_phone_e-comme_f19edd8d.jpg', import.meta.url).href;
+const img5 = new URL('@assets/stock_images/professional_e-comme_237bd240.jpg', import.meta.url).href;
+const img6 = new URL('@assets/stock_images/seo_optimization_sea_2c775c86.jpg', import.meta.url).href;
+const img7 = new URL('@assets/stock_images/mobile_phone_e-comme_55f8bfac.jpg', import.meta.url).href;
+const img8 = new URL('@assets/stock_images/web_development_code_c7923660.jpg', import.meta.url).href;
+const img9 = new URL('@assets/stock_images/web_development_code_0edd9fde.jpg', import.meta.url).href;
+const img10 = new URL('@assets/stock_images/seo_optimization_sea_af543c13.jpg', import.meta.url).href;
 
 export interface BlogPost {
   id: number;
