@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, User } from "lucide-react";
 import { useBlogPosts } from "@/hooks/useBlogPosts";
+import aiImg from '@assets/generated_images/ai_technology_neural_networks.png';
 import img1 from '@assets/stock_images/professional_e-comme_9e7deaa5.jpg';
 import img2 from '@assets/stock_images/seo_optimization_sea_af543c13.jpg';
 import img3 from '@assets/stock_images/professional_e-comme_a3dba94b.jpg';
@@ -19,7 +20,7 @@ import img10 from '@assets/generated_images/professional_analytics_dashboard.png
 const categories = ["All", "Technology", "SEO", "Conversion", "Mobile", "Performance", "Security"];
 
 const imageMap = {
-  "ai-powered-store-analysis": img1,
+  "ai-powered-store-analysis": aiImg,
   "shopify-seo-guide": img2,
   "conversion-rate-optimization": img3,
   "mobile-optimization": img4,
