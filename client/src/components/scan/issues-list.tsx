@@ -6,6 +6,10 @@ import { useState } from "react";
 import type { ScanIssue } from "@shared/schema";
 import { Link } from "wouter";
 
+const handleScrollToTop = () => {
+  window.scrollTo(0, 0);
+};
+
 interface IssuesListProps {
   issues: ScanIssue[];
   limitToFree?: boolean;
@@ -100,7 +104,7 @@ export function IssuesList({ issues, limitToFree = false }: IssuesListProps) {
             Upgrade to Pro to see all issues and detailed recommendations.
           </p>
           <Button asChild>
-            <Link href="/pricing" data-testid="button-upgrade-to-pro">Upgrade to Pro</Link>
+            <Link href="/pricing" onClick={handleScrollToTop} data-testid="button-upgrade-to-pro">Upgrade to Pro</Link>
           </Button>
         </div>
       )}

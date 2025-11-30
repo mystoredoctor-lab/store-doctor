@@ -11,6 +11,10 @@ import { dashboardStats, mockStores, mockUser } from "@/lib/data";
 import { Activity, Calendar, Store, AlertTriangle, Plus, Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+const handleScrollToTop = () => {
+  window.scrollTo(0, 0);
+};
+
 export default function DashboardPage() {
   const [showRatingModal, setShowRatingModal] = useState(false);
   const { toast } = useToast();
@@ -35,7 +39,7 @@ export default function DashboardPage() {
             Rate Us
           </Button>
           <Button asChild>
-            <Link href="/dashboard/stores" data-testid="button-connect-store">
+            <Link href="/dashboard/stores" onClick={handleScrollToTop} data-testid="button-connect-store">
               <Plus className="mr-2 h-4 w-4" />
               Connect Store
             </Link>
@@ -91,7 +95,7 @@ export default function DashboardPage() {
               <CardDescription>Quick overview of connected stores</CardDescription>
             </div>
             <Button variant="outline" size="sm" asChild>
-              <Link href="/dashboard/stores" data-testid="button-view-all-stores">View All</Link>
+              <Link href="/dashboard/stores" onClick={handleScrollToTop} data-testid="button-view-all-stores">View All</Link>
             </Button>
           </CardHeader>
           <CardContent>
@@ -112,19 +116,19 @@ export default function DashboardPage() {
         <CardContent>
           <div className="grid gap-4 md:grid-cols-3">
             <Button variant="outline" className="h-auto py-4 flex-col gap-2 bg-transparent" asChild>
-              <Link href="/dashboard/scan" data-testid="button-quick-action-scan">
+              <Link href="/dashboard/scan" onClick={handleScrollToTop} data-testid="button-quick-action-scan">
                 <Activity className="h-6 w-6" />
                 <span>Run New Scan</span>
               </Link>
             </Button>
             <Button variant="outline" className="h-auto py-4 flex-col gap-2 bg-transparent" asChild>
-              <Link href="/dashboard/stores" data-testid="button-quick-action-stores">
+              <Link href="/dashboard/stores" onClick={handleScrollToTop} data-testid="button-quick-action-stores">
                 <Store className="h-6 w-6" />
                 <span>Manage Stores</span>
               </Link>
             </Button>
             <Button variant="outline" className="h-auto py-4 flex-col gap-2 bg-transparent" asChild>
-              <Link href="/dashboard/settings" data-testid="button-quick-action-issues">
+              <Link href="/dashboard/settings" onClick={handleScrollToTop} data-testid="button-quick-action-issues">
                 <AlertTriangle className="h-6 w-6" />
                 <span>View All Issues</span>
               </Link>
