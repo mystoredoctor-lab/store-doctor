@@ -263,13 +263,22 @@ export const mockScanRecommendations: ScanRecommendation[] = [
   },
 ];
 
+// Store-specific issues - each store has realistic issues based on their category scores
+const storeIssues = {
+  store_1: [mockScanIssues[0], mockScanIssues[1], mockScanIssues[2]], // SEO, Speed, CRO issues
+  store_2: [mockScanIssues[1], mockScanIssues[3], mockScanIssues[2], mockScanIssues[4], mockScanIssues[0]], // All 5: Speed, UX, CRO, ALT text, Meta descriptions
+  store_3: [mockScanIssues[0], mockScanIssues[1], mockScanIssues[2], mockScanIssues[3], mockScanIssues[4]], // All 5 issues
+  store_4: [mockScanIssues[4], mockScanIssues[2]], // Only 2 minor issues: ALT text, CRO
+  store_5: [mockScanIssues[2], mockScanIssues[3], mockScanIssues[0]], // CRO, UX, SEO issues
+};
+
 // Store-specific scan results
 export const mockScanResultsByStore = {
   store_1: {
     overallScore: 72,
     scanDate: "2025-11-20T14:30:00Z",
     categories: mockScanCategories,
-    criticalIssues: mockScanIssues.slice(0, 3),
+    criticalIssues: storeIssues.store_1,
     recommendations: mockScanRecommendations,
   },
   store_2: {
@@ -283,7 +292,7 @@ export const mockScanResultsByStore = {
       { name: "Security", score: 85, icon: "shield", color: "#10b981" },
       { name: "Mobile", score: 72, icon: "smartphone", color: "#10b981" },
     ],
-    criticalIssues: mockScanIssues,
+    criticalIssues: storeIssues.store_2,
     recommendations: mockScanRecommendations,
   },
   store_3: {
@@ -297,7 +306,7 @@ export const mockScanResultsByStore = {
       { name: "Security", score: 75, icon: "shield", color: "#10b981" },
       { name: "Mobile", score: 69, icon: "smartphone", color: "#10b981" },
     ],
-    criticalIssues: mockScanIssues,
+    criticalIssues: storeIssues.store_3,
     recommendations: mockScanRecommendations,
   },
   store_4: {
@@ -311,7 +320,7 @@ export const mockScanResultsByStore = {
       { name: "Security", score: 95, icon: "shield", color: "#10b981" },
       { name: "Mobile", score: 86, icon: "smartphone", color: "#10b981" },
     ],
-    criticalIssues: mockScanIssues.slice(0, 2),
+    criticalIssues: storeIssues.store_4,
     recommendations: mockScanRecommendations,
   },
   store_5: {
@@ -325,7 +334,7 @@ export const mockScanResultsByStore = {
       { name: "Security", score: 88, icon: "shield", color: "#10b981" },
       { name: "Mobile", score: 75, icon: "smartphone", color: "#10b981" },
     ],
-    criticalIssues: mockScanIssues.slice(2, 5),
+    criticalIssues: storeIssues.store_5,
     recommendations: mockScanRecommendations,
   },
 };
