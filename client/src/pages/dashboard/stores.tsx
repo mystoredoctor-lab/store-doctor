@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,26 +17,65 @@ import { Label } from "@/components/ui/label";
 import { mockStores, mockUser } from "@/lib/data";
 import { Plus, Search, Store, Shield, Zap, BarChart3, Lock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import type { Store as StoreType } from "@shared/schema";
+
+const STORES_STORAGE_KEY = "storedoctor_connected_stores_v1";
 
 export default function StoresPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isConnectDialogOpen, setIsConnectDialogOpen] = useState(false);
   const [storeUrl, setStoreUrl] = useState("");
+  const [stores, setStores] = useState<StoreType[]>([]);
   const { toast } = useToast();
 
-  const filteredStores = mockStores.filter(
+  // Initialize stores from localStorage or use mock data
+  useEffect(() => {
+    const stored = localStorage.getItem(STORES_STORAGE_KEY);
+    if (stored) {
+      try {
+        setStores(JSON.parse(stored));
+      } catch {
+        setStores(mockStores);
+      }
+    } else {
+      setStores(mockStores);
+    }
+  }, []);
+
+  // Save stores to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem(STORES_STORAGE_KEY, JSON.stringify(stores));
+  }, [stores]);
+
+  const filteredStores = stores.filter(
     (store) =>
       store.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       store.url.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const maxStores = mockUser.plan === "free" ? 1 : mockUser.plan === "pro" ? 2 : 5;
-  const canAddMore = mockStores.length < maxStores;
+  const canAddMore = stores.length < maxStores;
 
   const handleConnectStore = () => {
+    if (!storeUrl.trim()) return;
+
+    const newStore: StoreType = {
+      id: `store_${Date.now()}`,
+      userId: mockUser.id,
+      name: storeUrl.split(".")[0] || "New Store",
+      url: storeUrl,
+      shopifyAccessToken: null,
+      healthScore: 0,
+      status: "pending",
+      issuesCount: 0,
+      lastScanAt: null,
+      createdAt: new Date(),
+    };
+
+    setStores([...stores, newStore]);
     toast({
-      title: "Store connection initiated",
-      description: "Redirecting to Shopify for authorization...",
+      title: "Store connected successfully",
+      description: `${storeUrl} has been added to your stores.`,
     });
     setIsConnectDialogOpen(false);
     setStoreUrl("");
@@ -165,7 +204,7 @@ export default function StoresPage() {
             <div>
               <CardTitle>Connected Stores</CardTitle>
               <CardDescription>
-                {mockStores.length} of {maxStores} stores connected
+                {stores.length} of {maxStores} stores connected
               </CardDescription>
             </div>
             <div className="relative w-full sm:w-72">
