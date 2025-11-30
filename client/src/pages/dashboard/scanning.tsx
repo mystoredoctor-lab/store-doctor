@@ -5,7 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Search, Zap, Layout, TrendingUp, Shield, Smartphone, CheckCircle, Clock } from "lucide-react";
-import { mockStores } from "@/lib/data";
+import { mockStoresByPlan } from "@/lib/data";
+import { getUserPlan } from "@/lib/planManager";
 
 const scanSteps = [
   { name: "SEO Analysis", icon: Search, duration: 1500 },
@@ -17,14 +18,21 @@ const scanSteps = [
 ];
 
 export default function ScanningPage() {
-  const [, navigate] = useLocation();
+  const [location, navigate] = useLocation();
   const [currentStep, setCurrentStep] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [startTime, setStartTime] = useState(Date.now());
   const [elapsedTime, setElapsedTime] = useState(0);
   const [scanId, setScanId] = useState(0);
+  const userPlan = getUserPlan();
 
-  const store = mockStores[0];
+  // Get storeId from URL params
+  const params = new URLSearchParams(location.split("?")[1]);
+  const storeId = params.get("storeId");
+  
+  // Get stores for current plan and find the requested store
+  const planStores = mockStoresByPlan[userPlan as "free" | "pro" | "advanced"] || mockStoresByPlan.free;
+  const store = storeId ? planStores.find((s) => s.id === storeId) : planStores[0];
   const progress = ((currentStep + 1) / scanSteps.length) * 100;
 
   // Update elapsed time
@@ -66,7 +74,7 @@ export default function ScanningPage() {
   };
 
   const handleViewResults = () => {
-    navigate("/dashboard/scan");
+    navigate(`/dashboard/scan?storeId=${store?.id}`);
   };
 
   const handleNewScan = () => {

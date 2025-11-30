@@ -51,10 +51,7 @@ export default function ScanPage() {
       setShowUpgradeModal(true);
     } else {
       incrementScanCount();
-      toast({
-        title: "Scan started",
-        description: `Running scan on ${store?.name}. This may take a few minutes.`,
-      });
+      navigate(`/dashboard/scanning?storeId=${store?.id}`);
     }
   };
 
