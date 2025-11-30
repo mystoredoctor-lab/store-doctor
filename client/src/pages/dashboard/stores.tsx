@@ -16,7 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { mockStores } from "@/lib/data";
+import { mockStores, mockUser } from "@/lib/data";
 import { Plus, Search, Store, Shield, Zap, BarChart3, Lock, Zap as ZapIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getUserPlan } from "@/lib/planManager";
