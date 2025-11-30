@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
@@ -574,6 +575,10 @@ export default function BlogPostPage() {
   const slug = location.split("/blog/")[1];
   const post = allPosts.find(p => p.slug === slug);
   const content = staticBlogPostContent[slug];
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [slug]);
 
   if (!post) {
     return (
