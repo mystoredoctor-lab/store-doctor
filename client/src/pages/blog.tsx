@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, User } from "lucide-react";
@@ -13,7 +14,7 @@ import img6 from '@assets/stock_images/seo_optimization_sea_2c775c86.jpg';
 import img7 from '@assets/stock_images/mobile_phone_e-comme_55f8bfac.jpg';
 import img8 from '@assets/stock_images/web_development_code_c7923660.jpg';
 import img9 from '@assets/stock_images/web_development_code_0edd9fde.jpg';
-import img10 from '@assets/stock_images/seo_optimization_sea_af543c13.jpg';
+import img10 from '@assets/generated_images/professional_analytics_dashboard.png';
 
 const categories = ["All", "Technology", "SEO", "Conversion", "Mobile", "Performance", "Security"];
 
@@ -135,6 +136,7 @@ export default function BlogPage() {
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 }
