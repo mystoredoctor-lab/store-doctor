@@ -17,8 +17,17 @@ const footerLinks = {
 };
 
 const handleLinkClick = (href: string) => {
-  // Scroll to top unless it's a hash link
-  if (!href.includes("#")) {
+  if (href.includes("#")) {
+    // Smooth scroll to anchor
+    setTimeout(() => {
+      const id = href.split("#")[1];
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+  } else {
+    // Scroll to top for regular links
     window.scrollTo(0, 0);
   }
 };
