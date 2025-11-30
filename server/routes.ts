@@ -7,6 +7,45 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+  // ============ AUTH ENDPOINTS ============
+  
+  app.post("/api/auth/sign-in", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      if (!email || !password) {
+        return res.status(400).json({ error: "Email and password required" });
+      }
+      // Mock authentication - store in session
+      (req as any).userId = email;
+      res.json({ success: true, email });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to sign in" });
+    }
+  });
+
+  app.post("/api/auth/sign-up", async (req, res) => {
+    try {
+      const { name, email, password } = req.body;
+      if (!name || !email || !password) {
+        return res.status(400).json({ error: "Name, email, and password required" });
+      }
+      // Mock authentication - store in session
+      (req as any).userId = email;
+      res.json({ success: true, email, name });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create account" });
+    }
+  });
+
+  app.get("/api/auth/google", async (req, res) => {
+    try {
+      // Mock Google OAuth - redirect to dashboard
+      res.redirect("/onboarding/connect-store");
+    } catch (error) {
+      res.status(500).json({ error: "Failed to authenticate with Google" });
+    }
+  });
+
   // ============ STORES ENDPOINTS ============
   
   // GET all stores for user
@@ -70,7 +109,21 @@ export async function registerRoutes(
 
   // ============ SCANS ENDPOINTS ============
 
-  // GET all scans for store
+  // GET all scans (with optional storeId filter)
+  app.get("/api/scans", async (req, res) => {
+    try {
+      const storeId = req.query.storeId as string;
+      if (!storeId) {
+        return res.status(400).json({ error: "storeId query parameter required" });
+      }
+      const scans = await storage.getScansByStoreId(storeId);
+      res.json(scans);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch scans" });
+    }
+  });
+
+  // GET all scans for store (alternative route)
   app.get("/api/stores/:storeId/scans", async (req, res) => {
     try {
       const scans = await storage.getScansByStoreId(req.params.storeId);
@@ -127,6 +180,29 @@ export async function registerRoutes(
       });
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch scan" });
+    }
+  });
+
+  // CREATE new scan - alternative route
+  app.post("/api/scans/:storeId", async (req, res) => {
+    try {
+      const userId = (req as any).userId || "demo-user";
+      const scan = await storage.createScan({
+        storeId: req.params.storeId,
+        userId,
+        overallScore: req.body.overallScore || 72,
+        seoScore: req.body.seoScore,
+        speedScore: req.body.speedScore,
+        uxScore: req.body.uxScore,
+        croScore: req.body.croScore,
+        securityScore: req.body.securityScore,
+        mobileScore: req.body.mobileScore,
+        issues: req.body.issues || [],
+        recommendations: req.body.recommendations || [],
+      });
+      res.json(scan);
+    } catch (error) {
+      res.status(400).json({ error: "Failed to create scan" });
     }
   });
 
