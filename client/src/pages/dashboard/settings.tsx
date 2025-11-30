@@ -161,11 +161,22 @@ export default function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <div className="flex items-center gap-2">
-            <Store className="h-5 w-5" />
-            <CardTitle>Connected Stores</CardTitle>
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Store className="h-5 w-5" />
+              <CardTitle>Connected Stores</CardTitle>
+            </div>
+            {mockUser.plan !== "advanced" && (
+              <Badge variant="outline" className="bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/20">
+                Advanced Plan
+              </Badge>
+            )}
           </div>
-          <CardDescription>Manage your connected Shopify stores.</CardDescription>
+          <CardDescription>
+            {mockUser.plan === "advanced" 
+              ? "Manage your connected Shopify stores." 
+              : "Upgrade to Advanced plan to manage store connections."}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {stores.length > 0 ? (
@@ -179,15 +190,17 @@ export default function SettingsPage() {
                     <p className="font-medium truncate">{store.name}</p>
                     <p className="text-sm text-muted-foreground truncate">{store.url}</p>
                   </div>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="shrink-0 text-destructive hover:text-destructive"
-                    onClick={() => handleRemoveStore(store.id)}
-                    data-testid={`button-remove-store-${store.id}`}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
+                  {mockUser.plan === "advanced" && (
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="shrink-0 text-destructive hover:text-destructive"
+                      onClick={() => handleRemoveStore(store.id)}
+                      data-testid={`button-remove-store-${store.id}`}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  )}
                 </div>
               ))}
             </div>
