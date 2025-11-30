@@ -78,7 +78,7 @@ export function StoreCard({ store, onRunScan }: StoreCardProps) {
         </div>
         <div className="mt-4 flex gap-2">
           <Button size="sm" className="flex-1" asChild>
-            <Link href="/dashboard/scan" onClick={handleScrollToTop} data-testid={`button-view-details-${store.id}`}>View Details</Link>
+            <Link href={`/dashboard/scan?storeId=${store.id}`} onClick={handleScrollToTop} data-testid={`button-view-details-${store.id}`}>View Details</Link>
           </Button>
           <Button size="sm" variant="outline" onClick={onRunScan} data-testid={`button-run-scan-${store.id}`}>
             Run Scan

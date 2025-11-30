@@ -13,20 +13,113 @@ export const mockUser: User = {
   createdAt: new Date("2025-11-20"),
 };
 
-export const mockStores: Store[] = [
-  {
-    id: "store_1",
-    userId: "user_123",
-    name: "Fashion Forward",
-    url: "fashionforward.myshopify.com",
-    shopifyAccessToken: null,
-    healthScore: 87,
-    status: "healthy",
-    issuesCount: 3,
-    lastScanAt: new Date("2025-11-20"),
-    createdAt: new Date("2025-11-20"),
-  },
-];
+// Plan-specific mock stores
+export const mockStoresByPlan = {
+  free: [
+    {
+      id: "store_1",
+      userId: "user_123",
+      name: "Fashion Forward",
+      url: "fashionforward.myshopify.com",
+      shopifyAccessToken: null,
+      healthScore: 72,
+      status: "healthy",
+      issuesCount: 3,
+      lastScanAt: new Date("2025-11-20"),
+      createdAt: new Date("2025-11-20"),
+    },
+  ],
+  pro: [
+    {
+      id: "store_1",
+      userId: "user_123",
+      name: "Fashion Forward",
+      url: "fashionforward.myshopify.com",
+      shopifyAccessToken: null,
+      healthScore: 72,
+      status: "healthy",
+      issuesCount: 8,
+      lastScanAt: new Date("2025-11-20"),
+      createdAt: new Date("2025-11-20"),
+    },
+    {
+      id: "store_2",
+      userId: "user_123",
+      name: "Tech Gadgets Pro",
+      url: "techgadgets.myshopify.com",
+      shopifyAccessToken: null,
+      healthScore: 68,
+      status: "warning",
+      issuesCount: 12,
+      lastScanAt: new Date("2025-11-19"),
+      createdAt: new Date("2025-11-15"),
+    },
+  ],
+  advanced: [
+    {
+      id: "store_1",
+      userId: "user_123",
+      name: "Fashion Forward",
+      url: "fashionforward.myshopify.com",
+      shopifyAccessToken: null,
+      healthScore: 82,
+      status: "healthy",
+      issuesCount: 8,
+      lastScanAt: new Date("2025-11-20"),
+      createdAt: new Date("2025-11-20"),
+    },
+    {
+      id: "store_2",
+      userId: "user_123",
+      name: "Tech Gadgets Pro",
+      url: "techgadgets.myshopify.com",
+      shopifyAccessToken: null,
+      healthScore: 78,
+      status: "healthy",
+      issuesCount: 12,
+      lastScanAt: new Date("2025-11-19"),
+      createdAt: new Date("2025-11-15"),
+    },
+    {
+      id: "store_3",
+      userId: "user_123",
+      name: "Home & Garden Store",
+      url: "homeandgarden.myshopify.com",
+      shopifyAccessToken: null,
+      healthScore: 65,
+      status: "warning",
+      issuesCount: 15,
+      lastScanAt: new Date("2025-11-18"),
+      createdAt: new Date("2025-11-10"),
+    },
+    {
+      id: "store_4",
+      userId: "user_123",
+      name: "Luxury Watches Co",
+      url: "luxurywatches.myshopify.com",
+      shopifyAccessToken: null,
+      healthScore: 88,
+      status: "excellent",
+      issuesCount: 4,
+      lastScanAt: new Date("2025-11-17"),
+      createdAt: new Date("2025-11-05"),
+    },
+    {
+      id: "store_5",
+      userId: "user_123",
+      name: "Organic Beauty",
+      url: "organicbeauty.myshopify.com",
+      shopifyAccessToken: null,
+      healthScore: 75,
+      status: "healthy",
+      issuesCount: 10,
+      lastScanAt: new Date("2025-11-16"),
+      createdAt: new Date("2024-11-01"),
+    },
+  ],
+};
+
+export const mockStores = mockStoresByPlan.free;
 
 export const dashboardStats = {
   scansLeft: 1,
@@ -170,6 +263,75 @@ export const mockScanRecommendations: ScanRecommendation[] = [
   },
 ];
 
+// Store-specific scan results
+export const mockScanResultsByStore = {
+  store_1: {
+    overallScore: 72,
+    scanDate: "2025-11-20T14:30:00Z",
+    categories: mockScanCategories,
+    criticalIssues: mockScanIssues.slice(0, 3),
+    recommendations: mockScanRecommendations,
+  },
+  store_2: {
+    overallScore: 68,
+    scanDate: "2025-11-19T10:15:00Z",
+    categories: [
+      { name: "SEO", score: 75, icon: "search", color: "#10b981" },
+      { name: "Speed", score: 62, icon: "zap", color: "#f59e0b" },
+      { name: "UX", score: 70, icon: "layout", color: "#f59e0b" },
+      { name: "CRO", score: 65, icon: "trending-up", color: "#10b981" },
+      { name: "Security", score: 85, icon: "shield", color: "#10b981" },
+      { name: "Mobile", score: 72, icon: "smartphone", color: "#10b981" },
+    ],
+    criticalIssues: mockScanIssues.slice(1, 4),
+    recommendations: mockScanRecommendations,
+  },
+  store_3: {
+    overallScore: 65,
+    scanDate: "2025-11-18T09:00:00Z",
+    categories: [
+      { name: "SEO", score: 60, icon: "search", color: "#f59e0b" },
+      { name: "Speed", score: 58, icon: "zap", color: "#f59e0b" },
+      { name: "UX", score: 68, icon: "layout", color: "#10b981" },
+      { name: "CRO", score: 64, icon: "trending-up", color: "#f59e0b" },
+      { name: "Security", score: 75, icon: "shield", color: "#10b981" },
+      { name: "Mobile", score: 69, icon: "smartphone", color: "#10b981" },
+    ],
+    criticalIssues: mockScanIssues,
+    recommendations: mockScanRecommendations,
+  },
+  store_4: {
+    overallScore: 88,
+    scanDate: "2025-11-17T16:45:00Z",
+    categories: [
+      { name: "SEO", score: 92, icon: "search", color: "#10b981" },
+      { name: "Speed", score: 85, icon: "zap", color: "#10b981" },
+      { name: "UX", score: 90, icon: "layout", color: "#10b981" },
+      { name: "CRO", score: 84, icon: "trending-up", color: "#10b981" },
+      { name: "Security", score: 95, icon: "shield", color: "#10b981" },
+      { name: "Mobile", score: 86, icon: "smartphone", color: "#10b981" },
+    ],
+    criticalIssues: mockScanIssues.slice(0, 2),
+    recommendations: mockScanRecommendations,
+  },
+  store_5: {
+    overallScore: 75,
+    scanDate: "2025-11-16T11:20:00Z",
+    categories: [
+      { name: "SEO", score: 80, icon: "search", color: "#10b981" },
+      { name: "Speed", score: 72, icon: "zap", color: "#10b981" },
+      { name: "UX", score: 76, icon: "layout", color: "#10b981" },
+      { name: "CRO", score: 70, icon: "trending-up", color: "#f59e0b" },
+      { name: "Security", score: 88, icon: "shield", color: "#10b981" },
+      { name: "Mobile", score: 75, icon: "smartphone", color: "#10b981" },
+    ],
+    criticalIssues: mockScanIssues.slice(2, 5),
+    recommendations: mockScanRecommendations,
+  },
+};
+
+export const mockScanResults = mockScanResultsByStore.store_1;
+
 export const competitionBenchmark = {
   yourStore: {
     name: "Fashion Forward",
@@ -201,14 +363,6 @@ export const competitionBenchmark = {
     security: 94,
     mobile: 86,
   },
-};
-
-export const mockScanResults = {
-  overallScore: 72,
-  scanDate: "2025-11-20T14:30:00Z",
-  categories: mockScanCategories,
-  criticalIssues: mockScanIssues,
-  recommendations: mockScanRecommendations,
 };
 
 export const scanHistoryData = [

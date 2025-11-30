@@ -16,7 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { mockStores, mockUser } from "@/lib/data";
+import { mockStoresByPlan, mockUser } from "@/lib/data";
 import { Plus, Search, Store, Shield, Zap, BarChart3, Lock, Zap as ZapIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getUserPlan } from "@/lib/planManager";
@@ -34,19 +34,20 @@ export default function StoresPage() {
   const { toast } = useToast();
   const userPlan = getUserPlan();
 
-  // Initialize stores from localStorage or use mock data
+  // Initialize stores from localStorage or use plan-specific mock data
   useEffect(() => {
     const stored = localStorage.getItem(STORES_STORAGE_KEY);
+    const planStores = mockStoresByPlan[userPlan as "free" | "pro" | "advanced"] || mockStoresByPlan.free;
     if (stored) {
       try {
         setStores(JSON.parse(stored));
       } catch {
-        setStores(mockStores);
+        setStores(planStores);
       }
     } else {
-      setStores(mockStores);
+      setStores(planStores);
     }
-  }, []);
+  }, [userPlan]);
 
   // Save stores to localStorage whenever they change
   useEffect(() => {

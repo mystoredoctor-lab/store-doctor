@@ -347,6 +347,40 @@ export async function registerRoutes(
     }
   });
 
+  // ============ SCAN RESULTS ENDPOINT (WITH PLAN-AWARE DATA) ============
+  
+  // GET latest scan results for a store (returns plan-specific data)
+  app.get("/api/stores/:storeId/scan-results", async (req, res) => {
+    try {
+      const storeId = req.params.storeId;
+      const plan = req.query.plan as string || "free";
+      
+      // Return mock scan results (will be replaced with real data from database)
+      // This endpoint is plan-aware and can return different levels of detail
+      const scanResults = {
+        storeId,
+        plan,
+        overallScore: 72,
+        scanDate: new Date().toISOString(),
+        categories: [
+          { name: "SEO", score: 78, icon: "search", color: "#10b981" },
+          { name: "Speed", score: 65, icon: "zap", color: "#f59e0b" },
+          { name: "UX", score: 82, icon: "layout", color: "#10b981" },
+          { name: "CRO", score: 58, icon: "trending-up", color: "#f59e0b" },
+          { name: "Security", score: 91, icon: "shield", color: "#10b981" },
+          { name: "Mobile", score: 69, icon: "smartphone", color: "#f59e0b" },
+        ],
+        // Free plan shows limited issues, Pro/Advanced show all
+        issuesCount: plan === "free" ? 3 : 8,
+        message: "Scan results retrieved successfully",
+      };
+      
+      res.json(scanResults);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch scan results" });
+    }
+  });
+
   // ============ PAYMENT ENDPOINTS (NOT IMPLEMENTED) ============
   
   app.get("/api/payment/checkout/pro", async (req, res) => {

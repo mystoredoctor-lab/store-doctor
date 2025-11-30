@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,17 +14,34 @@ import { ScanHistoryChart } from "@/components/scan/scan-history-chart";
 import { IssueSeverityChart } from "@/components/scan/issue-severity-chart";
 import { CategoryBreakdownChart } from "@/components/scan/category-breakdown-chart";
 import { CompetitionBenchmarkChart } from "@/components/scan/competition-benchmark-chart";
-import { mockScanResults, mockStores } from "@/lib/data";
+import { mockStoresByPlan, mockScanResultsByStore, mockUser } from "@/lib/data";
 import { RefreshCw, Download, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getUserPlan } from "@/lib/planManager";
+import type { Store } from "@shared/schema";
 
 export default function ScanPage() {
-  const [, navigate] = useLocation();
+  const [location, navigate] = useLocation();
   const { toast } = useToast();
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-  const store = mockStores[0];
+  const [store, setStore] = useState<Store | null>(null);
   const userPlan = getUserPlan();
+
+  useEffect(() => {
+    // Get storeId from URL params
+    const params = new URLSearchParams(location.split("?")[1]);
+    const storeId = params.get("storeId");
+
+    // Get stores for current plan
+    const planStores = mockStoresByPlan[userPlan as "free" | "pro" | "advanced"] || mockStoresByPlan.free;
+
+    if (storeId) {
+      const foundStore = planStores.find((s) => s.id === storeId);
+      setStore(foundStore || planStores[0]);
+    } else {
+      setStore(planStores[0]);
+    }
+  }, [location, userPlan]);
 
   const handleRunScan = () => {
     setShowUpgradeModal(true);
@@ -37,13 +54,24 @@ export default function ScanPage() {
     });
   };
 
+  if (!store) return <div>Loading...</div>;
+
+  // Get scan results for this store
+  const scanResults = mockScanResultsByStore[store.id as keyof typeof mockScanResultsByStore] || mockScanResultsByStore.store_1;
+
   return (
     <>
       <UpgradeModal
         open={showUpgradeModal}
         onOpenChange={setShowUpgradeModal}
         title="Rescan Not Available"
-        description="You've reached your monthly scan limit on the Free plan. Upgrade to Pro (10 scans/month) or Advanced (25 scans/month) to run more scans."
+        description={
+          userPlan === "free"
+            ? "You've reached your monthly scan limit on the Free plan. Upgrade to Pro (10 scans/month) or Advanced (25 scans/month) to run more scans."
+            : userPlan === "pro"
+            ? "You've reached your monthly scan limit. Upgrade to Advanced (25 scans/month) for more scans."
+            : "You've reached your monthly scan limit. Please try again next month."
+        }
       />
       <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -54,7 +82,7 @@ export default function ScanPage() {
               {store.name}
             </Badge>
           </div>
-          <p className="text-muted-foreground">Last scanned: {new Date(mockScanResults.scanDate).toLocaleString()}</p>
+          <p className="text-muted-foreground">Last scanned: {new Date(scanResults.scanDate).toLocaleString()}</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={handleExportReport} data-testid="button-export-report">
@@ -83,7 +111,7 @@ export default function ScanPage() {
             <CardDescription>Based on 6 category analysis</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col items-center justify-center py-6">
-            <HealthScoreGauge score={mockScanResults.overallScore} size="lg" />
+            <HealthScoreGauge score={scanResults.overallScore} size="lg" />
             <div className="mt-4 flex items-center gap-2">
               <a
                 href={`https://${store.url}`}
@@ -105,7 +133,7 @@ export default function ScanPage() {
             <CardDescription>Performance breakdown by category</CardDescription>
           </CardHeader>
           <CardContent>
-            <CategoryScoreGrid categories={mockScanResults.categories} />
+            <CategoryScoreGrid categories={scanResults.categories} />
           </CardContent>
         </Card>
       </div>
@@ -166,13 +194,13 @@ export default function ScanPage() {
             </TabsList>
             <TabsContent value="issues">
               <IssuesList 
-                issues={mockScanResults.criticalIssues} 
+                issues={scanResults.criticalIssues} 
                 limitToFree={userPlan === "free"}
                 showAutoFix={userPlan === "advanced"}
               />
             </TabsContent>
             <TabsContent value="recommendations">
-              <RecommendationsList recommendations={mockScanResults.recommendations} />
+              <RecommendationsList recommendations={scanResults.recommendations} />
             </TabsContent>
           </Tabs>
         </CardContent>
