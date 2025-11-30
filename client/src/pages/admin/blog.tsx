@@ -10,7 +10,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 export default function AdminBlogPage() {
   const defaultBlogPosts = useBlogPosts();
-  const [posts, setPosts] = useLocalStorage<BlogPost[]>("storedoctor_blog_posts", defaultBlogPosts);
+  const [posts, setPosts] = useLocalStorage<BlogPost[]>("storedoctor_blog_posts_v2", defaultBlogPosts);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formData, setFormData] = useState({ title: "", author: "", category: "", content: "" });

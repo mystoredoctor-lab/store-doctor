@@ -34,7 +34,7 @@ const initialPlans = [
 ];
 
 export default function AdminPricingPage() {
-  const [plans, setPlans] = useLocalStorage("storedoctor_pricing_plans", initialPlans);
+  const [plans, setPlans] = useLocalStorage("storedoctor_pricing_plans_v2", initialPlans);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editFormData, setEditFormData] = useState({ price: 0, scans: 0, stores: 0, features: [] as string[] });
   const [newFeature, setNewFeature] = useState("");
