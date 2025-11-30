@@ -24,7 +24,7 @@ const defaultPosts: BlogPost[] = [
     author: "Sarah Chen",
     date: "November 15, 2025",
     readTime: "12 min read",
-    image: "https://images.unsplash.com/photo-1677442d019cecf8920f254b09b04b24143f3f7fa?w=400&h=300&fit=crop",
+    image: "/stock_images/professional_e-comme_9e7deaa5.jpg",
   },
   {
     id: 2,
@@ -36,7 +36,7 @@ const defaultPosts: BlogPost[] = [
     author: "Marcus Johnson",
     date: "November 12, 2025",
     readTime: "15 min read",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+    image: "/stock_images/seo_optimization_sea_af543c13.jpg",
   },
   {
     id: 3,
@@ -48,7 +48,7 @@ const defaultPosts: BlogPost[] = [
     author: "Emma Williams",
     date: "October 28, 2025",
     readTime: "14 min read",
-    image: "https://images.unsplash.com/photo-1460925895917-adf4e565c472?w=400&h=300&fit=crop",
+    image: "/stock_images/professional_e-comme_a3dba94b.jpg",
   },
   {
     id: 4,
@@ -60,7 +60,7 @@ const defaultPosts: BlogPost[] = [
     author: "John Smith",
     date: "October 22, 2025",
     readTime: "13 min read",
-    image: "https://images.unsplash.com/photo-1512941691920-25bda36dc643?w=400&h=300&fit=crop",
+    image: "/stock_images/mobile_phone_e-comme_f19edd8d.jpg",
   },
   {
     id: 5,
@@ -72,7 +72,7 @@ const defaultPosts: BlogPost[] = [
     author: "Lisa Rodriguez",
     date: "October 15, 2025",
     readTime: "16 min read",
-    image: "https://images.unsplash.com/photo-1551073645-f4c6bff1c85b?w=400&h=300&fit=crop",
+    image: "/stock_images/professional_e-comme_237bd240.jpg",
   },
   {
     id: 6,
@@ -84,7 +84,7 @@ const defaultPosts: BlogPost[] = [
     author: "David Kim",
     date: "October 8, 2025",
     readTime: "14 min read",
-    image: "https://images.unsplash.com/photo-1563986768711-b3bbb3c0ae2e?w=400&h=300&fit=crop",
+    image: "/stock_images/seo_optimization_sea_2c775c86.jpg",
   },
   {
     id: 7,
@@ -96,7 +96,7 @@ const defaultPosts: BlogPost[] = [
     author: "Alex Rivera",
     date: "November 8, 2025",
     readTime: "18 min read",
-    image: "https://images.unsplash.com/photo-1523475335684-37898b6baf30?w=400&h=300&fit=crop",
+    image: "/stock_images/mobile_phone_e-comme_55f8bfac.jpg",
   },
   {
     id: 8,
@@ -108,7 +108,7 @@ const defaultPosts: BlogPost[] = [
     author: "Jordan Martinez",
     date: "November 5, 2025",
     readTime: "14 min read",
-    image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=300&fit=crop",
+    image: "/stock_images/web_development_code_c7923660.jpg",
   },
   {
     id: 9,
@@ -120,7 +120,7 @@ const defaultPosts: BlogPost[] = [
     author: "Taylor Chen",
     date: "October 31, 2025",
     readTime: "16 min read",
-    image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop",
+    image: "/stock_images/web_development_code_0edd9fde.jpg",
   },
   {
     id: 10,
@@ -132,7 +132,7 @@ const defaultPosts: BlogPost[] = [
     author: "Casey Wright",
     date: "October 25, 2025",
     readTime: "19 min read",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+    image: "/stock_images/seo_optimization_sea_af543c13.jpg",
   },
 ];
 
