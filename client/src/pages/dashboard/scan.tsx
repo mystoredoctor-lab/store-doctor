@@ -23,7 +23,7 @@ export default function ScanPage() {
   const store = mockStores[0];
 
   const handleRunScan = () => {
-    navigate("/dashboard/scanning");
+    navigate("/pricing");
   };
 
   const handleExportReport = () => {

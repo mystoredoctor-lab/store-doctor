@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,13 +16,14 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { mockStores, mockUser } from "@/lib/data";
-import { Plus, Search, Store, Shield, Zap, BarChart3, Lock } from "lucide-react";
+import { Plus, Search, Store, Shield, Zap, BarChart3, Lock, Zap as ZapIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import type { Store as StoreType } from "@shared/schema";
 
 export const STORES_STORAGE_KEY = "storedoctor_connected_stores_v1";
 
 export default function StoresPage() {
+  const [, navigate] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [isConnectDialogOpen, setIsConnectDialogOpen] = useState(false);
   const [storeUrl, setStoreUrl] = useState("");
@@ -97,7 +99,15 @@ export default function StoresPage() {
         </div>
         <Dialog open={isConnectDialogOpen} onOpenChange={setIsConnectDialogOpen}>
           <DialogTrigger asChild>
-            <Button disabled={!canAddMore} data-testid="button-connect-store">
+            <Button 
+              disabled={!canAddMore} 
+              data-testid="button-connect-store"
+              onClick={() => {
+                if (!canAddMore) {
+                  navigate("/pricing");
+                }
+              }}
+            >
               <Plus className="mr-2 h-4 w-4" />
               Connect Store
             </Button>
@@ -191,11 +201,21 @@ export default function StoresPage() {
       </div>
 
       {!canAddMore && (
-        <AlertBanner
-          type="info"
-          title={`You've reached your store limit (${maxStores} stores)`}
-          message="Upgrade your plan to connect more stores."
-        />
+        <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <p className="font-semibold text-sm">You've reached your store limit ({maxStores} stores)</p>
+              <p className="text-sm text-muted-foreground mt-1">Upgrade your plan to connect more stores.</p>
+            </div>
+            <Button 
+              onClick={() => navigate("/pricing")}
+              data-testid="button-upgrade-to-add-store"
+            >
+              <ZapIcon className="mr-2 h-4 w-4" />
+              Upgrade Plan
+            </Button>
+          </div>
+        </div>
       )}
 
       <Card>
