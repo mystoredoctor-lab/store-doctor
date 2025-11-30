@@ -21,6 +21,10 @@ interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
+const handleScrollToTop = () => {
+  window.scrollTo(0, 0);
+};
+
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [location] = useLocation();
 
@@ -100,13 +104,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href="/dashboard/settings" className="cursor-pointer w-full" data-testid="link-header-profile">
+                    <Link href="/dashboard/settings" className="cursor-pointer w-full" onClick={handleScrollToTop} data-testid="link-header-profile">
                       <User className="mr-2 h-4 w-4" />
                       Profile
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/dashboard/settings" className="cursor-pointer w-full" data-testid="link-header-settings">
+                    <Link href="/dashboard/settings" className="cursor-pointer w-full" onClick={handleScrollToTop} data-testid="link-header-settings">
                       <Settings className="mr-2 h-4 w-4" />
                       Settings
                     </Link>

@@ -146,7 +146,11 @@ export default function ScanPage() {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="issues">
-              <IssuesList issues={mockScanResults.criticalIssues} limitToFree={mockUser.plan === "free"} />
+              <IssuesList 
+                issues={mockScanResults.criticalIssues} 
+                limitToFree={mockUser.plan === "free"}
+                showAutoFix={mockUser.plan === "advanced"}
+              />
             </TabsContent>
             <TabsContent value="recommendations">
               <RecommendationsList recommendations={mockScanResults.recommendations} />

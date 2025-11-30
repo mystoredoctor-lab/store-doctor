@@ -1,10 +1,11 @@
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, AlertCircle, Info, Lock, ChevronDown, ChevronUp } from "lucide-react";
+import { AlertTriangle, AlertCircle, Info, Lock, ChevronDown, ChevronUp, Wand2 } from "lucide-react";
 import { useState } from "react";
 import type { ScanIssue } from "@shared/schema";
 import { Link } from "wouter";
+import { useToast } from "@/hooks/use-toast";
 
 const handleScrollToTop = () => {
   window.scrollTo(0, 0);
@@ -13,10 +14,12 @@ const handleScrollToTop = () => {
 interface IssuesListProps {
   issues: ScanIssue[];
   limitToFree?: boolean;
+  showAutoFix?: boolean;
 }
 
-export function IssuesList({ issues, limitToFree = false }: IssuesListProps) {
+export function IssuesList({ issues, limitToFree = false, showAutoFix = false }: IssuesListProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const displayedIssues = limitToFree ? issues.slice(0, 3) : issues;
   const hiddenCount = limitToFree ? issues.length - 3 : 0;
@@ -80,7 +83,7 @@ export function IssuesList({ issues, limitToFree = false }: IssuesListProps) {
             </button>
             {isExpanded && (
               <div className="px-4 pb-4 pt-0 border-t bg-muted/30">
-                <div className="pt-4 space-y-3">
+                <div className="pt-4 space-y-4">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground mb-1">Impact</p>
                     <p className="text-sm">{issue.impact}</p>
@@ -89,6 +92,20 @@ export function IssuesList({ issues, limitToFree = false }: IssuesListProps) {
                     <p className="text-sm font-medium text-muted-foreground mb-1">Recommendation</p>
                     <p className="text-sm">{issue.recommendation}</p>
                   </div>
+                  {showAutoFix && (
+                    <div className="flex items-center gap-2 pt-2 border-t">
+                      <Button 
+                        size="sm" 
+                        className="bg-primary hover:bg-primary/90 gap-2"
+                        onClick={() => toast({ title: "Auto-fix applied", description: `Fixing: ${issue.title}` })}
+                        data-testid={`button-autofix-${issue.id}`}
+                      >
+                        <Wand2 className="h-4 w-4" />
+                        Apply Auto-Fix
+                      </Button>
+                      <span className="text-xs text-muted-foreground">Advanced Plan</span>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
