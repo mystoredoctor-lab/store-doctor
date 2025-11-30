@@ -1,8 +1,9 @@
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Users, BarChart2, Settings, ArrowLeft, FileText, DollarSign, Menu, X } from "lucide-react";
+import { LayoutDashboard, Users, BarChart2, Settings, ArrowLeft, FileText, DollarSign, Menu, X, LogOut } from "lucide-react";
 import { useState } from "react";
+import { useAdminAuth } from "@/hooks/useAdminAuth";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +24,7 @@ const adminMenuItems = [
 export function AdminNavbar() {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { logout } = useAdminAuth();
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-card">
@@ -99,17 +101,26 @@ export function AdminNavbar() {
                   Back to Dashboard
                 </Link>
               </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={logout} data-testid="button-mobile-admin-logout">
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
 
-        {/* Desktop Back Button */}
-        <div className="hidden md:block">
+        {/* Desktop Actions */}
+        <div className="hidden md:flex items-center gap-2">
           <Button variant="ghost" size="sm" className="gap-2" asChild>
             <Link href="/dashboard" data-testid="admin-back-button">
               <ArrowLeft className="h-4 w-4" />
               Back
             </Link>
+          </Button>
+          <Button variant="ghost" size="sm" className="gap-2" onClick={logout} data-testid="button-admin-logout">
+            <LogOut className="h-4 w-4" />
+            Logout
           </Button>
         </div>
       </div>

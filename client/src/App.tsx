@@ -19,6 +19,7 @@ import ScanPage from "@/pages/dashboard/scan";
 import ScanningPage from "@/pages/dashboard/scanning";
 import SettingsPage from "@/pages/dashboard/settings";
 import { DashboardLayout } from "@/pages/dashboard/layout";
+import AdminLoginPage from "@/pages/admin/login";
 import AdminDashboard from "@/pages/admin/index";
 import AdminUsers from "@/pages/admin/users";
 import AdminBlog from "@/pages/admin/blog";
@@ -26,6 +27,14 @@ import AdminPricing from "@/pages/admin/pricing";
 import AdminAnalytics from "@/pages/admin/analytics";
 import AdminSettings from "@/pages/admin/settings";
 import AdminLayout from "@/pages/admin/layout";
+import { useAdminAuth } from "@/hooks/useAdminAuth";
+
+function ProtectedAdminRoute({ children }: { children: React.ReactNode }) {
+  const { isLoggedIn, isLoading } = useAdminAuth();
+  if (isLoading) return <div>Loading...</div>;
+  if (!isLoggedIn) return <AdminLoginPage />;
+  return <>{children}</>;
+}
 
 function Router() {
   return (
@@ -73,46 +82,59 @@ function Router() {
           </DashboardLayout>
         )}
       </Route>
+      <Route path="/admin/login" component={AdminLoginPage} />
       <Route path="/admin">
         {() => (
-          <AdminLayout>
-            <AdminDashboard />
-          </AdminLayout>
+          <ProtectedAdminRoute>
+            <AdminLayout>
+              <AdminDashboard />
+            </AdminLayout>
+          </ProtectedAdminRoute>
         )}
       </Route>
       <Route path="/admin/users">
         {() => (
-          <AdminLayout>
-            <AdminUsers />
-          </AdminLayout>
+          <ProtectedAdminRoute>
+            <AdminLayout>
+              <AdminUsers />
+            </AdminLayout>
+          </ProtectedAdminRoute>
         )}
       </Route>
       <Route path="/admin/blog">
         {() => (
-          <AdminLayout>
-            <AdminBlog />
-          </AdminLayout>
+          <ProtectedAdminRoute>
+            <AdminLayout>
+              <AdminBlog />
+            </AdminLayout>
+          </ProtectedAdminRoute>
         )}
       </Route>
       <Route path="/admin/pricing">
         {() => (
-          <AdminLayout>
-            <AdminPricing />
-          </AdminLayout>
+          <ProtectedAdminRoute>
+            <AdminLayout>
+              <AdminPricing />
+            </AdminLayout>
+          </ProtectedAdminRoute>
         )}
       </Route>
       <Route path="/admin/analytics">
         {() => (
-          <AdminLayout>
-            <AdminAnalytics />
-          </AdminLayout>
+          <ProtectedAdminRoute>
+            <AdminLayout>
+              <AdminAnalytics />
+            </AdminLayout>
+          </ProtectedAdminRoute>
         )}
       </Route>
       <Route path="/admin/settings">
         {() => (
-          <AdminLayout>
-            <AdminSettings />
-          </AdminLayout>
+          <ProtectedAdminRoute>
+            <AdminLayout>
+              <AdminSettings />
+            </AdminLayout>
+          </ProtectedAdminRoute>
         )}
       </Route>
       <Route component={NotFound} />
