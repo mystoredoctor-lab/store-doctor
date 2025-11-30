@@ -2,10 +2,12 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, AlertCircle, Info, Lock, ChevronDown, ChevronUp, Wand2, MapPin, Code, Loader2, CheckCircle2 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { ScanIssue } from "@shared/schema";
 import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
+import { queryClient } from "@/lib/queryClient";
 
 const handleScrollToTop = () => {
   window.scrollTo(0, 0);
@@ -15,6 +17,7 @@ interface IssuesListProps {
   issues: ScanIssue[];
   limitToFree?: boolean;
   showAutoFix?: boolean;
+  scanId?: string;
 }
 
 interface AutoFixState {
@@ -23,7 +26,7 @@ interface AutoFixState {
   message?: string;
 }
 
-export function IssuesList({ issues, limitToFree = false, showAutoFix = false }: IssuesListProps) {
+export function IssuesList({ issues, limitToFree = false, showAutoFix = false, scanId }: IssuesListProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [autoFixState, setAutoFixState] = useState<AutoFixState>({ issueId: null, status: "idle" });
   const { toast } = useToast();
@@ -36,8 +39,17 @@ export function IssuesList({ issues, limitToFree = false, showAutoFix = false }:
     setAutoFixState({ issueId, status: "loading", message: "Processing..." });
 
     try {
-      // Simulate API call with delay (replace with actual API call later)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Call backend API if scanId provided, otherwise simulate
+      if (scanId) {
+        const endpoint = `/api/scans/${scanId}/issues/${issueId}/auto-fix`;
+        await apiRequest("POST", endpoint, {});
+        
+        // Invalidate scan cache to refresh data
+        queryClient.invalidateQueries({ queryKey: ["/api/scans", scanId] });
+      } else {
+        // Fallback: simulate API call
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+      }
 
       // Success state
       setAutoFixState({ issueId, status: "success", message: "Auto-fix applied successfully!" });
