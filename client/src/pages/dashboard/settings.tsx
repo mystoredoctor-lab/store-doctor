@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,13 +21,17 @@ import { mockUser, pricingPlans } from "@/lib/data";
 import { User, CreditCard, Mail, Key, AlertTriangle, Trash2, Store, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { STORES_STORAGE_KEY } from "@/pages/dashboard/stores";
+import { getUserPlan, updateUserPlan } from "@/lib/planManager";
 import type { Store as StoreType } from "@shared/schema";
 
 export default function SettingsPage() {
+  const [, navigate] = useLocation();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [stores, setStores] = useState<StoreType[]>([]);
   const { toast } = useToast();
-  const currentPlan = pricingPlans.find((p) => p.id === mockUser.plan);
+  const [userPlan, setUserPlan] = useState(getUserPlan());
+  const [isProcessing, setIsProcessing] = useState(false);
+  const currentPlan = pricingPlans.find((p) => p.id === userPlan);
 
   // Load stores from localStorage
   useEffect(() => {
@@ -73,6 +77,32 @@ export default function SettingsPage() {
       variant: "destructive",
     });
     setIsDeleteDialogOpen(false);
+  };
+
+  const handleUpgradePlan = () => {
+    navigate("/pricing");
+  };
+
+  const handleDowngradePlan = async () => {
+    setIsProcessing(true);
+    try {
+      const success = await updateUserPlan("free");
+      if (success) {
+        setUserPlan("free");
+        toast({
+          title: "Success",
+          description: "You've successfully downgraded to the Free plan.",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to downgrade plan. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -134,15 +164,22 @@ export default function SettingsPage() {
               </p>
             </div>
             <div className="flex gap-2">
-              {mockUser.plan !== "advanced" && (
-                <Button asChild>
-                  <Link href="/pricing" data-testid="button-upgrade-plan">Upgrade Plan</Link>
+              {userPlan !== "advanced" && (
+                <Button onClick={handleUpgradePlan} data-testid="button-upgrade-plan">Upgrade Plan</Button>
+              )}
+              {userPlan !== "free" && (
+                <Button 
+                  variant="outline" 
+                  onClick={handleDowngradePlan}
+                  disabled={isProcessing}
+                  data-testid="button-downgrade"
+                >
+                  {isProcessing ? 'Processing...' : 'Downgrade'}
                 </Button>
               )}
-              {mockUser.plan !== "free" && <Button variant="outline" data-testid="button-downgrade">Downgrade</Button>}
             </div>
           </div>
-          {mockUser.plan !== "free" && (
+          {userPlan !== "free" && (
             <div className="space-y-2">
               <p className="text-sm font-medium">Payment Method</p>
               <div className="flex items-center justify-between p-3 rounded-lg border">
@@ -166,14 +203,14 @@ export default function SettingsPage() {
               <Store className="h-5 w-5" />
               <CardTitle>Connected Stores</CardTitle>
             </div>
-            {mockUser.plan !== "advanced" && (
+            {userPlan !== "advanced" && (
               <Badge variant="outline" className="bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/20">
                 Advanced Plan
               </Badge>
             )}
           </div>
           <CardDescription>
-            {mockUser.plan === "advanced" 
+            {userPlan === "advanced" 
               ? "Manage your connected Shopify stores." 
               : "Upgrade to Advanced plan to manage store connections."}
           </CardDescription>
@@ -190,7 +227,7 @@ export default function SettingsPage() {
                     <p className="font-medium truncate">{store.name}</p>
                     <p className="text-sm text-muted-foreground truncate">{store.url}</p>
                   </div>
-                  {mockUser.plan === "advanced" && (
+                  {userPlan === "advanced" && (
                     <Button
                       size="icon"
                       variant="ghost"

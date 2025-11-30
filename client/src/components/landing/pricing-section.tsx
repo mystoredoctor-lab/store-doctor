@@ -5,6 +5,9 @@ import { Check } from "lucide-react";
 import { usePricingPlans } from "@/hooks/usePricingPlans";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { useLocation } from "wouter";
+import { useToast } from "@/hooks/use-toast";
+import { updateUserPlan } from "@/lib/planManager";
 
 const handleScrollToTop = () => {
   window.scrollTo(0, 0);
@@ -12,31 +15,58 @@ const handleScrollToTop = () => {
 
 export function PricingSection() {
   const plans = usePricingPlans();
+  const [, navigate] = useLocation();
+  const { toast } = useToast();
   const [isLoggedIn] = useState(!!localStorage.getItem("storedoctor_admin_auth_v1"));
+  const [isProcessing, setIsProcessing] = useState<string | null>(null);
+
+  const handlePlanSelection = async (planId: string) => {
+    if (planId === 'free') {
+      navigate(isLoggedIn ? '/dashboard' : '/auth/sign-up');
+      return;
+    }
+
+    setIsProcessing(planId);
+    try {
+      const success = await updateUserPlan(planId);
+      if (success) {
+        toast({
+          title: "Success!",
+          description: `You've successfully subscribed to the ${planId === 'pro' ? 'Pro' : 'Advanced'} plan!`,
+        });
+        // Redirect to dashboard
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 1500);
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to update plan. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(null);
+    }
+  };
 
   const getButtonConfig = (planId: string) => {
     if (planId === 'free') {
-      return {
-        text: 'Get Started',
-        href: isLoggedIn ? '/dashboard' : '/auth/sign-up',
-        onClick: handleScrollToTop,
-      };
+      return { text: 'Get Started' };
     }
     if (planId === 'pro') {
-      return {
-        text: 'Go Pro',
-        href: '/api/payment/checkout/pro',
-        onClick: handleScrollToTop,
-      };
+      return { text: 'Go Pro' };
     }
     if (planId === 'advanced') {
-      return {
-        text: 'Subscribe',
-        href: '/api/payment/checkout/advanced',
-        onClick: handleScrollToTop,
-      };
+      return { text: 'Subscribe' };
     }
-    return { text: 'Get Started', href: '/dashboard', onClick: handleScrollToTop };
+    return { text: 'Get Started' };
   };
   
   return (
@@ -89,11 +119,11 @@ export function PricingSection() {
                   <Button 
                     className="w-full" 
                     variant={plan.id === 'pro' ? "default" : "outline"}
-                    onClick={buttonConfig.onClick}
-                    asChild
+                    onClick={() => handlePlanSelection(plan.id)}
+                    disabled={isProcessing !== null}
                     data-testid={`button-pricing-${plan.id}`}
                   >
-                    <a href={buttonConfig.href}>{buttonConfig.text}</a>
+                    {isProcessing === plan.id ? 'Processing...' : buttonConfig.text}
                   </Button>
                 </CardFooter>
               </Card>

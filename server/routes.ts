@@ -332,6 +332,21 @@ export async function registerRoutes(
     }
   });
 
+  // ============ USER PLAN ENDPOINTS ============
+  
+  app.patch("/api/users/:userId/plan", async (req, res) => {
+    try {
+      const { plan } = req.body;
+      if (!plan || !["free", "pro", "advanced"].includes(plan)) {
+        return res.status(400).json({ error: "Invalid plan" });
+      }
+      // Mock update - in production would update database
+      res.json({ success: true, userId: req.params.userId, plan });
+    } catch (error) {
+      res.status(400).json({ error: "Failed to update plan" });
+    }
+  });
+
   // ============ PAYMENT ENDPOINTS (NOT IMPLEMENTED) ============
   
   app.get("/api/payment/checkout/pro", async (req, res) => {
