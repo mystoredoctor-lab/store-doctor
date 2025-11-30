@@ -58,39 +58,58 @@ export function IssuesList({ issues, limitToFree = false, showAutoFix = false }:
           <div key={issue.id} className="border rounded-lg overflow-hidden" data-testid={`issue-${issue.id}`}>
             <button
               onClick={() => setExpandedId(isExpanded ? null : issue.id)}
-              className="w-full flex items-center justify-between p-4 text-left hover:bg-muted/50 transition-colors"
+              className="w-full text-left hover:bg-muted/30 transition-colors"
               data-testid={`button-expand-issue-${issue.id}`}
             >
-              <div className="flex items-center gap-4">
-                <div className={cn("p-2 rounded-lg shrink-0", config.className)}>
-                  <Icon className="h-4 w-4" />
-                </div>
-                <div className="min-w-0">
-                  <p className="font-medium">{issue.title}</p>
-                  <div className="flex items-center gap-2 mt-1 flex-wrap">
-                    <Badge variant="outline" className={config.className}>
-                      {config.label}
-                    </Badge>
-                    <Badge variant="secondary">{issue.category}</Badge>
+              <div className="p-4 space-y-3">
+                {/* Header: Icon, Title, Severity, Category */}
+                <div className="flex items-start gap-4">
+                  <div className={cn("p-2 rounded-lg shrink-0 mt-0.5", config.className)}>
+                    <Icon className="h-4 w-4" />
                   </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-base">{issue.title}</p>
+                    <div className="flex items-center gap-2 mt-2 flex-wrap">
+                      <Badge variant="outline" className={config.className}>
+                        {config.label} Severity
+                      </Badge>
+                      <Badge variant="secondary">{issue.category}</Badge>
+                    </div>
+                  </div>
+                  {isExpanded ? (
+                    <ChevronUp className="h-5 w-5 text-muted-foreground shrink-0" />
+                  ) : (
+                    <ChevronDown className="h-5 w-5 text-muted-foreground shrink-0" />
+                  )}
+                </div>
+
+                {/* Key Info Grid (shown by default) */}
+                <div className="ml-12 grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <p className="text-xs font-medium text-muted-foreground">Impact</p>
+                    <p className="text-sm line-clamp-2">{issue.impact}</p>
+                  </div>
+                  {showAutoFix && issue.location?.page && (
+                    <div className="space-y-1">
+                      <p className="text-xs font-medium text-muted-foreground">Location</p>
+                      <p className="text-sm line-clamp-2">{issue.location.page}</p>
+                    </div>
+                  )}
                 </div>
               </div>
-              {isExpanded ? (
-                <ChevronUp className="h-5 w-5 text-muted-foreground shrink-0" />
-              ) : (
-                <ChevronDown className="h-5 w-5 text-muted-foreground shrink-0" />
-              )}
             </button>
             {isExpanded && (
               <div className="px-4 pb-4 pt-0 border-t bg-muted/30">
                 <div className="pt-4 space-y-4">
+                  {/* Full Impact */}
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-1">Impact</p>
+                    <p className="text-sm font-medium text-muted-foreground mb-1">Business Impact</p>
                     <p className="text-sm">{issue.impact}</p>
                   </div>
 
+                  {/* Location Details for Advanced Users */}
                   {showAutoFix && issue.location && (
-                    <div className="space-y-3 p-3 rounded-lg bg-background/50 border border-border/50">
+                    <div className="space-y-3 p-3 rounded-lg bg-background/50 border border-primary/20">
                       <p className="text-sm font-semibold flex items-center gap-2">
                         <MapPin className="h-4 w-4 text-primary" />
                         Where the issue is
@@ -99,28 +118,29 @@ export function IssuesList({ issues, limitToFree = false, showAutoFix = false }:
                       <div className="space-y-2 text-sm">
                         {issue.location.url && (
                           <div>
-                            <p className="text-xs text-muted-foreground">URL/Page</p>
+                            <p className="text-xs text-muted-foreground uppercase tracking-wide">URL</p>
                             <p className="font-mono text-xs bg-muted/50 p-2 rounded border border-border/50">{issue.location.url}</p>
                           </div>
                         )}
                         
                         {issue.location.page && (
                           <div>
-                            <p className="text-xs text-muted-foreground">Location</p>
-                            <p className="text-sm">{issue.location.page}</p>
+                            <p className="text-xs text-muted-foreground uppercase tracking-wide">Section/App</p>
+                            <p className="text-sm font-medium">{issue.location.page}</p>
                           </div>
                         )}
 
                         {issue.location.element && (
                           <div>
-                            <p className="text-xs text-muted-foreground">HTML Element</p>
+                            <p className="text-xs text-muted-foreground uppercase tracking-wide">HTML Element</p>
                             <p className="font-mono text-xs bg-muted/50 p-2 rounded border border-border/50">{issue.location.element}</p>
                           </div>
                         )}
 
                         {issue.location.lineNumbers && (
                           <div>
-                            <p className="text-xs text-muted-foreground">Lines {issue.location.lineNumbers}</p>
+                            <p className="text-xs text-muted-foreground uppercase tracking-wide">Code Location</p>
+                            <p className="text-xs">Lines {issue.location.lineNumbers}</p>
                           </div>
                         )}
                       </div>
@@ -139,11 +159,13 @@ export function IssuesList({ issues, limitToFree = false, showAutoFix = false }:
                     </div>
                   )}
 
+                  {/* Recommendation */}
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-1">Recommendation</p>
+                    <p className="text-sm font-medium text-muted-foreground mb-1">How to Fix</p>
                     <p className="text-sm">{issue.recommendation}</p>
                   </div>
 
+                  {/* Auto-fix button */}
                   {showAutoFix && (
                     <div className="flex items-center gap-2 pt-2 border-t">
                       <Button 
