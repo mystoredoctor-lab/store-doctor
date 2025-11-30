@@ -5,6 +5,29 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import { useBlogPosts } from "@/hooks/useBlogPosts";
+import img1 from '@assets/stock_images/professional_e-comme_9e7deaa5.jpg';
+import img2 from '@assets/stock_images/seo_optimization_sea_af543c13.jpg';
+import img3 from '@assets/stock_images/professional_e-comme_a3dba94b.jpg';
+import img4 from '@assets/stock_images/mobile_phone_e-comme_f19edd8d.jpg';
+import img5 from '@assets/stock_images/professional_e-comme_237bd240.jpg';
+import img6 from '@assets/stock_images/seo_optimization_sea_2c775c86.jpg';
+import img7 from '@assets/stock_images/mobile_phone_e-comme_55f8bfac.jpg';
+import img8 from '@assets/stock_images/web_development_code_c7923660.jpg';
+import img9 from '@assets/stock_images/web_development_code_0edd9fde.jpg';
+import img10 from '@assets/stock_images/seo_optimization_sea_af543c13.jpg';
+
+const imageMap = {
+  "ai-powered-store-analysis": img1,
+  "shopify-seo-guide": img2,
+  "conversion-rate-optimization": img3,
+  "mobile-optimization": img4,
+  "website-speed-optimization": img5,
+  "ecommerce-security": img6,
+  "shopify-product-page-seo": img7,
+  "best-shopify-theme-seo": img8,
+  "shopify-meta-tags-schema-markup": img9,
+  "improve-shopify-google-rankings": img10,
+} as Record<string, string>;
 
 const staticBlogPostContent: Record<string, any> = {
   "ai-powered-store-analysis": {
@@ -602,15 +625,13 @@ export default function BlogPostPage() {
         {/* Hero Image */}
         <div className="h-96 overflow-hidden bg-muted">
           <img 
-            src={post.image} 
+            src={imageMap[slug] || img1} 
             alt={post.title} 
             className="w-full h-full object-cover" 
             data-testid="blog-post-hero-image"
             loading="eager"
             width="1200"
             height="600"
-            decoding="async"
-            fetchPriority="high"
           />
         </div>
 
