@@ -21,6 +21,9 @@ const handleNavClick = (href: string) => {
         element.scrollIntoView({ behavior: "smooth" });
       }
     }, 100);
+  } else {
+    // Scroll to top for regular page links
+    window.scrollTo(0, 0);
   }
 };
 
