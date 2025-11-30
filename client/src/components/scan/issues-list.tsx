@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, AlertCircle, Info, Lock, ChevronDown, ChevronUp, Wand2 } from "lucide-react";
+import { AlertTriangle, AlertCircle, Info, Lock, ChevronDown, ChevronUp, Wand2, MapPin, Code } from "lucide-react";
 import { useState } from "react";
 import type { ScanIssue } from "@shared/schema";
 import { Link } from "wouter";
@@ -88,10 +88,62 @@ export function IssuesList({ issues, limitToFree = false, showAutoFix = false }:
                     <p className="text-sm font-medium text-muted-foreground mb-1">Impact</p>
                     <p className="text-sm">{issue.impact}</p>
                   </div>
+
+                  {showAutoFix && issue.location && (
+                    <div className="space-y-3 p-3 rounded-lg bg-background/50 border border-border/50">
+                      <p className="text-sm font-semibold flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-primary" />
+                        Where the issue is
+                      </p>
+                      
+                      <div className="space-y-2 text-sm">
+                        {issue.location.url && (
+                          <div>
+                            <p className="text-xs text-muted-foreground">URL/Page</p>
+                            <p className="font-mono text-xs bg-muted/50 p-2 rounded border border-border/50">{issue.location.url}</p>
+                          </div>
+                        )}
+                        
+                        {issue.location.page && (
+                          <div>
+                            <p className="text-xs text-muted-foreground">Location</p>
+                            <p className="text-sm">{issue.location.page}</p>
+                          </div>
+                        )}
+
+                        {issue.location.element && (
+                          <div>
+                            <p className="text-xs text-muted-foreground">HTML Element</p>
+                            <p className="font-mono text-xs bg-muted/50 p-2 rounded border border-border/50">{issue.location.element}</p>
+                          </div>
+                        )}
+
+                        {issue.location.lineNumbers && (
+                          <div>
+                            <p className="text-xs text-muted-foreground">Lines {issue.location.lineNumbers}</p>
+                          </div>
+                        )}
+                      </div>
+
+                      {issue.location.codeSnippet && (
+                        <div className="space-y-1">
+                          <p className="text-sm font-semibold flex items-center gap-2">
+                            <Code className="h-4 w-4 text-primary" />
+                            Code Details
+                          </p>
+                          <pre className="text-xs bg-muted/50 p-2 rounded border border-border/50 overflow-x-auto whitespace-pre-wrap break-words">
+                            {issue.location.codeSnippet}
+                          </pre>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   <div>
                     <p className="text-sm font-medium text-muted-foreground mb-1">Recommendation</p>
                     <p className="text-sm">{issue.recommendation}</p>
                   </div>
+
                   {showAutoFix && (
                     <div className="flex items-center gap-2 pt-2 border-t">
                       <Button 

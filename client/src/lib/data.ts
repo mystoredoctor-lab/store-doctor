@@ -79,6 +79,17 @@ export const mockScanIssues: ScanIssue[] = [
     severity: "high",
     impact: "Can reduce click-through rates from search results by up to 30%",
     recommendation: "Add unique, compelling meta descriptions (150-160 chars) to each product page",
+    location: {
+      url: "/products/category/shoes",
+      page: "Product Listing Pages (PLP)",
+      element: "<meta name=\"description\">",
+      lineNumbers: "45-60",
+      codeSnippet: `<!-- Missing on pages like:
+/products/shoes/running
+/products/shoes/casual
+/products/shoes/formal
+Found 15 instances without meta description tag`,
+    },
   },
   {
     id: "issue_2",
@@ -87,6 +98,16 @@ export const mockScanIssues: ScanIssue[] = [
     severity: "high",
     impact: "Page load time increased by 3.2 seconds, potentially losing 40% of visitors",
     recommendation: "Compress images and use WebP format. Consider lazy loading for below-fold images",
+    location: {
+      url: "/",
+      page: "Homepage & Product Pages",
+      element: "<img class=\"hero-banner\">",
+      lineNumbers: "24-28",
+      codeSnippet: `<!-- Images not optimized:
+hero-banner.jpg: 4.2MB (should be <500KB)
+product-image-*.jpg: 2.1MB each (should be <800KB)
+Using JPEG instead of WebP format`,
+    },
   },
   {
     id: "issue_3",
@@ -95,6 +116,17 @@ export const mockScanIssues: ScanIssue[] = [
     severity: "medium",
     impact: "Cart abandonment may increase by 15-20% without visible security indicators",
     recommendation: "Add SSL badge, payment icons, and money-back guarantee near checkout button",
+    location: {
+      url: "/checkout",
+      page: "Checkout Page",
+      element: ".payment-section",
+      lineNumbers: "112-145",
+      codeSnippet: `<!-- Missing trust signals in payment area:
+No SSL certificate badge display
+No payment method logos (Visa, Mastercard, PayPal)
+No money-back guarantee message
+No customer review ratings visible`,
+    },
   },
   {
     id: "issue_4",
@@ -103,6 +135,17 @@ export const mockScanIssues: ScanIssue[] = [
     severity: "medium",
     impact: "Accessibility issues affecting 15% of users",
     recommendation: "Ensure all interactive elements are keyboard-navigable",
+    location: {
+      url: "/",
+      page: "All Mobile Pages",
+      element: ".mobile-nav-menu",
+      lineNumbers: "89-110",
+      codeSnippet: `<!-- ARIA attributes missing:
+- Menu toggle button lacks aria-expanded
+- Menu items not keyboard-focusable
+- No role="navigation" on menu container
+- Tab order not properly managed`,
+    },
   },
   {
     id: "issue_5",
@@ -111,6 +154,17 @@ export const mockScanIssues: ScanIssue[] = [
     severity: "low",
     impact: "Reduced image search visibility and accessibility concerns",
     recommendation: "Add descriptive alt text to all images",
+    location: {
+      url: "/",
+      page: "Homepage Hero Section",
+      element: "<img class=\"hero-section\">",
+      lineNumbers: "15-18",
+      codeSnippet: `<!-- Current (bad):
+<img src="hero.jpg" />
+
+<!-- Should be:
+<img src="hero.jpg" alt="Summer collection sale - 50% off all items" />`,
+    },
   },
 ];
 

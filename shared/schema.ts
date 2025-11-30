@@ -96,6 +96,13 @@ export interface ScanIssue {
   severity: "high" | "medium" | "low";
   impact: string;
   recommendation: string;
+  location?: {
+    url: string;
+    page?: string;
+    element?: string;
+    lineNumbers?: string;
+    codeSnippet?: string;
+  };
 }
 
 export interface ScanRecommendation {
