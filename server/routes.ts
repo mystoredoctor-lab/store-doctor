@@ -256,5 +256,15 @@ export async function registerRoutes(
     }
   });
 
+  // ============ PAYMENT ENDPOINTS (NOT IMPLEMENTED) ============
+  
+  app.get("/api/payment/checkout/pro", async (req, res) => {
+    res.status(404).json({ error: "Payment endpoint not implemented" });
+  });
+
+  app.get("/api/payment/checkout/advanced", async (req, res) => {
+    res.status(404).json({ error: "Payment endpoint not implemented" });
+  });
+
   return httpServer;
 }

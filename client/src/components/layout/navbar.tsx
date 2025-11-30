@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Activity, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const navItems = [
   { name: "Features", href: "/#features" },
@@ -30,6 +30,13 @@ const handleNavClick = (href: string) => {
 export function Navbar() {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if user is logged in by checking for auth token or session
+    const authStatus = localStorage.getItem("storedoctor_admin_auth_v1");
+    setIsLoggedIn(!!authStatus);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -63,12 +70,20 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <div className="hidden md:flex items-center gap-2">
-            <Button variant="ghost" asChild>
-              <Link href="/dashboard" data-testid="button-login">Log In</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/dashboard" data-testid="button-install">Get Started</Link>
-            </Button>
+            {isLoggedIn ? (
+              <Button asChild>
+                <Link href="/dashboard" data-testid="button-dashboard">Dashboard</Link>
+              </Button>
+            ) : (
+              <>
+                <Button variant="ghost" asChild>
+                  <Link href="/auth/sign-in" data-testid="button-login">Log In</Link>
+                </Button>
+                <Button asChild>
+                  <Link href="/auth/sign-up" data-testid="button-install">Get Started</Link>
+                </Button>
+              </>
+            )}
           </div>
           <Button
             variant="ghost"
@@ -98,12 +113,20 @@ export function Navbar() {
             </Link>
           ))}
           <div className="flex flex-col gap-2 pt-4 border-t">
-            <Button variant="outline" asChild>
-              <Link href="/dashboard">Log In</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/dashboard">Get Started</Link>
-            </Button>
+            {isLoggedIn ? (
+              <Button asChild>
+                <Link href="/dashboard">Dashboard</Link>
+              </Button>
+            ) : (
+              <>
+                <Button variant="outline" asChild>
+                  <Link href="/auth/sign-in">Log In</Link>
+                </Button>
+                <Button asChild>
+                  <Link href="/auth/sign-up">Get Started</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       )}
