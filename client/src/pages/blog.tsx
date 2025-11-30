@@ -17,6 +17,10 @@ import img8 from '@assets/stock_images/web_development_code_c7923660.jpg';
 import img9 from '@assets/stock_images/web_development_code_0edd9fde.jpg';
 import img10 from '@assets/generated_images/professional_analytics_dashboard.png';
 
+const handleScrollToTop = () => {
+  window.scrollTo(0, 0);
+};
+
 const categories = ["All", "Technology", "SEO", "Conversion", "Mobile", "Performance", "Security"];
 
 const imageMap = {
@@ -109,7 +113,7 @@ export default function BlogPage() {
                       <span>{post.readTime}</span>
                     </div>
                     <Button variant="ghost" className="w-full justify-start pl-0" asChild>
-                      <Link href={`/blog/${post.slug}`} data-testid={`link-read-more-${post.slug}`}>
+                      <Link href={`/blog/${post.slug}`} onClick={handleScrollToTop} data-testid={`link-read-more-${post.slug}`}>
                         Read More <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
                     </Button>
@@ -128,7 +132,7 @@ export default function BlogPage() {
                 Start your AI-powered store analysis today and get actionable insights to boost your revenue.
               </p>
               <Button size="lg" asChild>
-                <Link href="/dashboard" data-testid="button-blog-cta">
+                <Link href="/dashboard" onClick={handleScrollToTop} data-testid="button-blog-cta">
                   Get Started Free
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>

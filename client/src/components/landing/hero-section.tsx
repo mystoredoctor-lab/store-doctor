@@ -5,6 +5,10 @@ import { HealthScoreGauge } from "@/components/ui/health-score-gauge";
 import { ArrowRight, CheckCircle, Sparkles } from "lucide-react";
 import dashboardImage from "@assets/generated_images/store_health_dashboard_scan_results.png";
 
+const handleScrollToTop = () => {
+  window.scrollTo(0, 0);
+};
+
 export function HeroSection() {
   return (
     <section className="relative overflow-hidden py-20 md:py-32">
@@ -42,7 +46,7 @@ export function HeroSection() {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Button size="lg" className="gap-2" asChild>
-                <Link href="/dashboard" data-testid="button-hero-install">
+                <Link href="/dashboard" onClick={handleScrollToTop} data-testid="button-hero-install">
                   Get Started
                   <ArrowRight className="h-4 w-4" />
                 </Link>
