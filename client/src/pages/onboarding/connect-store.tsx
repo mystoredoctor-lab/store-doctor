@@ -23,6 +23,9 @@ interface ConnectedStore {
   name: string;
   url: string;
   status: string;
+  healthScore?: number | null;
+  issuesCount?: number | null;
+  lastScanAt?: string | null;
 }
 
 export default function ConnectStorePage() {
@@ -134,17 +137,19 @@ export default function ConnectStorePage() {
             <div className="grid gap-3">
               {stores.map((store) => (
                 <Card key={store.id} className="hover-elevate">
-                  <CardContent className="p-4 flex items-center justify-between">
-                    <div>
+                  <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex-1">
                       <p className="font-medium">{store.name}</p>
                       <p className="text-sm text-muted-foreground">{store.url}</p>
+                      {!store.lastScanAt && (
+                        <p className="text-xs text-muted-foreground mt-2">No scans yet - click scan to get started</p>
+                      )}
                     </div>
                     <Button
                       onClick={() => handleScanStore(store.id)}
                       disabled={connectStoreMutation.isPending}
                       data-testid={`button-scan-store-${store.id}`}
                     >
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Scan Store
                     </Button>
                   </CardContent>
@@ -250,14 +255,20 @@ export default function ConnectStorePage() {
         <Card className="mt-8 bg-primary/5 border-primary/20">
           <CardContent className="p-4 flex gap-3">
             <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-            <div className="space-y-1">
-              <p className="font-medium text-sm">Free Plan includes:</p>
+            <div className="space-y-2">
+              <p className="font-medium text-sm">Free Plan Features:</p>
               <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• Up to 1 connected store</li>
-                <li>• Monthly scans: 5</li>
-                <li>• Limited issue insights</li>
-                <li>• Upgrade anytime for more features</li>
+                <li>✓ 1 scan per month</li>
+                <li>✓ 1 connected store</li>
+                <li>✓ Basic health overview</li>
+                <li>✓ Top 3 critical issues only</li>
+                <li>✗ Full analysis & charts (upgrade to Pro)</li>
+                <li>✗ Auto-fix suggestions (upgrade to Advanced)</li>
+                <li>✗ Competition benchmark (upgrade to Advanced)</li>
               </ul>
+              <p className="text-xs text-muted-foreground mt-3 pt-3 border-t border-primary/20">
+                Scans reset monthly. Upgrade anytime for more features.
+              </p>
             </div>
           </CardContent>
         </Card>

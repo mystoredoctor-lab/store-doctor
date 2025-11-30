@@ -16,6 +16,7 @@ import BlogPostPage from "@/pages/blog-post";
 import SignInPage from "@/pages/auth/sign-in";
 import SignUpPage from "@/pages/auth/sign-up";
 import ConnectStorePage from "@/pages/onboarding/connect-store";
+import StoreDetailsPage from "@/pages/onboarding/store-details";
 import DashboardPage from "@/pages/dashboard/index";
 import StoresPage from "@/pages/dashboard/stores";
 import ScanPage from "@/pages/dashboard/scan";
@@ -53,6 +54,7 @@ function Router() {
       <Route path="/auth/sign-in" component={SignInPage} />
       <Route path="/auth/sign-up" component={SignUpPage} />
       <Route path="/onboarding/connect-store" component={ConnectStorePage} />
+      <Route path="/onboarding/store-details" component={StoreDetailsPage} />
       <Route path="/dashboard">
         {() => (
           <DashboardLayout>
