@@ -6,6 +6,10 @@ import { HealthScoreGauge } from "@/components/ui/health-score-gauge";
 import { ExternalLink, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 import type { Store } from "@shared/schema";
 
+const handleScrollToTop = () => {
+  window.scrollTo(0, 0);
+};
+
 interface StoreCardProps {
   store: Store;
   onRunScan?: () => void;
@@ -74,7 +78,7 @@ export function StoreCard({ store, onRunScan }: StoreCardProps) {
         </div>
         <div className="mt-4 flex gap-2">
           <Button size="sm" className="flex-1" asChild>
-            <Link href="/dashboard/scan" data-testid={`button-view-details-${store.id}`}>View Details</Link>
+            <Link href="/dashboard/scan" onClick={handleScrollToTop} data-testid={`button-view-details-${store.id}`}>View Details</Link>
           </Button>
           <Button size="sm" variant="outline" onClick={onRunScan} data-testid={`button-run-scan-${store.id}`}>
             Run Scan
