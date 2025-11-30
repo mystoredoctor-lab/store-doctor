@@ -47,7 +47,7 @@ export function HeroSection() {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="#features" data-testid="button-hero-features">See How It Works</Link>
+                <Link href="/#how-it-works" data-testid="button-hero-features">See How It Works</Link>
               </Button>
             </div>
 

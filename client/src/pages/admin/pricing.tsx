@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { Check } from "lucide-react";
+import { Check, Plus, X } from "lucide-react";
 
 const initialPlans = [
   {
@@ -35,17 +35,19 @@ const initialPlans = [
 export default function AdminPricingPage() {
   const [plans, setPlans] = useState(initialPlans);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editFormData, setEditFormData] = useState({ price: 0, scans: 0, stores: 0 });
+  const [editFormData, setEditFormData] = useState({ price: 0, scans: 0, stores: 0, features: [] as string[] });
+  const [newFeature, setNewFeature] = useState("");
 
   const handleEdit = (plan: typeof plans[0]) => {
     setEditingId(plan.id);
-    setEditFormData({ price: plan.price, scans: plan.scans, stores: plan.stores });
+    setEditFormData({ price: plan.price, scans: plan.scans, stores: plan.stores, features: [...plan.features] });
+    setNewFeature("");
   };
 
   const handleSave = () => {
     setPlans(plans.map(p => 
       p.id === editingId 
-        ? { ...p, price: editFormData.price, scans: editFormData.scans, stores: editFormData.stores }
+        ? { ...p, price: editFormData.price, scans: editFormData.scans, stores: editFormData.stores, features: editFormData.features }
         : p
     ));
     setEditingId(null);
@@ -53,6 +55,21 @@ export default function AdminPricingPage() {
 
   const handleCancel = () => {
     setEditingId(null);
+    setNewFeature("");
+  };
+
+  const handleAddFeature = () => {
+    if (newFeature.trim()) {
+      setEditFormData({ ...editFormData, features: [...editFormData.features, newFeature] });
+      setNewFeature("");
+    }
+  };
+
+  const handleRemoveFeature = (idx: number) => {
+    setEditFormData({ 
+      ...editFormData, 
+      features: editFormData.features.filter((_, i) => i !== idx) 
+    });
   };
 
   return (
@@ -109,8 +126,40 @@ export default function AdminPricingPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <p className="text-sm font-medium">{editFormData.scans} scans/month</p>
-                    <p className="text-sm font-medium">Up to {editFormData.stores} store{editFormData.stores !== 1 ? 's' : ''}</p>
+                    <Label>Features</Label>
+                    <ul className="space-y-2 mb-3">
+                      {editFormData.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-center gap-2 text-sm bg-muted p-2 rounded">
+                          <Check className="h-4 w-4 text-primary" />
+                          <span className="flex-1">{feature}</span>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => handleRemoveFeature(idx)}
+                            data-testid={`button-remove-feature-${plan.id}-${idx}`}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="Add new feature..."
+                        value={newFeature}
+                        onChange={(e) => setNewFeature(e.target.value)}
+                        className="text-sm"
+                        onKeyPress={(e) => e.key === 'Enter' && handleAddFeature()}
+                        data-testid={`input-new-feature-${plan.id}`}
+                      />
+                      <Button
+                        size="sm"
+                        onClick={handleAddFeature}
+                        data-testid={`button-add-feature-${plan.id}`}
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
                 </>
               ) : (
@@ -123,7 +172,7 @@ export default function AdminPricingPage() {
               )}
 
               <ul className="space-y-2">
-                {plan.features.map((feature, idx) => (
+                {(editingId === plan.id ? editFormData.features : plan.features).map((feature, idx) => (
                   <li key={idx} className="flex items-center gap-2 text-sm">
                     <Check className="h-4 w-4 text-primary" />
                     {feature}

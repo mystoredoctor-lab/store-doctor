@@ -5,7 +5,7 @@ import { howItWorksSteps } from "@/lib/data";
 
 export function HowItWorksSection() {
   return (
-    <section className="py-20">
+    <section id="how-it-works" className="py-20">
       <div className="container">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">How Store Doctor Works</h2>
