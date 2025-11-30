@@ -4,8 +4,31 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, User } from "lucide-react";
 import { useBlogPosts } from "@/hooks/useBlogPosts";
+import img1 from '@assets/stock_images/professional_e-comme_9e7deaa5.jpg';
+import img2 from '@assets/stock_images/seo_optimization_sea_af543c13.jpg';
+import img3 from '@assets/stock_images/professional_e-comme_a3dba94b.jpg';
+import img4 from '@assets/stock_images/mobile_phone_e-comme_f19edd8d.jpg';
+import img5 from '@assets/stock_images/professional_e-comme_237bd240.jpg';
+import img6 from '@assets/stock_images/seo_optimization_sea_2c775c86.jpg';
+import img7 from '@assets/stock_images/mobile_phone_e-comme_55f8bfac.jpg';
+import img8 from '@assets/stock_images/web_development_code_c7923660.jpg';
+import img9 from '@assets/stock_images/web_development_code_0edd9fde.jpg';
+import img10 from '@assets/stock_images/seo_optimization_sea_af543c13.jpg';
 
 const categories = ["All", "Technology", "SEO", "Conversion", "Mobile", "Performance", "Security"];
+
+const imageMap = {
+  "ai-powered-store-analysis": img1,
+  "shopify-seo-guide": img2,
+  "conversion-rate-optimization": img3,
+  "mobile-optimization": img4,
+  "website-speed-optimization": img5,
+  "ecommerce-security": img6,
+  "shopify-product-page-seo": img7,
+  "best-shopify-theme-seo": img8,
+  "shopify-meta-tags-schema-markup": img9,
+  "improve-shopify-google-rankings": img10,
+} as Record<string, string>;
 
 export default function BlogPage() {
   const blogPosts = useBlogPosts();
@@ -55,13 +78,12 @@ export default function BlogPage() {
                 >
                   <div className="h-40 bg-muted overflow-hidden">
                     <img 
-                      src={post.image} 
+                      src={imageMap[post.slug] || img1} 
                       alt={post.title} 
                       className="w-full h-full object-cover" 
                       loading="lazy"
                       width="400"
                       height="300"
-                      decoding="async"
                     />
                   </div>
                   <CardHeader>
