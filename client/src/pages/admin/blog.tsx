@@ -139,7 +139,7 @@ export default function AdminBlogPage() {
                   <th className="text-left py-3 px-4 font-semibold">Title</th>
                   <th className="text-left py-3 px-4 font-semibold">Author</th>
                   <th className="text-left py-3 px-4 font-semibold">Date</th>
-                  <th className="text-left py-3 px-4 font-semibold">Views</th>
+                  <th className="text-left py-3 px-4 font-semibold">Category</th>
                   <th className="text-left py-3 px-4 font-semibold">Actions</th>
                 </tr>
               </thead>
@@ -149,7 +149,7 @@ export default function AdminBlogPage() {
                     <td className="py-3 px-4">{post.title}</td>
                     <td className="py-3 px-4 text-muted-foreground">{post.author}</td>
                     <td className="py-3 px-4 text-muted-foreground">{post.date}</td>
-                    <td className="py-3 px-4">{post.views.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-muted-foreground">{post.category}</td>
                     <td className="py-3 px-4">
                       <div className="flex gap-2">
                         <Button 
