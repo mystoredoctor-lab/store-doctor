@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Search, Plus, Edit, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 const initialPosts = [
   { id: 1, title: "How AI-Powered Store Analysis is Revolutionizing E-commerce in 2025", date: "November 15, 2025", author: "Sarah Chen", views: 2340 },
@@ -14,7 +15,7 @@ const initialPosts = [
 ];
 
 export default function AdminBlogPage() {
-  const [posts, setPosts] = useState(initialPosts);
+  const [posts, setPosts] = useLocalStorage("storedoctor_blog_posts", initialPosts);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formData, setFormData] = useState({ title: "", author: "", category: "", content: "" });
