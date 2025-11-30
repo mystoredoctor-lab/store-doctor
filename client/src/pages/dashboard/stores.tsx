@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { StoreCard } from "@/components/ui/store-card";
 import { AlertBanner } from "@/components/ui/alert-banner";
+import { UpgradeModal } from "@/components/ui/upgrade-modal";
 import {
   Dialog,
   DialogContent,
@@ -28,6 +29,7 @@ export default function StoresPage() {
   const [isConnectDialogOpen, setIsConnectDialogOpen] = useState(false);
   const [storeUrl, setStoreUrl] = useState("");
   const [stores, setStores] = useState<StoreType[]>([]);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const { toast } = useToast();
 
   // Initialize stores from localStorage or use mock data
@@ -91,7 +93,14 @@ export default function StoresPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <>
+      <UpgradeModal
+        open={showUpgradeModal}
+        onOpenChange={setShowUpgradeModal}
+        title="Store Limit Reached"
+        description="You've reached your store limit on the Free plan. Upgrade to Pro (2 stores) or Advanced (5 stores) to connect more stores."
+      />
+      <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">Your Stores</h1>
@@ -104,7 +113,7 @@ export default function StoresPage() {
               data-testid="button-connect-store"
               onClick={() => {
                 if (!canAddMore) {
-                  navigate("/pricing");
+                  setShowUpgradeModal(true);
                 }
               }}
             >
@@ -208,7 +217,7 @@ export default function StoresPage() {
               <p className="text-sm text-muted-foreground mt-1">Upgrade your plan to connect more stores.</p>
             </div>
             <Button 
-              onClick={() => navigate("/pricing")}
+              onClick={() => setShowUpgradeModal(true)}
               data-testid="button-upgrade-to-add-store"
             >
               <ZapIcon className="mr-2 h-4 w-4" />
@@ -287,6 +296,7 @@ export default function StoresPage() {
           </ul>
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </>
   );
 }

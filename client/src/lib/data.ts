@@ -26,39 +26,15 @@ export const mockStores: Store[] = [
     lastScanAt: new Date("2025-11-20"),
     createdAt: new Date("2025-11-20"),
   },
-  {
-    id: "store_2",
-    userId: "user_123",
-    name: "Tech Gadgets Pro",
-    url: "techgadgetspro.myshopify.com",
-    shopifyAccessToken: null,
-    healthScore: 62,
-    status: "warning",
-    issuesCount: 12,
-    lastScanAt: new Date("2025-11-20"),
-    createdAt: new Date("2025-11-20"),
-  },
-  {
-    id: "store_3",
-    userId: "user_123",
-    name: "Home & Garden Hub",
-    url: "homegardenhub.myshopify.com",
-    shopifyAccessToken: null,
-    healthScore: 45,
-    status: "critical",
-    issuesCount: 24,
-    lastScanAt: new Date("2025-11-20"),
-    createdAt: new Date("2025-11-20"),
-  },
 ];
 
 export const dashboardStats = {
-  scansLeft: 7,
-  totalScans: 10,
+  scansLeft: 1,
+  totalScans: 1,
   lastScanDate: "2025-11-20",
-  averageHealthScore: 65,
-  totalStores: 3,
-  totalIssuesFound: 39,
+  averageHealthScore: 87,
+  totalStores: 1,
+  totalIssuesFound: 3,
   scanStrategy: "Smart sampling - analyzes top products, key pages, and critical areas only to minimize token usage and scanning time for large stores"
 };
 

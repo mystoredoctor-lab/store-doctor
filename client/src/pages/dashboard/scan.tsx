@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HealthScoreGauge } from "@/components/ui/health-score-gauge";
 import { AlertBanner } from "@/components/ui/alert-banner";
+import { UpgradeModal } from "@/components/ui/upgrade-modal";
 import { CategoryScoreGrid } from "@/components/scan/category-score-grid";
 import { IssuesList } from "@/components/scan/issues-list";
 import { RecommendationsList } from "@/components/scan/recommendations-list";
@@ -20,10 +21,11 @@ import { useToast } from "@/hooks/use-toast";
 export default function ScanPage() {
   const [, navigate] = useLocation();
   const { toast } = useToast();
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const store = mockStores[0];
 
   const handleRunScan = () => {
-    navigate("/pricing");
+    setShowUpgradeModal(true);
   };
 
   const handleExportReport = () => {
@@ -34,7 +36,14 @@ export default function ScanPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <>
+      <UpgradeModal
+        open={showUpgradeModal}
+        onOpenChange={setShowUpgradeModal}
+        title="Rescan Not Available"
+        description="You've reached your monthly scan limit on the Free plan. Upgrade to Pro (10 scans/month) or Advanced (25 scans/month) to run more scans."
+      />
+      <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-3 mb-1">
@@ -166,6 +175,7 @@ export default function ScanPage() {
           </Tabs>
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </>
   );
 }

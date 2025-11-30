@@ -12,6 +12,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Loader2, Store, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { mockUser } from "@/lib/data";
+import { UpgradeModal } from "@/components/ui/upgrade-modal";
 
 const connectStoreSchema = z.object({
   shopUrl: z.string().min(1, "Store URL is required").regex(/\.myshopify\.com$/, "Must be a valid Shopify store URL"),
@@ -33,6 +34,7 @@ export default function ConnectStorePage() {
   const [, navigate] = useLocation();
   const { toast } = useToast();
   const [showAddStore, setShowAddStore] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const form = useForm<ConnectStoreFormValues>({
     resolver: zodResolver(connectStoreSchema),
@@ -118,7 +120,14 @@ export default function ConnectStorePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/50 p-4">
+    <>
+      <UpgradeModal
+        open={showUpgradeModal}
+        onOpenChange={setShowUpgradeModal}
+        title="Store Limit Reached"
+        description="You've reached your store limit on the Free plan. Upgrade to Pro (2 stores) or Advanced (5 stores) to connect more stores."
+      />
+      <div className="min-h-screen bg-gradient-to-br from-background to-muted/50 p-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -165,7 +174,7 @@ export default function ConnectStorePage() {
                 onClick={() => {
                   const maxStores = mockUser.plan === "free" ? 1 : mockUser.plan === "pro" ? 2 : 5;
                   if (stores.length >= maxStores) {
-                    navigate("/pricing");
+                    setShowUpgradeModal(true);
                   } else {
                     setShowAddStore(true);
                   }
@@ -282,5 +291,6 @@ export default function ConnectStorePage() {
         </Card>
       </div>
     </div>
+    </>
   );
 }
