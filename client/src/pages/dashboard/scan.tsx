@@ -18,6 +18,7 @@ import { mockStoresByPlan, mockScanResultsByStore, mockUser } from "@/lib/data";
 import { RefreshCw, Download, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getUserPlan } from "@/lib/planManager";
+import { canRunScan, getScansRemaining, incrementScanCount } from "@/lib/scanManager";
 import type { Store } from "@shared/schema";
 
 export default function ScanPage() {
@@ -26,6 +27,8 @@ export default function ScanPage() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [store, setStore] = useState<Store | null>(null);
   const userPlan = getUserPlan();
+  const scansRemaining = getScansRemaining(userPlan as "free" | "pro" | "advanced");
+  const canScan = canRunScan(userPlan as "free" | "pro" | "advanced");
 
   useEffect(() => {
     // Get storeId from URL params
@@ -44,7 +47,15 @@ export default function ScanPage() {
   }, [location, userPlan]);
 
   const handleRunScan = () => {
-    setShowUpgradeModal(true);
+    if (!canScan) {
+      setShowUpgradeModal(true);
+    } else {
+      incrementScanCount();
+      toast({
+        title: "Scan started",
+        description: `Running scan on ${store?.name}. This may take a few minutes.`,
+      });
+    }
   };
 
   const handleExportReport = () => {
@@ -89,9 +100,14 @@ export default function ScanPage() {
             <Download className="mr-2 h-4 w-4" />
             Export Report
           </Button>
-          <Button onClick={handleRunScan} data-testid="button-run-scan">
+          <Button 
+            onClick={handleRunScan} 
+            disabled={!canScan}
+            data-testid="button-run-scan"
+          >
             <RefreshCw className="mr-2 h-4 w-4" />
             Run New Scan
+            {canScan && <span className="ml-2 text-xs">({scansRemaining} left)</span>}
           </Button>
         </div>
       </div>
