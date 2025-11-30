@@ -2,6 +2,10 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
+const handleScrollToTop = () => {
+  window.scrollTo(0, 0);
+};
+
 export function CTASection() {
   return (
     <section className="py-20 bg-muted/30">
@@ -20,13 +24,13 @@ export function CTASection() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="gap-2" asChild>
-              <Link href="/dashboard" data-testid="button-cta-install">
+              <Link href="/dashboard" onClick={handleScrollToTop} data-testid="button-cta-install">
                 Get Started
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href="/pricing" data-testid="button-cta-pricing">View Pricing</Link>
+              <Link href="/pricing" onClick={handleScrollToTop} data-testid="button-cta-pricing">View Pricing</Link>
             </Button>
           </div>
         </div>

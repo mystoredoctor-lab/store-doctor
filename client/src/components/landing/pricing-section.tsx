@@ -6,6 +6,10 @@ import { Check, X } from "lucide-react";
 import { usePricingPlans } from "@/hooks/usePricingPlans";
 import { cn } from "@/lib/utils";
 
+const handleScrollToTop = () => {
+  window.scrollTo(0, 0);
+};
+
 export function PricingSection() {
   const plans = usePricingPlans();
   
@@ -49,7 +53,7 @@ export function PricingSection() {
               </CardContent>
               <CardFooter>
                 <Button className="w-full" variant={plan.id === 'pro' ? "default" : "outline"} asChild>
-                  <Link href="/dashboard" data-testid={`button-pricing-${plan.id}`}>Get Started</Link>
+                  <Link href="/dashboard" onClick={handleScrollToTop} data-testid={`button-pricing-${plan.id}`}>Get Started</Link>
                 </Button>
               </CardFooter>
             </Card>
