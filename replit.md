@@ -15,6 +15,9 @@ Rebuild StoreDoctor Shopify app as a fully functional web application using Vite
 - Full auth flow: Sign In/Sign Up with Gmail OAuth option
 - Password show/hide toggles on all password fields
 - Professional upgrade modal with 3-second auto-redirect to pricing
+- Redesigned pricing page: more mature and professional layout with plan highlights
+- Navbar shows logged-in state (Dashboard button for authenticated users)
+- Payment buttons on pricing: "Go Pro" and "Subscribe" (404 endpoints for unimplemented backend)
 - Dashboard with sidebar navigation
 - Admin panel with authentication (demo@storedoctor.com / admin123)
 - Blog with 10 SEO-optimized posts with AI-generated images
@@ -38,6 +41,10 @@ Rebuild StoreDoctor Shopify app as a fully functional web application using Vite
   - No auto-fix suggestions
   - No competition benchmark
   - No full analysis charts
+- **Pricing Page:**
+  - Free plan: "Get Started" button
+  - Pro/Advanced: "Go Pro"/"Subscribe" buttons (return 404 - not implemented)
+  - Navbar shows "Dashboard" for logged-in users, "Log In"/"Get Started" for guests
 
 ## Mock Data
 - **Mock Stores:** 1 store (Fashion Forward - fashionforward.myshopify.com)
