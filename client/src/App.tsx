@@ -19,6 +19,11 @@ import ScanPage from "@/pages/dashboard/scan";
 import ScanningPage from "@/pages/dashboard/scanning";
 import SettingsPage from "@/pages/dashboard/settings";
 import { DashboardLayout } from "@/pages/dashboard/layout";
+import AdminDashboard from "@/pages/admin/index";
+import AdminUsers from "@/pages/admin/users";
+import AdminAnalytics from "@/pages/admin/analytics";
+import AdminSettings from "@/pages/admin/settings";
+import AdminLayout from "@/pages/admin/layout";
 
 function Router() {
   return (
@@ -64,6 +69,34 @@ function Router() {
           <DashboardLayout>
             <SettingsPage />
           </DashboardLayout>
+        )}
+      </Route>
+      <Route path="/admin">
+        {() => (
+          <AdminLayout>
+            <AdminDashboard />
+          </AdminLayout>
+        )}
+      </Route>
+      <Route path="/admin/users">
+        {() => (
+          <AdminLayout>
+            <AdminUsers />
+          </AdminLayout>
+        )}
+      </Route>
+      <Route path="/admin/analytics">
+        {() => (
+          <AdminLayout>
+            <AdminAnalytics />
+          </AdminLayout>
+        )}
+      </Route>
+      <Route path="/admin/settings">
+        {() => (
+          <AdminLayout>
+            <AdminSettings />
+          </AdminLayout>
         )}
       </Route>
       <Route component={NotFound} />
