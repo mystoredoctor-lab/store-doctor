@@ -46,9 +46,6 @@ export function HeroSection() {
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link href="/#how-it-works" data-testid="button-hero-features">See How It Works</Link>
-              </Button>
             </div>
 
             <p className="text-sm text-muted-foreground">Free plan available. No credit card required.</p>
