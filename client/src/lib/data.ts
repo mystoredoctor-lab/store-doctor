@@ -283,7 +283,7 @@ export const mockScanResultsByStore = {
       { name: "Security", score: 85, icon: "shield", color: "#10b981" },
       { name: "Mobile", score: 72, icon: "smartphone", color: "#10b981" },
     ],
-    criticalIssues: mockScanIssues.slice(1, 4),
+    criticalIssues: mockScanIssues,
     recommendations: mockScanRecommendations,
   },
   store_3: {
