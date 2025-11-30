@@ -37,6 +37,6 @@ const defaultPlans: PricingPlan[] = [
 ];
 
 export function usePricingPlans() {
-  const [plans] = useLocalStorage<PricingPlan[]>("storedoctor_pricing_plans", defaultPlans);
+  const [plans] = useLocalStorage<PricingPlan[]>("storedoctor_pricing_plans_v2", defaultPlans);
   return plans;
 }

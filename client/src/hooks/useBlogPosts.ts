@@ -137,6 +137,6 @@ const defaultPosts: BlogPost[] = [
 ];
 
 export function useBlogPosts() {
-  const [posts] = useLocalStorage<BlogPost[]>("storedoctor_blog_posts", defaultPosts);
+  const [posts] = useLocalStorage<BlogPost[]>("storedoctor_blog_posts_v2", defaultPosts);
   return posts;
 }
