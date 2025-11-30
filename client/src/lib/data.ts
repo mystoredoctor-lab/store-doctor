@@ -9,7 +9,7 @@ export const mockUser: User = {
   email: "john@mystore.com",
   name: "John Merchant",
   avatar: profileImage,
-  plan: "advanced",
+  plan: "free",
   createdAt: new Date("2025-11-20"),
 };
 
