@@ -24,7 +24,7 @@ export function CTASection() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="gap-2" asChild>
-              <Link href="/dashboard" onClick={handleScrollToTop} data-testid="button-cta-install">
+              <Link href="/auth/sign-in" onClick={handleScrollToTop} data-testid="button-cta-install">
                 Get Started
                 <ArrowRight className="h-4 w-4" />
               </Link>

@@ -13,6 +13,9 @@ import TermsPage from "@/pages/terms";
 import PrivacyPage from "@/pages/privacy";
 import BlogPage from "@/pages/blog";
 import BlogPostPage from "@/pages/blog-post";
+import SignInPage from "@/pages/auth/sign-in";
+import SignUpPage from "@/pages/auth/sign-up";
+import ConnectStorePage from "@/pages/onboarding/connect-store";
 import DashboardPage from "@/pages/dashboard/index";
 import StoresPage from "@/pages/dashboard/stores";
 import ScanPage from "@/pages/dashboard/scan";
@@ -47,6 +50,9 @@ function Router() {
       <Route path="/privacy" component={PrivacyPage} />
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:slug" component={BlogPostPage} />
+      <Route path="/auth/sign-in" component={SignInPage} />
+      <Route path="/auth/sign-up" component={SignUpPage} />
+      <Route path="/onboarding/connect-store" component={ConnectStorePage} />
       <Route path="/dashboard">
         {() => (
           <DashboardLayout>
