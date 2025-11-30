@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Loader2, Store, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { mockUser } from "@/lib/data";
+import { getUserPlan } from "@/lib/planManager";
 import { UpgradeModal } from "@/components/ui/upgrade-modal";
 
 const connectStoreSchema = z.object({
@@ -35,6 +35,7 @@ export default function ConnectStorePage() {
   const { toast } = useToast();
   const [showAddStore, setShowAddStore] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const userPlan = getUserPlan();
 
   const form = useForm<ConnectStoreFormValues>({
     resolver: zodResolver(connectStoreSchema),
@@ -172,7 +173,7 @@ export default function ConnectStorePage() {
                 variant="outline"
                 className="mt-4 w-full"
                 onClick={() => {
-                  const maxStores = mockUser.plan === "free" ? 1 : mockUser.plan === "pro" ? 2 : 5;
+                  const maxStores = userPlan === "free" ? 1 : userPlan === "pro" ? 2 : 5;
                   if (stores.length >= maxStores) {
                     setShowUpgradeModal(true);
                   } else {

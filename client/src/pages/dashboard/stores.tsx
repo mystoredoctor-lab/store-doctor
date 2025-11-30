@@ -16,9 +16,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { mockStores, mockUser } from "@/lib/data";
+import { mockStores } from "@/lib/data";
 import { Plus, Search, Store, Shield, Zap, BarChart3, Lock, Zap as ZapIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { getUserPlan } from "@/lib/planManager";
 import type { Store as StoreType } from "@shared/schema";
 
 export const STORES_STORAGE_KEY = "storedoctor_connected_stores_v1";
@@ -31,6 +32,7 @@ export default function StoresPage() {
   const [stores, setStores] = useState<StoreType[]>([]);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const { toast } = useToast();
+  const userPlan = getUserPlan();
 
   // Initialize stores from localStorage or use mock data
   useEffect(() => {
@@ -57,7 +59,7 @@ export default function StoresPage() {
       store.url.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const maxStores = mockUser.plan === "free" ? 1 : mockUser.plan === "pro" ? 2 : 5;
+  const maxStores = userPlan === "free" ? 1 : userPlan === "pro" ? 2 : 5;
   const canAddMore = stores.length < maxStores;
 
   const handleConnectStore = () => {

@@ -14,15 +14,17 @@ import { ScanHistoryChart } from "@/components/scan/scan-history-chart";
 import { IssueSeverityChart } from "@/components/scan/issue-severity-chart";
 import { CategoryBreakdownChart } from "@/components/scan/category-breakdown-chart";
 import { CompetitionBenchmarkChart } from "@/components/scan/competition-benchmark-chart";
-import { mockScanResults, mockStores, mockUser } from "@/lib/data";
+import { mockScanResults, mockStores } from "@/lib/data";
 import { RefreshCw, Download, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { getUserPlan } from "@/lib/planManager";
 
 export default function ScanPage() {
   const [, navigate] = useLocation();
   const { toast } = useToast();
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const store = mockStores[0];
+  const userPlan = getUserPlan();
 
   const handleRunScan = () => {
     setShowUpgradeModal(true);
@@ -66,7 +68,7 @@ export default function ScanPage() {
         </div>
       </div>
 
-      {mockUser.plan === "free" && (
+      {userPlan === "free" && (
         <AlertBanner
           type="info"
           title="Free Plan Limitations"
@@ -140,7 +142,7 @@ export default function ScanPage() {
         </Card>
       </div>
 
-      {mockUser.plan === "advanced" && (
+      {userPlan === "advanced" && (
         <div>
           <h2 className="text-2xl font-bold mb-4">Competition Benchmark</h2>
           <CompetitionBenchmarkChart />
@@ -165,8 +167,8 @@ export default function ScanPage() {
             <TabsContent value="issues">
               <IssuesList 
                 issues={mockScanResults.criticalIssues} 
-                limitToFree={mockUser.plan === "free"}
-                showAutoFix={mockUser.plan === "advanced"}
+                limitToFree={userPlan === "free"}
+                showAutoFix={userPlan === "advanced"}
               />
             </TabsContent>
             <TabsContent value="recommendations">
