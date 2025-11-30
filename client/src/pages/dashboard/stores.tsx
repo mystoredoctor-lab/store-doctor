@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { mockStores, mockUser } from "@/lib/data";
-import { Plus, Search, Store } from "lucide-react";
+import { Plus, Search, Store, Shield, Zap, BarChart3, Lock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function StoresPage() {
@@ -63,32 +63,88 @@ export default function StoresPage() {
               Connect Store
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-w-lg">
             <DialogHeader>
-              <DialogTitle>Connect a Shopify Store</DialogTitle>
-              <DialogDescription>Enter your Shopify store URL to connect it to Store Doctor.</DialogDescription>
+              <DialogTitle className="text-2xl">Connect Your Shopify Store</DialogTitle>
+              <DialogDescription>
+                Secure integration with real-time health monitoring
+              </DialogDescription>
             </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="store-url">Store URL</Label>
+            
+            <div className="space-y-6 py-6">
+              {/* Input Section */}
+              <div className="space-y-3">
+                <Label htmlFor="store-url" className="text-sm font-semibold">
+                  Store URL
+                </Label>
                 <Input
                   id="store-url"
                   placeholder="yourstore.myshopify.com"
                   value={storeUrl}
                   onChange={(e) => setStoreUrl(e.target.value)}
                   data-testid="input-store-url"
+                  className="h-10"
                 />
+                <p className="text-xs text-muted-foreground">
+                  Enter your store's Myshopify domain
+                </p>
               </div>
-              <p className="text-sm text-muted-foreground">
-                You'll be redirected to Shopify to authorize the connection.
-              </p>
+
+              {/* Benefits Grid */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="flex gap-3 rounded-lg bg-muted/30 p-3 border border-border/30">
+                  <Shield className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <div className="min-w-0">
+                    <p className="text-xs font-medium leading-tight">Secure</p>
+                    <p className="text-xs text-muted-foreground leading-tight">OAuth 2.0 encryption</p>
+                  </div>
+                </div>
+                <div className="flex gap-3 rounded-lg bg-muted/30 p-3 border border-border/30">
+                  <Zap className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <div className="min-w-0">
+                    <p className="text-xs font-medium leading-tight">Smart Sampling</p>
+                    <p className="text-xs text-muted-foreground leading-tight">Top 50-100 products</p>
+                  </div>
+                </div>
+                <div className="flex gap-3 rounded-lg bg-muted/30 p-3 border border-border/30">
+                  <BarChart3 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <div className="min-w-0">
+                    <p className="text-xs font-medium leading-tight">Instant Reports</p>
+                    <p className="text-xs text-muted-foreground leading-tight">Real-time analytics</p>
+                  </div>
+                </div>
+                <div className="flex gap-3 rounded-lg bg-muted/30 p-3 border border-border/30">
+                  <Lock className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <div className="min-w-0">
+                    <p className="text-xs font-medium leading-tight">Privacy First</p>
+                    <p className="text-xs text-muted-foreground leading-tight">No data stored</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Info Note */}
+              <div className="rounded-lg bg-primary/5 border border-primary/10 p-3">
+                <p className="text-xs text-foreground">
+                  <span className="font-medium">What happens next:</span> You'll be securely redirected to Shopify to authorize the connection. Store Doctor never accesses sensitive customer data.
+                </p>
+              </div>
             </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsConnectDialogOpen(false)}>
+
+            <DialogFooter className="gap-2 sm:gap-0">
+              <Button 
+                variant="outline" 
+                onClick={() => setIsConnectDialogOpen(false)}
+                data-testid="button-cancel-connect"
+              >
                 Cancel
               </Button>
-              <Button onClick={handleConnectStore} disabled={!storeUrl} data-testid="button-confirm-connect">
-                Connect Store
+              <Button 
+                onClick={handleConnectStore} 
+                disabled={!storeUrl} 
+                data-testid="button-confirm-connect"
+              >
+                <Lock className="mr-2 h-4 w-4" />
+                Connect Securely
               </Button>
             </DialogFooter>
           </DialogContent>
