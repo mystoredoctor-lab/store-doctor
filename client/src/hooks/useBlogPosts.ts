@@ -1,4 +1,14 @@
 import { useLocalStorage } from './useLocalStorage';
+import img1 from '@assets/stock_images/professional_e-comme_9e7deaa5.jpg';
+import img2 from '@assets/stock_images/seo_optimization_sea_af543c13.jpg';
+import img3 from '@assets/stock_images/professional_e-comme_a3dba94b.jpg';
+import img4 from '@assets/stock_images/mobile_phone_e-comme_f19edd8d.jpg';
+import img5 from '@assets/stock_images/professional_e-comme_237bd240.jpg';
+import img6 from '@assets/stock_images/seo_optimization_sea_2c775c86.jpg';
+import img7 from '@assets/stock_images/mobile_phone_e-comme_55f8bfac.jpg';
+import img8 from '@assets/stock_images/web_development_code_c7923660.jpg';
+import img9 from '@assets/stock_images/web_development_code_0edd9fde.jpg';
+import img10 from '@assets/stock_images/seo_optimization_sea_af543c13.jpg';
 
 export interface BlogPost {
   id: number;
@@ -24,7 +34,7 @@ const defaultPosts: BlogPost[] = [
     author: "Sarah Chen",
     date: "November 15, 2025",
     readTime: "12 min read",
-    image: "/stock_images/professional_e-comme_9e7deaa5.jpg",
+    image: img1,
   },
   {
     id: 2,
@@ -36,7 +46,7 @@ const defaultPosts: BlogPost[] = [
     author: "Marcus Johnson",
     date: "November 12, 2025",
     readTime: "15 min read",
-    image: "/stock_images/seo_optimization_sea_af543c13.jpg",
+    image: img2,
   },
   {
     id: 3,
@@ -48,7 +58,7 @@ const defaultPosts: BlogPost[] = [
     author: "Emma Williams",
     date: "October 28, 2025",
     readTime: "14 min read",
-    image: "/stock_images/professional_e-comme_a3dba94b.jpg",
+    image: img3,
   },
   {
     id: 4,
@@ -60,7 +70,7 @@ const defaultPosts: BlogPost[] = [
     author: "John Smith",
     date: "October 22, 2025",
     readTime: "13 min read",
-    image: "/stock_images/mobile_phone_e-comme_f19edd8d.jpg",
+    image: img4,
   },
   {
     id: 5,
@@ -72,7 +82,7 @@ const defaultPosts: BlogPost[] = [
     author: "Lisa Rodriguez",
     date: "October 15, 2025",
     readTime: "16 min read",
-    image: "/stock_images/professional_e-comme_237bd240.jpg",
+    image: img5,
   },
   {
     id: 6,
@@ -84,7 +94,7 @@ const defaultPosts: BlogPost[] = [
     author: "David Kim",
     date: "October 8, 2025",
     readTime: "14 min read",
-    image: "/stock_images/seo_optimization_sea_2c775c86.jpg",
+    image: img6,
   },
   {
     id: 7,
@@ -96,7 +106,7 @@ const defaultPosts: BlogPost[] = [
     author: "Alex Rivera",
     date: "November 8, 2025",
     readTime: "18 min read",
-    image: "/stock_images/mobile_phone_e-comme_55f8bfac.jpg",
+    image: img7,
   },
   {
     id: 8,
@@ -108,7 +118,7 @@ const defaultPosts: BlogPost[] = [
     author: "Jordan Martinez",
     date: "November 5, 2025",
     readTime: "14 min read",
-    image: "/stock_images/web_development_code_c7923660.jpg",
+    image: img8,
   },
   {
     id: 9,
@@ -120,7 +130,7 @@ const defaultPosts: BlogPost[] = [
     author: "Taylor Chen",
     date: "October 31, 2025",
     readTime: "16 min read",
-    image: "/stock_images/web_development_code_0edd9fde.jpg",
+    image: img9,
   },
   {
     id: 10,
@@ -132,7 +142,7 @@ const defaultPosts: BlogPost[] = [
     author: "Casey Wright",
     date: "October 25, 2025",
     readTime: "19 min read",
-    image: "/stock_images/seo_optimization_sea_af543c13.jpg",
+    image: img10,
   },
 ];
 
