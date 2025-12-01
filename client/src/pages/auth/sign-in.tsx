@@ -37,6 +37,9 @@ export default function SignInPage() {
     try {
       const response = await apiRequest("POST", "/api/auth/sign-in", data);
       
+      // Set user auth key to indicate user is logged in
+      localStorage.setItem("storedoctor_user_auth_v1", JSON.stringify({ email: data.email }));
+      
       toast({
         title: "Success",
         description: "Signed in successfully",

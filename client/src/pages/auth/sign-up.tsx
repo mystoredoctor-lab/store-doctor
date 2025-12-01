@@ -48,6 +48,9 @@ export default function SignUpPage() {
       
       await apiRequest("POST", "/api/auth/sign-up", signUpData);
       
+      // Set user auth key to indicate user is logged in
+      localStorage.setItem("storedoctor_user_auth_v1", JSON.stringify({ email: signUpData.email }));
+      
       toast({
         title: "Success",
         description: "Account created successfully",

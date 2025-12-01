@@ -33,9 +33,9 @@ export function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // Check if user is logged in by checking for auth token or session
-    const authStatus = localStorage.getItem("storedoctor_admin_auth_v1");
-    setIsLoggedIn(!!authStatus);
+    // Check if user is logged in by checking for user authentication
+    const userAuth = localStorage.getItem("storedoctor_user_auth_v1");
+    setIsLoggedIn(!!userAuth);
   }, []);
 
   return (
