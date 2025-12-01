@@ -18,11 +18,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { mockUser, pricingPlans } from "@/lib/data";
-import { User, CreditCard, Mail, Key, AlertTriangle, Trash2, Store, X, Zap } from "lucide-react";
+import { User, CreditCard, Mail, Key, AlertTriangle, Trash2, Store, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { STORES_STORAGE_KEY } from "@/pages/dashboard/stores";
 import { getUserPlan, updateUserPlan } from "@/lib/planManager";
-import { getScanLimits, setScanLimits, DEFAULT_LIMITS, resetScanCount } from "@/lib/scanManager";
 import type { Store as StoreType } from "@shared/schema";
 
 export default function SettingsPage() {
@@ -33,8 +32,6 @@ export default function SettingsPage() {
   const [userPlan, setUserPlan] = useState(getUserPlan());
   const [isProcessing, setIsProcessing] = useState(false);
   const currentPlan = pricingPlans.find((p) => p.id === userPlan);
-  const [scanLimits, setScanLimitsState] = useState(getScanLimits());
-  const [tempLimits, setTempLimits] = useState(getScanLimits());
 
   // Load stores from localStorage
   useEffect(() => {
@@ -86,9 +83,8 @@ export default function SettingsPage() {
     navigate("/pricing");
   };
 
+
   const handleSaveScanLimits = () => {
-    setScanLimits(tempLimits);
-    setScanLimitsState(tempLimits);
     toast({
       title: "Scan limits updated",
       description: "Monthly scan limits have been saved successfully.",
@@ -96,10 +92,6 @@ export default function SettingsPage() {
   };
 
   const handleResetScanLimits = () => {
-    setTempLimits(DEFAULT_LIMITS);
-    setScanLimits(DEFAULT_LIMITS);
-    setScanLimitsState(DEFAULT_LIMITS);
-    resetScanCount();
     toast({
       title: "Scan limits reset",
       description: "Limits have been reset to defaults and usage counter has been cleared.",
@@ -271,57 +263,6 @@ export default function SettingsPage() {
             </div>
           )}
         </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Zap className="h-5 w-5" />
-            <CardTitle>Scan Limits (Admin)</CardTitle>
-          </div>
-          <CardDescription>Configure monthly scan limits for each plan.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="space-y-2">
-              <Label htmlFor="free-scans">Free Plan Scans/Month</Label>
-              <Input 
-                id="free-scans" 
-                type="number" 
-                min="1"
-                value={tempLimits.free} 
-                onChange={(e) => setTempLimits({...tempLimits, free: parseInt(e.target.value) || 1})}
-                data-testid="input-free-scans"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="pro-scans">Pro Plan Scans/Month</Label>
-              <Input 
-                id="pro-scans" 
-                type="number" 
-                min="1"
-                value={tempLimits.pro} 
-                onChange={(e) => setTempLimits({...tempLimits, pro: parseInt(e.target.value) || 10})}
-                data-testid="input-pro-scans"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="advanced-scans">Advanced Plan Scans/Month</Label>
-              <Input 
-                id="advanced-scans" 
-                type="number" 
-                min="1"
-                value={tempLimits.advanced} 
-                onChange={(e) => setTempLimits({...tempLimits, advanced: parseInt(e.target.value) || 25})}
-                data-testid="input-advanced-scans"
-              />
-            </div>
-          </div>
-        </CardContent>
-        <CardFooter className="flex gap-2">
-          <Button onClick={handleSaveScanLimits} data-testid="button-save-scan-limits">Save Limits</Button>
-          <Button variant="outline" onClick={handleResetScanLimits} data-testid="button-reset-scan-limits">Reset to Defaults</Button>
-        </CardFooter>
       </Card>
 
       <Card>

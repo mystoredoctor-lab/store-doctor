@@ -1,9 +1,37 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { getScanLimits, setScanLimits, DEFAULT_LIMITS, resetScanCount } from "@/lib/scanManager";
+import { Zap } from "lucide-react";
 
 export default function AdminSettingsPage() {
+  const { toast } = useToast();
+  const [scanLimits, setScanLimitsState] = useState(getScanLimits());
+  const [tempLimits, setTempLimits] = useState(getScanLimits());
+
+  const handleSaveScanLimits = () => {
+    setScanLimits(tempLimits);
+    setScanLimitsState(tempLimits);
+    toast({
+      title: "Scan limits updated",
+      description: "Monthly scan limits have been saved successfully.",
+    });
+  };
+
+  const handleResetScanLimits = () => {
+    setTempLimits(DEFAULT_LIMITS);
+    setScanLimits(DEFAULT_LIMITS);
+    setScanLimitsState(DEFAULT_LIMITS);
+    resetScanCount();
+    toast({
+      title: "Scan limits reset",
+      description: "Limits have been reset to defaults and usage counter has been cleared.",
+    });
+  };
+
   return (
     <div className="space-y-8">
       <div>
@@ -12,6 +40,57 @@ export default function AdminSettingsPage() {
       </div>
 
       <div className="grid gap-6 max-w-2xl">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Zap className="h-5 w-5" />
+              <CardTitle>Scan Limits</CardTitle>
+            </div>
+            <CardDescription>Configure monthly scan limits for each plan.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="space-y-2">
+                <Label htmlFor="free-scans">Free Plan Scans/Month</Label>
+                <Input 
+                  id="free-scans" 
+                  type="number" 
+                  min="1"
+                  value={tempLimits.free} 
+                  onChange={(e) => setTempLimits({...tempLimits, free: parseInt(e.target.value) || 1})}
+                  data-testid="input-free-scans"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="pro-scans">Pro Plan Scans/Month</Label>
+                <Input 
+                  id="pro-scans" 
+                  type="number" 
+                  min="1"
+                  value={tempLimits.pro} 
+                  onChange={(e) => setTempLimits({...tempLimits, pro: parseInt(e.target.value) || 10})}
+                  data-testid="input-pro-scans"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="advanced-scans">Advanced Plan Scans/Month</Label>
+                <Input 
+                  id="advanced-scans" 
+                  type="number" 
+                  min="1"
+                  value={tempLimits.advanced} 
+                  onChange={(e) => setTempLimits({...tempLimits, advanced: parseInt(e.target.value) || 25})}
+                  data-testid="input-advanced-scans"
+                />
+              </div>
+            </div>
+          </CardContent>
+          <CardFooter className="flex gap-2">
+            <Button onClick={handleSaveScanLimits} data-testid="button-save-scan-limits">Save Limits</Button>
+            <Button variant="outline" onClick={handleResetScanLimits} data-testid="button-reset-scan-limits">Reset to Defaults</Button>
+          </CardFooter>
+        </Card>
+
         <Card>
           <CardHeader>
             <CardTitle>API Configuration</CardTitle>
