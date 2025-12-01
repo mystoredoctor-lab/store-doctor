@@ -255,7 +255,7 @@ NEXTAUTH_URL=http://localhost:3000
 GOOGLE_CLIENT_ID=your-google-id
 GOOGLE_CLIENT_SECRET=your-google-secret
 
-# Groq AI
+# Groq AI (Llama 3.3 70B)
 GROQ_API_KEY=your-groq-api-key
 
 # GitHub (optional, for CI/CD)
@@ -266,7 +266,7 @@ GITHUB_TOKEN=your-github-token
 
 ### PART 3: SMART AI SCANNING WITH TOKEN OPTIMIZATION
 
-**Objective:** Implement intelligent scanning strategy that minimizes Groq AI token usage while maintaining comprehensive analysis.
+**Objective:** Implement intelligent scanning strategy that minimizes Llama 3.3 70B token usage while maintaining comprehensive analysis.
 
 #### 3.1 Smart Sampling Strategy
 
@@ -326,7 +326,7 @@ export function calculateSmartSampling(config: ScanConfig): SamplingStrategy {
 }
 ```
 
-#### 3.2 Groq AI Integration - Token Optimized
+#### 3.2 Groq AI Integration - Llama 3.3 70B Versatile
 
 ```typescript
 // lib/ai-scanner.ts
@@ -352,9 +352,9 @@ export async function analyzeStoreWithGroq(
   // Build optimized prompt based on categories and depth
   const prompt = buildOptimizedPrompt(storeData, categories, depth);
   
-  // Use Groq's fast inference models (mixtral-8x7b is cheaper than others)
+  // Use Llama 3.3 70B Versatile for superior analysis capabilities
   const message = await groq.messages.create({
-    model: "mixtral-8x7b-32768", // Fast, token-efficient model
+    model: "llama-3.3-70b-versatile", // Powerful, accurate model
     max_tokens: depth === 'quick' ? 1024 : depth === 'standard' ? 2048 : 4096,
     messages: [
       {
