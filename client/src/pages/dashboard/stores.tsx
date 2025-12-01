@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { mockStoresByPlan, mockUser } from "@/lib/data";
-import { Plus, Search, Store, Shield, Zap, BarChart3, Lock, Zap as ZapIcon } from "lucide-react";
+import { Plus, Search, Store, Shield, Zap, BarChart3, Lock, Zap as ZapIcon, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getUserPlan } from "@/lib/planManager";
 import type { Store as StoreType } from "@shared/schema";
@@ -31,6 +31,7 @@ export default function StoresPage() {
   const [storeUrl, setStoreUrl] = useState("");
   const [stores, setStores] = useState<StoreType[]>([]);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
   const { toast } = useToast();
   const userPlan = getUserPlan();
 
@@ -63,8 +64,13 @@ export default function StoresPage() {
   const maxStores = userPlan === "free" ? 1 : userPlan === "pro" ? 2 : 5;
   const canAddMore = stores.length < maxStores;
 
-  const handleConnectStore = () => {
+  const handleConnectStore = async () => {
     if (!storeUrl.trim()) return;
+
+    setIsConnecting(true);
+    
+    // Simulate connection delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
     const newStore: StoreType = {
       id: `store_${Date.now()}`,
@@ -86,6 +92,7 @@ export default function StoresPage() {
     });
     setIsConnectDialogOpen(false);
     setStoreUrl("");
+    setIsConnecting(false);
   };
 
   const handleRunScan = () => {
@@ -143,6 +150,7 @@ export default function StoresPage() {
                   placeholder="yourstore.myshopify.com"
                   value={storeUrl}
                   onChange={(e) => setStoreUrl(e.target.value)}
+                  disabled={isConnecting}
                   data-testid="input-store-url"
                   className="h-10"
                 />
@@ -201,11 +209,20 @@ export default function StoresPage() {
               </Button>
               <Button 
                 onClick={handleConnectStore} 
-                disabled={!storeUrl} 
+                disabled={!storeUrl || isConnecting} 
                 data-testid="button-confirm-connect"
               >
-                <Lock className="mr-2 h-4 w-4" />
-                Connect Securely
+                {isConnecting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Connecting...
+                  </>
+                ) : (
+                  <>
+                    <Lock className="mr-2 h-4 w-4" />
+                    Connect Securely
+                  </>
+                )}
               </Button>
             </DialogFooter>
           </DialogContent>
