@@ -255,6 +255,12 @@ NEXTAUTH_URL=http://localhost:3000
 GOOGLE_CLIENT_ID=your-google-id
 GOOGLE_CLIENT_SECRET=your-google-secret
 
+# Shopify Integration
+NEXT_PUBLIC_SHOPIFY_API_KEY=your-shopify-api-key
+SHOPIFY_API_SECRET=your-shopify-api-secret
+SHOPIFY_APP_HANDLE=storedoctor
+SHOPIFY_API_SCOPES=write_products,read_products,write_inventory,read_inventory,read_customers,write_customers
+
 # Groq AI (Llama 3.3 70B)
 GROQ_API_KEY=your-groq-api-key
 
@@ -989,4 +995,116 @@ export const config = {
 
 ---
 
-This comprehensive prompt covers everything needed for a complete migration from Vite to Next.js with Supabase, smart AI scanning with Groq, and deployment to Vercel.
+This comprehensive prompt covers everything needed for a complete migration from Vite to Next.js with Supabase, smart AI scanning with Llama 3.3 70B, and deployment to Render.
+
+---
+
+### PART 11: RENDER DEPLOYMENT GUIDE
+
+#### Setting Up Render Deployment
+
+**1. Create Render Account & New Web Service**
+- Go to https://render.com
+- Create new Web Service
+- Connect your GitHub repository
+- Select the branch to deploy (main)
+
+**2. Configure Build & Start Commands**
+```bash
+# Build command
+npm run build
+
+# Start command
+npm start
+```
+
+**3. Add Environment Variables on Render**
+In your Render dashboard, go to Environment → Add from .env.example:
+- All Supabase keys
+- NextAuth secret (generate with: `openssl rand -base64 32`)
+- Google OAuth credentials
+- Shopify API keys
+- Groq API key
+- Any other secrets from your .env.local
+
+**4. Database Configuration**
+- Supabase is cloud-hosted, so no separate database config needed
+- Render will connect via DATABASE_URL (if using Supabase)
+
+**5. Deploy**
+- Render auto-deploys on git push to main
+- Logs available in Render dashboard
+- Custom domain can be added in Settings
+
+**Key Differences from Vercel:**
+- ✅ Render uses standard Node.js runtime
+- ✅ No serverless functions (full Next.js server runs)
+- ✅ Environment variables via dashboard (no .env.local)
+- ✅ Logs streamed in real-time
+- ✅ Auto-redeploy on git push
+
+#### Render Blueprint (Optional but Recommended)
+Create `render.yaml` in project root for Infrastructure-as-Code:
+
+```yaml
+services:
+  - type: web
+    name: storedoctor
+    runtime: node
+    plan: standard
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: NEXTAUTH_SECRET
+        scope: run
+      - key: NODE_ENV
+        value: production
+    healthCheckPath: /api/health
+```
+
+#### Performance Optimization for Render
+- Set `NEXT_TELEMETRY_DISABLED=1` in environment
+- Use Next.js caching headers for static assets
+- Monitor memory usage (Render auto-restarts if exceeded)
+
+---
+
+## SMART AI SCANNING - IMPLEMENTATION SUMMARY
+
+The smart AI scanning is fully implemented with:
+
+1. **Smart Sampling Strategy (lib/scan-manager.ts)**
+   - Free: 50 products, quick analysis, 500 tokens
+   - Pro: 150 products, standard analysis, 2000 tokens
+   - Advanced: 500 products, deep analysis, 5000 tokens
+
+2. **Llama 3.3 70B Integration (lib/ai-scanner.ts)**
+   - Uses Groq API with `llama-3.3-70b-versatile` model
+   - Analyzes 6 categories: SEO, Speed, UX, CRO, Security, Mobile
+   - Returns structured JSON with critical/high-priority issues
+
+3. **Progressive Scanning UI (lib/hooks/use-scan-progress.ts)**
+   - 4 stages: initializing → sampling → analyzing → complete
+   - Real-time progress tracking (0-100%)
+   - Token estimation & savings display
+
+4. **Backend Scan Endpoint (app/api/stores/[storeId]/scans/route.ts)**
+   - Validates user authentication & plan limits
+   - Fetches store data from Shopify
+   - Calls Llama 3.3 70B via Groq
+   - Saves results to Supabase
+   - Returns issues with metadata
+
+---
+
+## QUICK START CHECKLIST
+
+- [ ] Fork/download repo to new Replit
+- [ ] Create Supabase project
+- [ ] Add all env vars from section 2.2
+- [ ] Run `npm install`
+- [ ] Run `npm run dev` to test locally
+- [ ] Connect GitHub to Render
+- [ ] Deploy to Render
+- [ ] Test Shopify OAuth flow
+- [ ] Test smart AI scan (free/pro/advanced)
