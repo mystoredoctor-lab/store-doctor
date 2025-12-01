@@ -69,7 +69,7 @@ export class MemStorage implements IStorage {
       healthScore: 0,
       status: "pending",
       issuesCount: 0,
-      lastScanAt: undefined,
+      lastScanAt: null,
       createdAt: new Date(),
     };
     this.stores.set(id, newStore);
@@ -144,7 +144,7 @@ export class MemStorage implements IStorage {
     if (!scan) throw new Error("Scan not found");
 
     // Find and mark issue as fixed
-    const updatedIssues = scan.issues.map((issue: ScanIssue) => 
+    const updatedIssues = (scan.issues || []).map((issue: ScanIssue) => 
       issue.id === issueId ? { ...issue, status: "fixed" } : issue
     );
 
