@@ -18,7 +18,7 @@ export async function updateUserPlan(planId: string): Promise<boolean> {
 }
 
 export function getUserPlan(): string {
-  return localStorage.getItem(PLAN_STORAGE_KEY) || "pro";
+  return localStorage.getItem(PLAN_STORAGE_KEY) || "free";
 }
 
 export function setUserPlan(planId: string): void {

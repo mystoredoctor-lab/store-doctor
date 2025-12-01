@@ -17,7 +17,7 @@ export function PricingSection() {
   const plans = usePricingPlans();
   const [, navigate] = useLocation();
   const { toast } = useToast();
-  const [isLoggedIn] = useState(!!localStorage.getItem("storedoctor_admin_auth_v1"));
+  const [isLoggedIn] = useState(!!localStorage.getItem("storedoctor_user_auth_v1"));
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
   const handlePlanSelection = async (planId: string) => {
