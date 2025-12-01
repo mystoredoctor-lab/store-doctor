@@ -13,9 +13,15 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { Bell, Settings, User, LogOut } from "lucide-react";
+import { Bell, Settings, User, LogOut, Check } from "lucide-react";
 import { mockUser } from "@/lib/data";
 import { Link, useLocation } from "wouter";
+
+const notifications = [
+  { id: 1, message: "Your store scan completed successfully", time: "5 min ago" },
+  { id: 2, message: "New critical issue found in your store", time: "1 hour ago" },
+  { id: 3, message: "Plan upgrade available - get more scans", time: "2 hours ago" },
+];
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -79,12 +85,32 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             <div className="flex items-center gap-2">
               <ThemeToggle />
 
-              <Button variant="ghost" size="icon" className="relative" data-testid="button-notifications">
-                <Bell className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
-                  3
-                </span>
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="relative" data-testid="button-notifications">
+                    <Bell className="h-5 w-5" />
+                    <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
+                      {notifications.length}
+                    </span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-80" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <p className="text-sm font-medium">Notifications</p>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {notifications.map((notif) => (
+                    <DropdownMenuItem key={notif.id} className="flex flex-col items-start py-3 px-3 cursor-default hover:bg-muted" data-testid={`notification-${notif.id}`}>
+                      <p className="text-sm font-medium leading-tight">{notif.message}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{notif.time}</p>
+                    </DropdownMenuItem>
+                  ))}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="text-center justify-center py-2 cursor-pointer text-sm hover:bg-muted" data-testid="link-view-all-notifications">
+                    View all notifications
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
