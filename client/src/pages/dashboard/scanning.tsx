@@ -101,6 +101,28 @@ export default function ScanningPage() {
         )}
       </div>
 
+      {isComplete && (
+        <Card className="border-green-500/50 bg-green-500/5" data-testid="card-scan-complete">
+          <CardContent className="pt-6">
+            <div className="text-center space-y-4">
+              <div className="flex justify-center mb-4">
+                <CheckCircle className="h-16 w-16 text-green-500" />
+              </div>
+              <h3 className="text-2xl font-bold">Scan Complete!</h3>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Your store has been fully analyzed. We found actionable insights to help improve your store's health
+                and increase conversions.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
+                <Button onClick={handleViewResults} data-testid="button-view-results">
+                  View Results
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       <Card data-testid="card-scan-progress">
         <CardHeader>
           <CardTitle>Scan Progress</CardTitle>
@@ -160,31 +182,6 @@ export default function ScanningPage() {
           </div>
         </CardContent>
       </Card>
-
-      {isComplete && (
-        <Card className="border-green-500/50 bg-green-500/5" data-testid="card-scan-complete">
-          <CardContent className="pt-6">
-            <div className="text-center space-y-4">
-              <div className="flex justify-center mb-4">
-                <CheckCircle className="h-16 w-16 text-green-500" />
-              </div>
-              <h3 className="text-2xl font-bold">Scan Complete!</h3>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
-                Your store has been fully analyzed. We found actionable insights to help improve your store's health
-                and increase conversions.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
-                <Button onClick={handleViewResults} data-testid="button-view-results">
-                  View Results
-                </Button>
-                <Button variant="outline" onClick={handleNewScan} data-testid="button-scan-again">
-                  Scan Again
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
       {!isComplete && (
         <Card className="bg-muted/30 border-dashed">
