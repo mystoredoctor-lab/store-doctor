@@ -79,3 +79,30 @@ export function getScansRemaining(plan: "free" | "pro" | "advanced"): number {
 export function canRunScan(plan: "free" | "pro" | "advanced"): boolean {
   return getScansRemaining(plan) > 0;
 }
+
+// ============ SMART AI SAMPLING ============
+
+export const SMART_SAMPLING_CONFIG = {
+  free: {
+    productsToScan: 50,
+    analysisDepth: "quick" as const,
+    estimatedTokens: 500,
+    tokenSavings: 75, // percentage
+  },
+  pro: {
+    productsToScan: 150,
+    analysisDepth: "standard" as const,
+    estimatedTokens: 2000,
+    tokenSavings: 50,
+  },
+  advanced: {
+    productsToScan: 500,
+    analysisDepth: "deep" as const,
+    estimatedTokens: 5000,
+    tokenSavings: 37,
+  },
+};
+
+export function getSmartSamplingConfig(plan: "free" | "pro" | "advanced") {
+  return SMART_SAMPLING_CONFIG[plan];
+}

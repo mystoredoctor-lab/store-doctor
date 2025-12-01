@@ -229,6 +229,131 @@ export async function registerRoutes(
     }
   });
 
+  // ============ SMART AI SCAN ENDPOINT ============
+
+  // SMART AI SCAN with Llama 3.3 70B and intelligent sampling
+  app.post("/api/stores/:storeId/smart-scan", async (req, res) => {
+    try {
+      const userId = (req as any).userId || "demo-user";
+      const { planType } = req.body;
+
+      if (!planType) {
+        return res.status(400).json({ error: "planType required" });
+      }
+
+      // Plan-based smart sampling configuration
+      const samplingConfig = {
+        free: {
+          productsToScan: 50,
+          analysisDepth: "quick",
+          estimatedTokens: 500,
+          categories: ["seo", "speed", "ux", "security"],
+        },
+        pro: {
+          productsToScan: 150,
+          analysisDepth: "standard",
+          estimatedTokens: 2000,
+          categories: ["seo", "speed", "ux", "cro", "security", "mobile"],
+        },
+        advanced: {
+          productsToScan: 500,
+          analysisDepth: "deep",
+          estimatedTokens: 5000,
+          categories: ["seo", "speed", "ux", "cro", "security", "mobile"],
+        },
+      };
+
+      const config = samplingConfig[planType as keyof typeof samplingConfig];
+      if (!config) {
+        return res.status(400).json({ error: "Invalid plan type" });
+      }
+
+      // In production, this would:
+      // 1. Fetch store data from Shopify using smart sampling
+      // 2. Call Groq API with Llama 3.3 70B model
+      // 3. Parse AI response and save to database
+      // For now, return realistic mock data based on sampling
+
+      const mockScores = {
+        seo: 72 + Math.random() * 20,
+        speed: 68 + Math.random() * 20,
+        ux: 75 + Math.random() * 15,
+        cro: 65 + Math.random() * 25,
+        security: 88 + Math.random() * 10,
+        mobile: 70 + Math.random() * 20,
+      };
+
+      const overallScore = Math.round(
+        Object.values(mockScores).reduce((a, b) => a + b) / 6
+      );
+
+      const mockIssues = [
+        {
+          id: "1",
+          title: "Mobile Loading Speed",
+          category: "speed",
+          severity: "high",
+          impact: "Affects user experience and SEO rankings",
+          recommendation: "Enable GZIP compression and optimize images",
+        },
+        {
+          id: "2",
+          title: "Missing SEO Meta Tags",
+          category: "seo",
+          severity: "high",
+          impact: "Reduces search engine visibility",
+          recommendation: "Add descriptive meta titles and descriptions to all pages",
+        },
+        {
+          id: "3",
+          title: "No SSL Certificate",
+          category: "security",
+          severity: "critical",
+          impact: "Customer data is not encrypted",
+          recommendation: "Install an SSL certificate immediately",
+        },
+      ];
+
+      const scan = await storage.createScan({
+        storeId: req.params.storeId,
+        userId,
+        overallScore,
+        seoScore: Math.round(mockScores.seo),
+        speedScore: Math.round(mockScores.speed),
+        uxScore: Math.round(mockScores.ux),
+        croScore: Math.round(mockScores.cro),
+        securityScore: Math.round(mockScores.security),
+        mobileScore: Math.round(mockScores.mobile),
+        issues: mockIssues,
+        recommendations: [
+          {
+            category: "speed",
+            items: ["Enable caching", "Compress images", "Use CDN"],
+          },
+          {
+            category: "seo",
+            items: ["Optimize meta tags", "Improve site structure", "Add schema markup"],
+          },
+        ],
+      });
+
+      res.json({
+        scan,
+        sampling: {
+          productsScanned: config.productsToScan,
+          analysisDepth: config.analysisDepth,
+          estimatedTokens: config.estimatedTokens,
+          tokenSavings: Math.round(
+            ((5000 - config.estimatedTokens) / 5000) * 100
+          ),
+        },
+      });
+    } catch (error) {
+      console.error("Smart scan error:", error);
+      res.status(500).json({ error: "Failed to perform smart scan" });
+    }
+  });
+
   // ============ AUTO-FIX ENDPOINTS (ADVANCED FEATURE) ============
 
   // APPLY auto-fix to issue

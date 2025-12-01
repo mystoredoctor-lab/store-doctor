@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Search, Zap, Layout, TrendingUp, Shield, Smartphone, CheckCircle, Clock } from "lucide-react";
 import { mockStoresByPlan } from "@/lib/data";
 import { getUserPlan } from "@/lib/planManager";
+import { useToast } from "@/hooks/use-toast";
 
 const scanSteps = [
   { name: "SEO Analysis", icon: Search, duration: 1500 },
@@ -19,6 +20,7 @@ const scanSteps = [
 
 export default function ScanningPage() {
   const [location, navigate] = useLocation();
+  const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [startTime, setStartTime] = useState(Date.now());
@@ -43,7 +45,7 @@ export default function ScanningPage() {
     return () => clearInterval(interval);
   }, [startTime]);
 
-  // Main animation loop
+  // Main animation loop - calls smart AI scan endpoint
   useEffect(() => {
     if (isComplete) return;
     
@@ -51,6 +53,24 @@ export default function ScanningPage() {
     let isMounted = true;
 
     const runAnimation = async () => {
+      // Call smart AI scan endpoint during animation
+      if (stepIndex === 0 && isMounted) {
+        try {
+          await fetch(`/api/stores/${store?.id}/smart-scan`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ planType: userPlan }),
+          });
+        } catch (error) {
+          console.error("Smart scan failed:", error);
+          toast({
+            title: "Scan Error",
+            description: "Failed to perform smart scan. Using demo data.",
+            variant: "destructive",
+          });
+        }
+      }
+
       while (stepIndex < scanSteps.length && isMounted) {
         setCurrentStep(stepIndex);
         await new Promise((resolve) => setTimeout(resolve, scanSteps[stepIndex].duration));
@@ -67,7 +87,7 @@ export default function ScanningPage() {
     return () => {
       isMounted = false;
     };
-  }, [scanId, isComplete]);
+  }, [scanId, isComplete, store?.id, userPlan, toast]);
 
   const formatTime = (seconds: number) => {
     return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
