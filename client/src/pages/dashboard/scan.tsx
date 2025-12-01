@@ -75,7 +75,7 @@ export default function ScanPage() {
         title="Rescan Not Available"
         description={
           userPlan === "free"
-            ? "You've reached your monthly scan limit on the Free plan. Upgrade to Pro (10 scans/month) or Advanced (15 scans/month) to run more scans."
+            ? "You've reached your monthly scan limit on the Free plan. Upgrade to Pro (5 scans/month) or Advanced (15 scans/month) to run more scans."
             : userPlan === "pro"
             ? "You've reached your monthly scan limit. Upgrade to Advanced (15 scans/month) for more scans."
             : "You've reached your monthly scan limit. Please try again next month."

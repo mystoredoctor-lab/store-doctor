@@ -40,8 +40,8 @@ const setupSteps = [
     description: "Pick the right plan for your store",
     details: [
       "Free Plan: Best for trying it out (1 scan per month)",
-      "Pro Plan: Great for growing stores (10 scans per month, $12/month)",
-      "Advanced Plan: For serious merchants (30 scans per month, $25/month)",
+      "Pro Plan: Great for growing stores (5 scans per month, $12/month)",
+      "Advanced Plan: For serious merchants (15 scans per month, $25/month)",
       "Click the plan you want",
       "Add your payment method if choosing Pro or Advanced"
     ],

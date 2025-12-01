@@ -19,9 +19,9 @@ const initialPlans = [
     id: "pro",
     name: "Pro",
     price: 12,
-    scans: 10,
+    scans: 5,
     stores: 2,
-    features: ["10 scans per month", "Full analysis", "All issues", "Priority support"],
+    features: ["5 scans per month", "Full analysis", "All issues", "Priority support"],
   },
   {
     id: "advanced",

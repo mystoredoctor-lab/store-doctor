@@ -22,17 +22,17 @@ const defaultPlans: PricingPlan[] = [
     id: "pro",
     name: "Pro",
     price: 12,
-    scans: 10,
+    scans: 5,
     stores: 2,
-    features: ["10 scans per month", "Full analysis", "All issues", "Priority support"],
+    features: ["5 scans per month", "Full analysis", "All issues", "Priority support"],
   },
   {
     id: "advanced",
     name: "Advanced",
     price: 25,
-    scans: 30,
+    scans: 15,
     stores: 5,
-    features: ["30 scans per month", "Full analysis", "All issues", "Priority support", "Autofix", "Benchmarking"],
+    features: ["15 scans per month", "Full analysis", "All issues", "Priority support", "Autofix", "Benchmarking"],
   },
 ];
 

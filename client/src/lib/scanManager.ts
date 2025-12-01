@@ -15,7 +15,7 @@ export interface ScanLimits {
 
 export const DEFAULT_LIMITS: ScanLimits = {
   free: 1,
-  pro: 10,
+  pro: 5,
   advanced: 15,
 };
 
