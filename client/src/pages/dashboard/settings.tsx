@@ -217,23 +217,21 @@ export default function SettingsPage() {
             <div className="flex items-center gap-2">
               <Store className="h-5 w-5" />
               <CardTitle>Connected Stores</CardTitle>
-            </div>
-            {userPlan !== "advanced" && (
-              <Badge variant="outline" className="bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/20">
-                Advanced Plan
+              <Badge variant="outline" className="text-xs">
+                {userPlan === "free" ? "1 store" : userPlan === "pro" ? "2 stores" : "5 stores"}
               </Badge>
-            )}
+            </div>
           </div>
           <CardDescription>
-            {userPlan === "advanced" 
-              ? "Manage your connected Shopify stores." 
-              : "Upgrade to Advanced plan to manage store connections."}
+            {userPlan === "free" && "You can connect up to 1 store on the Free plan."}
+            {userPlan === "pro" && "You can connect up to 2 stores on the Pro plan."}
+            {userPlan === "advanced" && "You can connect up to 5 stores on the Advanced plan. Manage your connected Shopify stores."}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {stores.length > 0 ? (
+          {stores.slice(0, userPlan === "free" ? 1 : userPlan === "pro" ? 2 : 5).length > 0 ? (
             <div className="space-y-3">
-              {stores.map((store) => (
+              {stores.slice(0, userPlan === "free" ? 1 : userPlan === "pro" ? 2 : 5).map((store) => (
                 <div
                   key={store.id}
                   className="flex items-center justify-between p-4 rounded-lg border bg-muted/30"
