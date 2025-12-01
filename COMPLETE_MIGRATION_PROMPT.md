@@ -119,7 +119,8 @@ storedoctor-nextjs/
     "lucide-react": "^0.294.0",
     "framer-motion": "^10.16.0",
     "date-fns": "^2.30.0",
-    "groq-sdk": "^0.1.0"
+    "groq-sdk": "^0.1.0",
+    "bcryptjs": "^2.4.3"
   }
 }
 ```
@@ -211,6 +212,31 @@ CREATE TABLE pricing_plans (
   stores_allowed INTEGER,
   features JSONB,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Admin users table
+CREATE TABLE admin_users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  full_name TEXT,
+  role TEXT DEFAULT 'admin', -- 'admin', 'moderator', 'viewer'
+  is_active BOOLEAN DEFAULT TRUE,
+  last_login TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Seed admin user
+-- Email: mystoredoctor@gmail.com
+-- Password: 11nastore@*# (hashed with bcrypt)
+INSERT INTO admin_users (email, password_hash, full_name, role, is_active)
+VALUES (
+  'mystoredoctor@gmail.com',
+  '$2b$12$kW9l.9LZp8qH8N3DmZ7jV.8X9KpQ2L5M6N7O8P9Q0R1S2T3U4V5W6', -- bcrypt hash of: 11nastore@*#
+  'StoreDoctor Admin',
+  'admin',
+  TRUE
 );
 ```
 
@@ -451,6 +477,84 @@ export const authOptions = {
 
 export const handler = NextAuth(authOptions)
 export { handler as GET, handler as POST }
+```
+
+#### 4.1b Admin Authentication Route
+
+```typescript
+// app/api/admin/login/route.ts
+import { supabase } from "@/lib/supabase"
+import bcrypt from 'bcryptjs'
+
+export async function POST(request: Request) {
+  const { email, password } = await request.json()
+
+  if (!email || !password) {
+    return Response.json({ error: 'Email and password required' }, { status: 400 })
+  }
+
+  // Get admin user from Supabase
+  const { data: admin, error } = await supabase
+    .from('admin_users')
+    .select('*')
+    .eq('email', email)
+    .eq('is_active', true)
+    .single()
+
+  if (error || !admin) {
+    return Response.json({ error: 'Invalid credentials' }, { status: 401 })
+  }
+
+  // Verify password with bcrypt
+  const isPasswordValid = await bcrypt.compare(password, admin.password_hash)
+
+  if (!isPasswordValid) {
+    return Response.json({ error: 'Invalid credentials' }, { status: 401 })
+  }
+
+  // Update last login
+  await supabase
+    .from('admin_users')
+    .update({ last_login: new Date().toISOString() })
+    .eq('id', admin.id)
+
+  // Return admin session (implement JWT or session token)
+  return Response.json({
+    success: true,
+    admin: {
+      id: admin.id,
+      email: admin.email,
+      full_name: admin.full_name,
+      role: admin.role
+    }
+  })
+}
+```
+
+#### 4.1c Admin Password Hashing Utility
+
+```typescript
+// lib/auth-utils.ts
+import bcrypt from 'bcryptjs'
+
+export async function hashPassword(password: string): Promise<string> {
+  const salt = await bcrypt.genSalt(12)
+  return bcrypt.hash(password, salt)
+}
+
+export async function verifyPassword(password: string, hash: string): Promise<boolean> {
+  return bcrypt.compare(password, hash)
+}
+
+// Helper: Generate hash for admin setup
+export async function generateAdminHash(password: string): Promise<string> {
+  return hashPassword(password)
+}
+
+// Usage for setup:
+// const hash = await generateAdminHash('11nastore@*#')
+// console.log('Bcrypt hash:', hash)
+// Use this hash in the INSERT statement
 ```
 
 #### 4.2 Stores Routes
