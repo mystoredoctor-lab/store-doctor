@@ -98,13 +98,12 @@ export default function ScanPage() {
             Export Report
           </Button>
           <Button 
-            onClick={handleRunScan} 
-            disabled={!canScan}
+            onClick={handleRunScan}
             data-testid="button-run-scan"
           >
             <RefreshCw className="mr-2 h-4 w-4" />
             Run New Scan
-            {canScan && <span className="ml-2 text-xs">({scansRemaining} left)</span>}
+            <span className="ml-2 text-xs">({scansRemaining} left)</span>
           </Button>
         </div>
       </div>
