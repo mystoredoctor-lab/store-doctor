@@ -280,13 +280,14 @@ export default function SettingsPage() {
                   </div>
                   {userPlan === "advanced" && (
                     <Button
-                      size="icon"
-                      variant="ghost"
-                      className="shrink-0 text-destructive hover:text-destructive"
+                      size="sm"
+                      variant="destructive"
+                      className="shrink-0"
                       onClick={() => handleRemoveStore(store.id)}
                       data-testid={`button-remove-store-${store.id}`}
                     >
-                      <X className="h-4 w-4" />
+                      <X className="h-4 w-4 mr-2" />
+                      Disconnect
                     </Button>
                   )}
                 </div>
