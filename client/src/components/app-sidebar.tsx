@@ -15,7 +15,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Activity, LayoutDashboard, Store, Settings, HelpCircle, CreditCard, LogOut, ChevronUp } from "lucide-react";
 import { mockUser } from "@/lib/data";
-import { useAuth } from "@/hooks/useAuth";
+
+const handleLogout = () => {
+  localStorage.removeItem("storedoctor_user_auth_v1");
+  localStorage.removeItem("storedoctor_connected_stores_v1");
+  localStorage.removeItem("storedoctor_plan_v1");
+  localStorage.removeItem("storedoctor_admin_auth_v1");
+  window.location.href = "/";
+};
 
 const mainMenuItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
@@ -31,7 +38,6 @@ const supportMenuItems = [
 
 export function AppSidebar() {
   const [location] = useLocation();
-  const { logout } = useAuth();
 
   return (
     <Sidebar>
@@ -116,7 +122,7 @@ export function AppSidebar() {
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   className="text-destructive cursor-pointer"
-                  onClick={logout}
+                  onClick={handleLogout}
                   data-testid="button-sidebar-logout"
                 >
                   <LogOut className="mr-2 h-4 w-4" />

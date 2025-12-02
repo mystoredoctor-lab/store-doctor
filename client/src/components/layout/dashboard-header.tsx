@@ -12,11 +12,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Bell, Settings, User, LogOut } from "lucide-react";
 import { mockUser } from "@/lib/data";
 import { Link } from "wouter";
-import { useAuth } from "@/hooks/useAuth";
+
+const handleLogout = () => {
+  localStorage.removeItem("storedoctor_user_auth_v1");
+  localStorage.removeItem("storedoctor_connected_stores_v1");
+  localStorage.removeItem("storedoctor_plan_v1");
+  localStorage.removeItem("storedoctor_admin_auth_v1");
+  window.location.href = "/";
+};
 
 export function DashboardHeader() {
-  const { logout } = useAuth();
-
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background/95 backdrop-blur px-6 gap-4">
       <div></div>
@@ -63,7 +68,7 @@ export function DashboardHeader() {
             <DropdownMenuSeparator />
             <DropdownMenuItem 
               className="text-destructive cursor-pointer"
-              onClick={logout}
+              onClick={handleLogout}
             >
               <LogOut className="mr-2 h-4 w-4" />
               Log out
