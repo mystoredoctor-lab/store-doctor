@@ -73,14 +73,18 @@ export default function ScanPage() {
       const scanResults = mockScanResultsByStore[store.id as keyof typeof mockScanResultsByStore] || mockScanResultsByStore.store_1;
       const date = new Date().toISOString().split("T")[0];
       
+      // Limit content based on plan
+      const limitedIssues = userPlan === "free" ? scanResults.criticalIssues.slice(0, 3) : scanResults.criticalIssues;
+      const limitedCategories = userPlan === "free" ? scanResults.categories.slice(0, 3) : scanResults.categories;
+      
       const report = {
         storeName: store.name,
         storeUrl: store.url,
         scanDate: new Date().toISOString(),
         overallScore: scanResults.overallScore,
-        categories: scanResults.categories,
-        criticalIssues: scanResults.criticalIssues,
-        recommendations: scanResults.recommendations,
+        categories: limitedCategories,
+        criticalIssues: limitedIssues,
+        recommendations: userPlan === "free" ? [] : scanResults.recommendations,
       };
 
       let blob: Blob;
@@ -278,6 +282,12 @@ export default function ScanPage() {
                   <div class="score-large">${report.overallScore}</div>
                   <div class="score-label">Overall Health Score / 100</div>
                 </div>
+                
+                ${userPlan === "free" ? `
+                  <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                    <p style="font-size: 13px; color: #1e40af;"><strong>Free Plan Limited Report:</strong> This report shows only basic information. Upgrade to Pro or Advanced to see full analysis, all issues, and detailed recommendations.</p>
+                  </div>
+                ` : ""}
                 
                 <div class="stats-grid">
                   <div class="stat-card">
