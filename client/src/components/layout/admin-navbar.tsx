@@ -1,4 +1,5 @@
 import { Link, useLocation } from "wouter";
+import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { LayoutDashboard, Users, BarChart2, Settings, ArrowLeft, FileText, DollarSign, Menu, X, LogOut } from "lucide-react";
@@ -22,27 +23,37 @@ const adminMenuItems = [
 ];
 
 export function AdminNavbar() {
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { logout: clearAdminAuth } = useAdminAuth();
+  const { toast } = useToast();
 
   const handleLogout = async () => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL || "";
-      await fetch(`${apiUrl}/api/auth/logout`, { method: "POST" });
+      await fetch(`${apiUrl}/api/auth/logout`, { method: "POST" }).catch(() => {
+        // Silently fail if backend logout doesn't work
+      });
     } catch (error) {
       console.error("Logout failed:", error);
     }
+    
     // Clear admin auth
     clearAdminAuth();
+    
     // Clear all user auth data from localStorage
     localStorage.removeItem("storedoctor_user_auth_v1");
     localStorage.removeItem("storedoctor_connected_stores_v1");
     localStorage.removeItem("storedoctor_plan_v1");
+    localStorage.removeItem("storedoctor_admin_auth_v1");
+    
     // Notify other parts of app
     window.dispatchEvent(new Event("logout"));
-    // Redirect to home
-    window.location.href = "/";
+    
+    // Small delay to ensure storage is cleared
+    setTimeout(() => {
+      navigate("/");
+    }, 100);
   };
 
   return (

@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Activity, LayoutDashboard, Store, Settings, HelpCircle, CreditCard, LogOut } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const sidebarItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -17,7 +18,8 @@ const bottomItems = [
 ];
 
 export function DashboardSidebar() {
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
+  const { toast } = useToast();
 
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r bg-sidebar">
@@ -80,18 +82,26 @@ export function DashboardSidebar() {
               onClick={async () => {
                 try {
                   const apiUrl = import.meta.env.VITE_API_URL || "";
-                  await fetch(`${apiUrl}/api/auth/logout`, { method: "POST" });
+                  await fetch(`${apiUrl}/api/auth/logout`, { method: "POST" }).catch(() => {
+                    // Silently fail if backend logout doesn't work
+                  });
                 } catch (error) {
                   console.error("Logout failed:", error);
                 }
-                // Clear all user auth data from localStorage
+                
+                // Clear all user auth data from localStorage FIRST
                 localStorage.removeItem("storedoctor_user_auth_v1");
                 localStorage.removeItem("storedoctor_connected_stores_v1");
                 localStorage.removeItem("storedoctor_plan_v1");
+                localStorage.removeItem("storedoctor_admin_auth_v1");
+                
                 // Notify other tabs/windows
                 window.dispatchEvent(new Event("logout"));
-                // Redirect to home
-                window.location.href = "/";
+                
+                // Small delay to ensure storage is cleared
+                setTimeout(() => {
+                  navigate("/");
+                }, 100);
               }}
               data-testid="button-logout"
             >
