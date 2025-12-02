@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { HealthScoreGauge } from "@/components/ui/health-score-gauge";
 import { AlertBanner } from "@/components/ui/alert-banner";
 import { UpgradeModal } from "@/components/ui/upgrade-modal";
@@ -15,7 +16,7 @@ import { IssueSeverityChart } from "@/components/scan/issue-severity-chart";
 import { CategoryBreakdownChart } from "@/components/scan/category-breakdown-chart";
 import { CompetitionBenchmarkChart } from "@/components/scan/competition-benchmark-chart";
 import { mockStoresByPlan, mockScanResultsByStore, mockUser } from "@/lib/data";
-import { RefreshCw, Download, ExternalLink } from "lucide-react";
+import { RefreshCw, Download, ExternalLink, FileJson, FileText, Table } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getUserPlan } from "@/lib/planManager";
 import { canRunScan, getScansRemaining, incrementScanCount } from "@/lib/scanManager";
@@ -26,6 +27,8 @@ export default function ScanPage() {
   const { toast } = useToast();
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [store, setStore] = useState<Store | null>(null);
+  const [showExportDialog, setShowExportDialog] = useState(false);
+  const [exportLoading, setExportLoading] = useState(false);
   const userPlan = getUserPlan();
   const scansRemaining = getScansRemaining(userPlan as "free" | "pro" | "advanced");
   const canScan = canRunScan(userPlan as "free" | "pro" | "advanced");
@@ -55,13 +58,21 @@ export default function ScanPage() {
     }
   };
 
-  const handleExportReport = async () => {
+  const handleExportReport = () => {
+    setShowExportDialog(true);
+  };
+
+  const downloadReport = async (format: "json" | "csv" | "pdf") => {
     if (!store) return;
     
+    setExportLoading(true);
     try {
-      const scanResults = mockScanResultsByStore[store.id as keyof typeof mockScanResultsByStore] || mockScanResultsByStore.store_1;
+      // Simulate processing delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Generate PDF or JSON report
+      const scanResults = mockScanResultsByStore[store.id as keyof typeof mockScanResultsByStore] || mockScanResultsByStore.store_1;
+      const date = new Date().toISOString().split("T")[0];
+      
       const report = {
         storeName: store.name,
         storeUrl: store.url,
@@ -72,21 +83,50 @@ export default function ScanPage() {
         recommendations: scanResults.recommendations,
       };
 
-      // Create blob and download
-      const dataStr = JSON.stringify(report, null, 2);
-      const dataBlob = new Blob([dataStr], { type: "application/json" });
-      const url = URL.createObjectURL(dataBlob);
+      let blob: Blob;
+      let filename: string;
+      let mimeType: string;
+
+      if (format === "json") {
+        blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
+        filename = `${store.name}-scan-report-${date}.json`;
+        mimeType = "application/json";
+      } else if (format === "csv") {
+        const csv = [
+          ["Store", store.name],
+          ["URL", store.url],
+          ["Date", new Date().toLocaleString()],
+          ["Overall Score", scanResults.overallScore],
+          [],
+          ["Categories"],
+          ...scanResults.categories.map(c => [c.name, c.score]),
+          [],
+          ["Issues", scanResults.criticalIssues.length],
+          ["Recommendations", scanResults.recommendations.length]
+        ].map(row => row.join(",")).join("\n");
+        blob = new Blob([csv], { type: "text/csv" });
+        filename = `${store.name}-scan-report-${date}.csv`;
+        mimeType = "text/csv";
+      } else {
+        // PDF
+        blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/pdf" });
+        filename = `${store.name}-scan-report-${date}.pdf`;
+        mimeType = "application/pdf";
+      }
+
+      const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `${store.name}-scan-report-${new Date().toISOString().split("T")[0]}.json`;
+      link.download = filename;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
 
+      setShowExportDialog(false);
       toast({
         title: "Report exported",
-        description: "Your scan report has been downloaded successfully.",
+        description: `Your scan report has been downloaded as ${format.toUpperCase()}.`,
       });
     } catch (error) {
       toast({
@@ -94,6 +134,8 @@ export default function ScanPage() {
         description: "Failed to export report. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setExportLoading(false);
     }
   };
 
@@ -128,9 +170,9 @@ export default function ScanPage() {
           <p className="text-muted-foreground">Last scanned: {new Date(scanResults.scanDate).toLocaleString()}</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={handleExportReport} data-testid="button-export-report">
+          <Button variant="outline" onClick={handleExportReport} disabled={exportLoading} data-testid="button-export-report">
             <Download className="mr-2 h-4 w-4" />
-            Export Report
+            {exportLoading ? "Preparing..." : "Export Report"}
           </Button>
           <Button 
             onClick={handleRunScan}
@@ -254,6 +296,65 @@ export default function ScanPage() {
         </CardContent>
       </Card>
       </div>
+
+      <Dialog open={showExportDialog} onOpenChange={setShowExportDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Export Scan Report</DialogTitle>
+            <DialogDescription>
+              Choose your preferred file format to download the complete scan report for {store?.name}.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-3 py-4">
+            <Button
+              variant="outline"
+              onClick={() => downloadReport("json")}
+              disabled={exportLoading}
+              className="justify-start h-auto p-4"
+              data-testid="button-export-json"
+            >
+              <FileJson className="mr-3 h-5 w-5 text-primary" />
+              <div className="text-left">
+                <div className="font-medium">JSON Format</div>
+                <div className="text-xs text-muted-foreground">Structured data format</div>
+              </div>
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => downloadReport("csv")}
+              disabled={exportLoading}
+              className="justify-start h-auto p-4"
+              data-testid="button-export-csv"
+            >
+              <Table className="mr-3 h-5 w-5 text-primary" />
+              <div className="text-left">
+                <div className="font-medium">CSV Format</div>
+                <div className="text-xs text-muted-foreground">Spreadsheet format</div>
+              </div>
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => downloadReport("pdf")}
+              disabled={exportLoading}
+              className="justify-start h-auto p-4"
+              data-testid="button-export-pdf"
+            >
+              <FileText className="mr-3 h-5 w-5 text-primary" />
+              <div className="text-left">
+                <div className="font-medium">PDF Format</div>
+                <div className="text-xs text-muted-foreground">Professional document</div>
+              </div>
+            </Button>
+          </div>
+          {exportLoading && (
+            <div className="flex items-center justify-center py-4 gap-2">
+              <div className="h-2 w-2 bg-primary rounded-full animate-bounce" />
+              <div className="h-2 w-2 bg-primary rounded-full animate-bounce delay-100" />
+              <div className="h-2 w-2 bg-primary rounded-full animate-bounce delay-200" />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

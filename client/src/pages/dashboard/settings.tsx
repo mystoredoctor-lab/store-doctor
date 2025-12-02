@@ -32,6 +32,7 @@ export default function SettingsPage() {
   const { toast } = useToast();
   const [userPlan, setUserPlan] = useState(getUserPlan());
   const [isProcessing, setIsProcessing] = useState(false);
+  const [errorDialog, setErrorDialog] = useState<{ open: boolean; title: string; message: string } | null>(null);
   const currentPlan = pricingPlans.find((p) => p.id === userPlan);
 
   // Load stores from localStorage
@@ -58,10 +59,10 @@ export default function SettingsPage() {
         description: `${storeName} has been disconnected.`,
       });
     } catch (error) {
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to disconnect store",
-        variant: "destructive",
+      setErrorDialog({
+        open: true,
+        title: "Unable to Disconnect Store",
+        message: error instanceof Error ? error.message : "Failed to disconnect store. Please try again or contact support.",
       });
     }
   };
@@ -427,6 +428,29 @@ export default function SettingsPage() {
           </div>
         </CardContent>
       </Card>
+
+      {errorDialog && (
+        <Dialog open={errorDialog.open} onOpenChange={(open) => !open && setErrorDialog(null)}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-destructive/10">
+                  <AlertTriangle className="h-6 w-6 text-destructive" />
+                </div>
+                <DialogTitle>{errorDialog.title}</DialogTitle>
+              </div>
+              <DialogDescription className="mt-2">
+                {errorDialog.message}
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button onClick={() => setErrorDialog(null)} className="w-full">
+                Understood
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
