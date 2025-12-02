@@ -49,7 +49,7 @@ export default function ConnectStorePage() {
     queryKey: ["/api/stores"],
     queryFn: async () => {
       try {
-        const response = await fetch("/api/stores");
+        const response = await apiRequest("GET", "/api/stores");
         if (!response.ok) throw new Error("Failed to load stores");
         return response.json();
       } catch (error) {

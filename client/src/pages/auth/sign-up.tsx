@@ -88,7 +88,7 @@ export default function SignUpPage() {
               className="w-full"
               data-testid="button-google-signup"
               onClick={() => {
-                // Link to Google OAuth endpoint
+                // Redirect to Google OAuth endpoint
                 window.location.href = "/api/auth/google";
               }}
             >

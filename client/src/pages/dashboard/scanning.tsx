@@ -8,6 +8,7 @@ import { Search, Zap, Layout, TrendingUp, Shield, Smartphone, CheckCircle, Clock
 import { mockStoresByPlan } from "@/lib/data";
 import { getUserPlan } from "@/lib/planManager";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 
 const scanSteps = [
   { name: "SEO Analysis", icon: Search, duration: 1500 },
@@ -36,6 +37,7 @@ export default function ScanningPage() {
   const planStores = mockStoresByPlan[userPlan as "free" | "pro" | "advanced"] || mockStoresByPlan.free;
   const store = storeId ? planStores.find((s) => s.id === storeId) : planStores[0];
   const progress = ((currentStep + 1) / scanSteps.length) * 100;
+  const [lastScanId, setLastScanId] = useState<string | null>(null);
 
   // Update elapsed time
   useEffect(() => {
@@ -56,13 +58,13 @@ export default function ScanningPage() {
       // Call smart AI scan endpoint during animation
       if (stepIndex === 0 && isMounted) {
         try {
-          const apiUrl = import.meta.env.VITE_API_URL || "";
-          const endpoint = `${apiUrl}/api/stores/${store?.id}/smart-scan`;
-          await fetch(endpoint, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ planType: userPlan }),
+          const response = await apiRequest("POST", `/api/stores/${store?.id}/smart-scan`, {
+            planType: userPlan,
           });
+          const scanData = await response.json();
+          if (scanData.scan?.id) {
+            setLastScanId(scanData.scan.id);
+          }
         } catch (error) {
           console.error("Smart scan failed:", error);
           toast({
@@ -80,15 +82,14 @@ export default function ScanningPage() {
       }
 
       // After animation, fetch actual scan results from backend
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL || "";
-        const endpoint = `${apiUrl}/api/scans/${store?.id}`;
-        const response = await fetch(endpoint);
-        if (!response.ok) throw new Error("Failed to fetch scan results");
-        const scanData = await response.json();
-        // Scan data will be available when user clicks "View Results"
-      } catch (error) {
-        console.log("Using mock scan data:", error);
+      if (lastScanId && isMounted) {
+        try {
+          const response = await apiRequest("GET", `/api/scans/${lastScanId}`);
+          if (!response.ok) throw new Error("Failed to fetch scan results");
+          // Scan data will be available when user clicks "View Results"
+        } catch (error) {
+          console.log("Using mock scan data:", error);
+        }
       }
 
       if (isMounted && stepIndex >= scanSteps.length) {
@@ -101,7 +102,7 @@ export default function ScanningPage() {
     return () => {
       isMounted = false;
     };
-  }, [scanId, isComplete, store?.id, userPlan, toast]);
+  }, [scanId, isComplete, store?.id, userPlan, lastScanId, toast]);
 
   const formatTime = (seconds: number) => {
     return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
