@@ -69,3 +69,18 @@ export function clearUserContext(): void {
   localStorage.removeItem(USER_CONTEXT_KEY);
   localStorage.removeItem(PLAN_STORAGE_KEY);
 }
+
+export async function handleLogout(): Promise<void> {
+  try {
+    await fetch("/api/auth/logout", { 
+      method: "POST", 
+      credentials: "include",
+      headers: { "Content-Type": "application/json" }
+    }).catch(() => {});
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
+  clearUserContext();
+  localStorage.clear();
+  window.location.href = "/auth/sign-in";
+}

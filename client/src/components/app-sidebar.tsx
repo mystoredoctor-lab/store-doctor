@@ -15,18 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Activity, LayoutDashboard, Store, Settings, HelpCircle, CreditCard, LogOut, ChevronUp } from "lucide-react";
 import { mockUser } from "@/lib/data";
-import { clearUserContext } from "@/lib/planManager";
-
-const handleLogout = async () => {
-  try {
-    await fetch("/api/auth/logout", { method: "POST", credentials: "include" }).catch(() => {});
-  } catch (error) {
-    console.error("Logout failed:", error);
-  }
-  clearUserContext();
-  localStorage.clear();
-  window.location.href = "/auth/sign-in";
-};
+import { handleLogout } from "@/lib/planManager";
 
 const mainMenuItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },

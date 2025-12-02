@@ -105,7 +105,7 @@ export default function SettingsPage() {
       localStorage.removeItem("storedoctor_user_plan_v1");
       localStorage.removeItem("storedoctor_plan_v1");
       localStorage.removeItem("storedoctor_admin_auth_v1");
-      window.location.href = "/";
+      navigate("/auth/sign-in");
     } catch (error) {
       toast({
         title: "Error",

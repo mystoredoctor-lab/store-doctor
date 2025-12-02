@@ -3,6 +3,12 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertScanSchema, insertStoreSchema } from "@shared/schema";
 
+// Mock function - will be replaced with actual plan lookup from DB
+function getUserPlanFromContext(userId: string): string {
+  // In production, query the database for user's actual plan
+  return "free";
+}
+
 export async function registerRoutes(
   httpServer: Server,
   app: Express
@@ -110,8 +116,16 @@ export async function registerRoutes(
   // GET single store
   app.get("/api/stores/:storeId", async (req, res) => {
     try {
+      const userId = (req as any).userId || "demo-user";
+      if (!userId) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
       const store = await storage.getStore(req.params.storeId);
       if (!store) return res.status(404).json({ error: "Store not found" });
+      // Verify user owns this store
+      if (store.userId !== userId) {
+        return res.status(403).json({ error: "Forbidden" });
+      }
       res.json(store);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch store" });
@@ -125,11 +139,20 @@ export async function registerRoutes(
       if (!userId) {
         return res.status(401).json({ error: "Unauthorized" });
       }
+      const { name, url, shopifyAccessToken } = req.body;
+      if (!url || !name) {
+        return res.status(400).json({ error: "Store name and URL are required" });
+      }
+      // Validate Shopify URL format
+      const shopifyUrlRegex = /^https?:\/\/[a-zA-Z0-9-]+\.myshopify\.com\/?$/;
+      if (!shopifyUrlRegex.test(url)) {
+        return res.status(400).json({ error: "Invalid Shopify store URL format. Expected: https://your-store.myshopify.com" });
+      }
       const store = await storage.createStore({
         userId,
-        name: req.body.name,
-        url: req.body.url,
-        shopifyAccessToken: req.body.shopifyAccessToken,
+        name,
+        url,
+        shopifyAccessToken,
       });
       res.json(store);
     } catch (error) {
@@ -140,8 +163,18 @@ export async function registerRoutes(
   // UPDATE store
   app.patch("/api/stores/:storeId", async (req, res) => {
     try {
-      const store = await storage.updateStore(req.params.storeId, req.body);
-      res.json(store);
+      const userId = (req as any).userId || "demo-user";
+      if (!userId) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      const store = await storage.getStore(req.params.storeId);
+      if (!store) return res.status(404).json({ error: "Store not found" });
+      // Verify user owns this store
+      if (store.userId !== userId) {
+        return res.status(403).json({ error: "Forbidden" });
+      }
+      const updated = await storage.updateStore(req.params.storeId, req.body);
+      res.json(updated);
     } catch (error) {
       res.status(400).json({ error: "Failed to update store" });
     }
@@ -227,6 +260,13 @@ export async function registerRoutes(
       if (!userId) {
         return res.status(401).json({ error: "Unauthorized" });
       }
+      
+      // Check plan-based scan limits (will be enforced by backend in production)
+      // For now, allow the scan but include scan limit info in response
+      const plan = getUserPlanFromContext(userId); // Mock - would get from DB
+      const scanLimits = { free: 1, pro: 5, advanced: 15 };
+      const limit = scanLimits[plan as keyof typeof scanLimits] || 1;
+      
       const scan = await storage.createScan({
         storeId: req.params.storeId,
         userId,
