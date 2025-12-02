@@ -1,10 +1,10 @@
 import { Link, useLocation } from "wouter";
-import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { LayoutDashboard, Users, BarChart2, Settings, ArrowLeft, FileText, DollarSign, Menu, X, LogOut } from "lucide-react";
 import { useState } from "react";
 import { useAdminAuth } from "@/hooks/AdminAuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,10 +23,10 @@ const adminMenuItems = [
 ];
 
 export function AdminNavbar() {
-  const [location, navigate] = useLocation();
+  const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { logout: clearAdminAuth } = useAdminAuth();
-  const { toast } = useToast();
+  const { logout } = useAuth();
 
   const handleLogout = async () => {
     try {
@@ -41,14 +41,8 @@ export function AdminNavbar() {
     // Clear admin auth
     clearAdminAuth();
     
-    // Clear all user auth data from localStorage
-    localStorage.removeItem("storedoctor_user_auth_v1");
-    localStorage.removeItem("storedoctor_connected_stores_v1");
-    localStorage.removeItem("storedoctor_plan_v1");
-    localStorage.removeItem("storedoctor_admin_auth_v1");
-    
-    // Full page reload to ensure navbar checks localStorage
-    window.location.href = "/";
+    // Use the centralized logout function
+    logout();
   };
 
   return (

@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Activity, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 const navItems = [
   { name: "Features", href: "/#features" },
@@ -30,33 +31,7 @@ const handleNavClick = (href: string) => {
 export function Navbar() {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    // Check if user is logged in by checking for user authentication
-    const userAuth = localStorage.getItem("storedoctor_user_auth_v1");
-    setIsLoggedIn(!!userAuth);
-
-    // Listen for logout events from other parts of the app
-    const handleLogout = () => {
-      setIsLoggedIn(false);
-    };
-
-    // Listen for storage changes (when localStorage is cleared)
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === "storedoctor_user_auth_v1" && !e.newValue) {
-        setIsLoggedIn(false);
-      }
-    };
-
-    window.addEventListener("logout", handleLogout);
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("logout", handleLogout);
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []);
+  const { isLoggedIn } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
