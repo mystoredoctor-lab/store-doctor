@@ -16,9 +16,16 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Activity, LayoutDashboard, Store, Settings, HelpCircle, CreditCard, LogOut, ChevronUp } from "lucide-react";
 import { mockUser } from "@/lib/data";
 
-const handleLogout = () => {
+const handleLogout = async () => {
+  try {
+    const apiUrl = import.meta.env.VITE_API_URL || "";
+    await fetch(`${apiUrl}/api/auth/logout`, { method: "POST" }).catch(() => {});
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
   localStorage.removeItem("storedoctor_user_auth_v1");
   localStorage.removeItem("storedoctor_connected_stores_v1");
+  localStorage.removeItem("storedoctor_user_plan_v1");
   localStorage.removeItem("storedoctor_plan_v1");
   localStorage.removeItem("storedoctor_admin_auth_v1");
   window.location.href = "/";

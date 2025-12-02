@@ -17,9 +17,21 @@ import { Bell, Settings, User, LogOut, Check } from "lucide-react";
 import { mockUser } from "@/lib/data";
 import { Link, useLocation } from "wouter";
 
-const handleLogout = () => {
+const handleLogout = async () => {
+  try {
+    // Call backend logout endpoint
+    const apiUrl = import.meta.env.VITE_API_URL || "";
+    await fetch(`${apiUrl}/api/auth/logout`, { method: "POST" }).catch(() => {
+      // Silently fail if backend logout doesn't work - still clear frontend
+    });
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
+  
+  // Clear all localStorage keys
   localStorage.removeItem("storedoctor_user_auth_v1");
   localStorage.removeItem("storedoctor_connected_stores_v1");
+  localStorage.removeItem("storedoctor_user_plan_v1");
   localStorage.removeItem("storedoctor_plan_v1");
   localStorage.removeItem("storedoctor_admin_auth_v1");
   window.location.href = "/";

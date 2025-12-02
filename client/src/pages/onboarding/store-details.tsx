@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Loader2, ArrowLeft, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { apiRequest } from "@/lib/queryClient";
 
 interface StoreDetailsProps {
   storeId: string;
@@ -25,7 +26,7 @@ export default function StoreDetailsPage() {
   const { data: store, isLoading: isLoadingStore } = useQuery({
     queryKey: ["/api/stores", storeId],
     queryFn: async () => {
-      const response = await fetch(`/api/stores/${storeId}`);
+      const response = await apiRequest("GET", `/api/stores/${storeId}`);
       if (!response.ok) throw new Error("Failed to load store");
       return response.json();
     },
@@ -36,7 +37,7 @@ export default function StoreDetailsPage() {
   const { data: scans = [], isLoading: isLoadingScans } = useQuery<ScanData[]>({
     queryKey: ["/api/scans", storeId],
     queryFn: async () => {
-      const response = await fetch(`/api/scans?storeId=${storeId}`);
+      const response = await apiRequest("GET", `/api/scans?storeId=${storeId}`);
       if (!response.ok) return [];
       return response.json();
     },
