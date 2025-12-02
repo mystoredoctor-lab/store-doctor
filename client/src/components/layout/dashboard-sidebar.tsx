@@ -77,7 +77,13 @@ export function DashboardSidebar() {
             <Button
               variant="ghost"
               className="w-full justify-start gap-3 px-3 text-muted-foreground hover:text-accent-foreground"
-              onClick={() => {
+              onClick={async () => {
+                try {
+                  const apiUrl = import.meta.env.VITE_API_URL || "";
+                  await fetch(`${apiUrl}/api/auth/logout`, { method: "POST" });
+                } catch (error) {
+                  console.error("Logout failed:", error);
+                }
                 window.location.href = "/";
               }}
               data-testid="button-logout"

@@ -24,7 +24,17 @@ const adminMenuItems = [
 export function AdminNavbar() {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { logout } = useAdminAuth();
+  const { logout: clearAdminAuth } = useAdminAuth();
+
+  const handleLogout = async () => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || "";
+      await fetch(`${apiUrl}/api/auth/logout`, { method: "POST" });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+    clearAdminAuth();
+  };
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-card">
@@ -102,7 +112,7 @@ export function AdminNavbar() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={logout} data-testid="button-mobile-admin-logout">
+              <DropdownMenuItem onClick={handleLogout} data-testid="button-mobile-admin-logout">
                 <LogOut className="h-4 w-4 mr-2" />
                 Logout
               </DropdownMenuItem>
@@ -118,7 +128,7 @@ export function AdminNavbar() {
               Back
             </Link>
           </Button>
-          <Button variant="ghost" size="sm" className="gap-2" onClick={logout} data-testid="button-admin-logout">
+          <Button variant="ghost" size="sm" className="gap-2" onClick={handleLogout} data-testid="button-admin-logout">
             <LogOut className="h-4 w-4" />
             Logout
           </Button>

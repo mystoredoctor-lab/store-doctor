@@ -46,6 +46,16 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/auth/logout", async (req, res) => {
+    try {
+      // Clear session data
+      (req as any).userId = null;
+      res.json({ success: true, message: "Logged out successfully" });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to logout" });
+    }
+  });
+
   // ============ STORES ENDPOINTS ============
   
   // GET all stores for user
