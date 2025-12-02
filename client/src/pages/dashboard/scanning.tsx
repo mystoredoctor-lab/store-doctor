@@ -56,7 +56,9 @@ export default function ScanningPage() {
       // Call smart AI scan endpoint during animation
       if (stepIndex === 0 && isMounted) {
         try {
-          await fetch(`/api/stores/${store?.id}/smart-scan`, {
+          const apiUrl = import.meta.env.VITE_API_URL || "";
+          const endpoint = `${apiUrl}/api/stores/${store?.id}/smart-scan`;
+          await fetch(endpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ planType: userPlan }),

@@ -1,4 +1,5 @@
 import express, { type Request, Response, NextFunction } from "express";
+import cors from "cors";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
@@ -11,6 +12,26 @@ declare module "http" {
     rawBody: unknown;
   }
 }
+
+// CORS Configuration for separate frontend deployment
+const allowedOrigins = [
+  "http://localhost:5173", // Vite dev
+  "http://localhost:5000", // Local
+  process.env.FRONTEND_URL || "https://storedoctor-frontend.onrender.com",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  }),
+);
 
 app.use(
   express.json({
