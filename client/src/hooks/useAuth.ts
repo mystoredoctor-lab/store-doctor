@@ -1,25 +1,24 @@
 import { useState, useEffect, useCallback } from "react";
+import { getUserContext, clearUserContext } from "@/lib/planManager";
 
 export function useAuth() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in
-    const userAuth = localStorage.getItem("storedoctor_user_auth_v1");
-    setIsLoggedIn(!!userAuth);
+    // Check if user is logged in using new user context
+    const userContext = getUserContext();
+    setIsLoggedIn(!!userContext);
     setIsLoading(false);
   }, []);
 
   const logout = useCallback(() => {
     // Clear all auth data from localStorage
-    localStorage.removeItem("storedoctor_user_auth_v1");
-    localStorage.removeItem("storedoctor_connected_stores_v1");
-    localStorage.removeItem("storedoctor_plan_v1");
-    localStorage.removeItem("storedoctor_admin_auth_v1");
+    clearUserContext();
+    localStorage.clear();
     
-    // Force a complete page reload to re-check localStorage
-    window.location.reload();
+    // Redirect to sign-in
+    window.location.href = "/auth/sign-in";
   }, []);
 
   return { isLoggedIn, isLoading, logout, setIsLoggedIn };

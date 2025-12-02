@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
-import { updateUserPlan } from "@/lib/planManager";
+import { updateUserPlan, getUserContext } from "@/lib/planManager";
 
 const handleScrollToTop = () => {
   window.scrollTo(0, 0);
@@ -17,7 +17,8 @@ export function PricingSection() {
   const plans = usePricingPlans();
   const [, navigate] = useLocation();
   const { toast } = useToast();
-  const [isLoggedIn] = useState(!!localStorage.getItem("storedoctor_user_auth_v1"));
+  const userContext = getUserContext();
+  const [isLoggedIn] = useState(!!userContext);
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
   const handlePlanSelection = async (planId: string) => {

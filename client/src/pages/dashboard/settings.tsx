@@ -22,7 +22,7 @@ import { User, CreditCard, Mail, Key, AlertTriangle, Trash2, Store, X } from "lu
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { STORES_STORAGE_KEY } from "@/pages/dashboard/stores";
-import { getUserPlan, updateUserPlan } from "@/lib/planManager";
+import { getUserPlan, updateUserPlan, getUserContext, clearUserContext } from "@/lib/planManager";
 import type { Store as StoreType } from "@shared/schema";
 
 export default function SettingsPage() {
@@ -68,10 +68,9 @@ export default function SettingsPage() {
   };
 
   const handleSaveProfile = async () => {
-    const userAuthStr = localStorage.getItem("storedoctor_user_auth_v1");
-    if (!userAuthStr) return;
-    const userAuth = JSON.parse(userAuthStr);
-    const userId = userAuth.email;
+    const userContext = getUserContext();
+    if (!userContext?.id) return;
+    const userId = userContext.id;
     
     try {
       await apiRequest("PATCH", `/api/users/${userId}/profile`, {
@@ -95,14 +94,13 @@ export default function SettingsPage() {
   };
 
   const handleDeleteAccount = async () => {
-    const userAuthStr = localStorage.getItem("storedoctor_user_auth_v1");
-    if (!userAuthStr) return;
-    const userAuth = JSON.parse(userAuthStr);
-    const userId = userAuth.email;
+    const userContext = getUserContext();
+    if (!userContext?.id) return;
+    const userId = userContext.id;
     
     try {
       await apiRequest("DELETE", `/api/users/${userId}`);
-      localStorage.removeItem("storedoctor_user_auth_v1");
+      clearUserContext();
       localStorage.removeItem("storedoctor_connected_stores_v1");
       localStorage.removeItem("storedoctor_user_plan_v1");
       localStorage.removeItem("storedoctor_plan_v1");

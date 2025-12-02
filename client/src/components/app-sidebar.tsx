@@ -15,20 +15,17 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Activity, LayoutDashboard, Store, Settings, HelpCircle, CreditCard, LogOut, ChevronUp } from "lucide-react";
 import { mockUser } from "@/lib/data";
+import { clearUserContext } from "@/lib/planManager";
 
 const handleLogout = async () => {
   try {
-    const apiUrl = import.meta.env.VITE_API_URL || "";
-    await fetch(`${apiUrl}/api/auth/logout`, { method: "POST" }).catch(() => {});
+    await fetch("/api/auth/logout", { method: "POST", credentials: "include" }).catch(() => {});
   } catch (error) {
     console.error("Logout failed:", error);
   }
-  localStorage.removeItem("storedoctor_user_auth_v1");
-  localStorage.removeItem("storedoctor_connected_stores_v1");
-  localStorage.removeItem("storedoctor_user_plan_v1");
-  localStorage.removeItem("storedoctor_plan_v1");
-  localStorage.removeItem("storedoctor_admin_auth_v1");
-  window.location.href = "/";
+  clearUserContext();
+  localStorage.clear();
+  window.location.href = "/auth/sign-in";
 };
 
 const mainMenuItems = [
