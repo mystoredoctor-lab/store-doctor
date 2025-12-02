@@ -55,11 +55,46 @@ export default function ScanPage() {
     }
   };
 
-  const handleExportReport = () => {
-    toast({
-      title: "Report exported",
-      description: "Your scan report has been downloaded.",
-    });
+  const handleExportReport = async () => {
+    if (!store) return;
+    
+    try {
+      const scanResults = mockScanResultsByStore[store.id as keyof typeof mockScanResultsByStore] || mockScanResultsByStore.store_1;
+      
+      // Generate PDF or JSON report
+      const report = {
+        storeName: store.name,
+        storeUrl: store.url,
+        scanDate: new Date().toISOString(),
+        overallScore: scanResults.overallScore,
+        categories: scanResults.categories,
+        criticalIssues: scanResults.criticalIssues,
+        recommendations: scanResults.recommendations,
+      };
+
+      // Create blob and download
+      const dataStr = JSON.stringify(report, null, 2);
+      const dataBlob = new Blob([dataStr], { type: "application/json" });
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${store.name}-scan-report-${new Date().toISOString().split("T")[0]}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      toast({
+        title: "Report exported",
+        description: "Your scan report has been downloaded successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Export failed",
+        description: "Failed to export report. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   if (!store) return <div>Loading...</div>;
