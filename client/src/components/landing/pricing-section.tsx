@@ -21,11 +21,19 @@ export function PricingSection() {
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
   const handlePlanSelection = async (planId: string) => {
-    if (planId === 'free') {
-      navigate(isLoggedIn ? '/dashboard' : '/auth/sign-up');
+    // If not logged in, redirect to sign-up
+    if (!isLoggedIn) {
+      navigate('/auth/sign-up');
       return;
     }
 
+    // If already on free plan and clicking free, just go to dashboard
+    if (planId === 'free') {
+      navigate('/dashboard');
+      return;
+    }
+
+    // Update plan (Pro/Advanced)
     setIsProcessing(planId);
     try {
       const success = await updateUserPlan(planId);
