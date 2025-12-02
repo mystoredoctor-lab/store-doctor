@@ -108,35 +108,6 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
-          <CardDescription>Common tasks to manage your stores</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
-            <Button variant="outline" className="h-auto py-4 flex-col gap-2 bg-transparent" asChild>
-              <Link href="/dashboard/scan" onClick={handleScrollToTop} data-testid="button-quick-action-scan">
-                <Activity className="h-6 w-6" />
-                <span>Run New Scan</span>
-              </Link>
-            </Button>
-            <Button variant="outline" className="h-auto py-4 flex-col gap-2 bg-transparent" asChild>
-              <Link href="/dashboard/stores" onClick={handleScrollToTop} data-testid="button-quick-action-stores">
-                <Store className="h-6 w-6" />
-                <span>Manage Stores</span>
-              </Link>
-            </Button>
-            <Button variant="outline" className="h-auto py-4 flex-col gap-2 bg-transparent" asChild>
-              <Link href="/dashboard/settings" onClick={handleScrollToTop} data-testid="button-quick-action-issues">
-                <AlertTriangle className="h-6 w-6" />
-                <span>View All Issues</span>
-              </Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
       <RatingModal open={showRatingModal} onOpenChange={setShowRatingModal} />
     </div>
   );
