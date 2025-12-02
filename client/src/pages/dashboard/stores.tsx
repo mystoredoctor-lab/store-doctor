@@ -95,11 +95,9 @@ export default function StoresPage() {
     setIsConnecting(false);
   };
 
-  const handleRunScan = () => {
-    // Navigate to scanning page
-    const link = document.createElement('a');
-    link.href = '/dashboard/scanning';
-    link.click();
+  const handleRunScan = (storeId: string) => {
+    // Navigate to scanning page with store ID
+    navigate(`/dashboard/scanning?storeId=${storeId}`);
   };
 
   return (
@@ -272,7 +270,7 @@ export default function StoresPage() {
           {filteredStores.length > 0 ? (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {filteredStores.map((store) => (
-                <StoreCard key={store.id} store={store} onRunScan={handleRunScan} />
+                <StoreCard key={store.id} store={store} onRunScan={(id) => handleRunScan(id)} />
               ))}
             </div>
           ) : (

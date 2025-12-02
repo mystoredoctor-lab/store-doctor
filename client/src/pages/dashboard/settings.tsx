@@ -57,6 +57,7 @@ export default function SettingsPage() {
   };
 
   const handleSaveProfile = () => {
+    // In production: call /api/users/:userId/profile PATCH endpoint
     toast({
       title: "Profile updated",
       description: "Your profile has been saved successfully.",
@@ -64,6 +65,7 @@ export default function SettingsPage() {
   };
 
   const handleConnectGmail = () => {
+    // In production: redirect to /api/auth/google for OAuth flow
     toast({
       title: "Gmail connection initiated",
       description: "Redirecting to Google for authorization...",
@@ -71,6 +73,7 @@ export default function SettingsPage() {
   };
 
   const handleDeleteAccount = () => {
+    // In production: call /api/users/:userId DELETE endpoint to remove account
     toast({
       title: "Account deletion requested",
       description: "We've sent a confirmation email.",

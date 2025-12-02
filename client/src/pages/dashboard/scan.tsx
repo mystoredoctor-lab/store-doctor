@@ -209,6 +209,7 @@ export default function ScanPage() {
                 issues={scanResults.criticalIssues} 
                 limitToFree={userPlan === "free"}
                 showAutoFix={userPlan === "advanced"}
+                scanId={store?.id}
               />
             </TabsContent>
             <TabsContent value="recommendations">

@@ -12,7 +12,7 @@ const handleScrollToTop = () => {
 
 interface StoreCardProps {
   store: Store;
-  onRunScan?: () => void;
+  onRunScan?: (storeId: string) => void;
 }
 
 export function StoreCard({ store, onRunScan }: StoreCardProps) {
@@ -80,7 +80,7 @@ export function StoreCard({ store, onRunScan }: StoreCardProps) {
           <Button size="sm" className="flex-1" asChild>
             <Link href={`/dashboard/scan?storeId=${store.id}`} onClick={handleScrollToTop} data-testid={`button-view-details-${store.id}`}>View Details</Link>
           </Button>
-          <Button size="sm" variant="outline" onClick={onRunScan} data-testid={`button-run-scan-${store.id}`}>
+          <Button size="sm" variant="outline" onClick={() => onRunScan?.(store.id)} data-testid={`button-run-scan-${store.id}`}>
             Run Scan
           </Button>
         </div>
