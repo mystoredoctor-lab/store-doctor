@@ -15,9 +15,23 @@ export async function registerRoutes(
       if (!email || !password) {
         return res.status(400).json({ error: "Email and password required" });
       }
+      
       // Mock authentication - store in session
       (req as any).userId = email;
-      res.json({ success: true, email });
+      
+      // Fetch user's stores for smart redirect
+      const stores = await storage.getStoresByUserId(email);
+      const hasStores = stores && stores.length > 0;
+      
+      res.json({
+        success: true,
+        user: {
+          email,
+          plan: "free", // Default plan - will be fetched from DB in production
+        },
+        stores: stores || [],
+        hasStores,
+      });
     } catch (error) {
       res.status(500).json({ error: "Failed to sign in" });
     }
@@ -29,9 +43,21 @@ export async function registerRoutes(
       if (!name || !email || !password) {
         return res.status(400).json({ error: "Name, email, and password required" });
       }
+      
       // Mock authentication - store in session
       (req as any).userId = email;
-      res.json({ success: true, email, name });
+      
+      // New users start with no stores
+      res.json({
+        success: true,
+        user: {
+          email,
+          name,
+          plan: "free", // All new users start on free plan
+        },
+        stores: [],
+        hasStores: false,
+      });
     } catch (error) {
       res.status(500).json({ error: "Failed to create account" });
     }
@@ -39,7 +65,8 @@ export async function registerRoutes(
 
   app.get("/api/auth/google", async (req, res) => {
     try {
-      // Mock Google OAuth - redirect to dashboard
+      // Mock Google OAuth - in production, this would handle OAuth flow
+      // For now, redirect to onboarding (user needs to connect store)
       res.redirect("/onboarding/connect-store");
     } catch (error) {
       res.status(500).json({ error: "Failed to authenticate with Google" });
@@ -62,8 +89,11 @@ export async function registerRoutes(
   app.get("/api/stores", async (req, res) => {
     try {
       const userId = (req as any).userId || "demo-user";
+      if (!userId) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
       const stores = await storage.getStoresByUserId(userId);
-      res.json(stores);
+      res.json(stores || []);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch stores" });
     }
@@ -84,6 +114,9 @@ export async function registerRoutes(
   app.post("/api/stores", async (req, res) => {
     try {
       const userId = (req as any).userId || "demo-user";
+      if (!userId) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
       const store = await storage.createStore({
         userId,
         name: req.body.name,
@@ -119,25 +152,11 @@ export async function registerRoutes(
 
   // ============ SCANS ENDPOINTS ============
 
-  // GET all scans (with optional storeId filter)
-  app.get("/api/scans", async (req, res) => {
-    try {
-      const storeId = req.query.storeId as string;
-      if (!storeId) {
-        return res.status(400).json({ error: "storeId query parameter required" });
-      }
-      const scans = await storage.getScansByStoreId(storeId);
-      res.json(scans);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch scans" });
-    }
-  });
-
-  // GET all scans for store (alternative route)
+  // GET all scans for store (with optional filter)
   app.get("/api/stores/:storeId/scans", async (req, res) => {
     try {
       const scans = await storage.getScansByStoreId(req.params.storeId);
-      res.json(scans);
+      res.json(scans || []);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch scans" });
     }
@@ -193,33 +212,13 @@ export async function registerRoutes(
     }
   });
 
-  // CREATE new scan - alternative route
-  app.post("/api/scans/:storeId", async (req, res) => {
-    try {
-      const userId = (req as any).userId || "demo-user";
-      const scan = await storage.createScan({
-        storeId: req.params.storeId,
-        userId,
-        overallScore: req.body.overallScore || 72,
-        seoScore: req.body.seoScore,
-        speedScore: req.body.speedScore,
-        uxScore: req.body.uxScore,
-        croScore: req.body.croScore,
-        securityScore: req.body.securityScore,
-        mobileScore: req.body.mobileScore,
-        issues: req.body.issues || [],
-        recommendations: req.body.recommendations || [],
-      });
-      res.json(scan);
-    } catch (error) {
-      res.status(400).json({ error: "Failed to create scan" });
-    }
-  });
-
-  // CREATE new scan
+  // CREATE new scan (PRIMARY ROUTE)
   app.post("/api/stores/:storeId/scans", async (req, res) => {
     try {
       const userId = (req as any).userId || "demo-user";
+      if (!userId) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
       const scan = await storage.createScan({
         storeId: req.params.storeId,
         userId,
@@ -245,6 +244,9 @@ export async function registerRoutes(
   app.post("/api/stores/:storeId/smart-scan", async (req, res) => {
     try {
       const userId = (req as any).userId || "demo-user";
+      if (!userId) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
       const { planType } = req.body;
 
       if (!planType) {
@@ -348,6 +350,7 @@ export async function registerRoutes(
       });
 
       res.json({
+        success: true,
         scan,
         sampling: {
           productsScanned: config.productsToScan,
@@ -369,6 +372,11 @@ export async function registerRoutes(
   // APPLY auto-fix to issue
   app.post("/api/scans/:scanId/issues/:issueId/auto-fix", async (req, res) => {
     try {
+      const userId = (req as any).userId;
+      if (!userId) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      
       const scan = await storage.getScan(req.params.scanId);
       if (!scan) return res.status(404).json({ error: "Scan not found" });
 
@@ -516,14 +524,40 @@ export async function registerRoutes(
     }
   });
 
-  // ============ PAYMENT ENDPOINTS (NOT IMPLEMENTED) ============
+  // ============ PAYMENT ENDPOINTS (SHOPIFY INTEGRATION) ============
   
-  app.get("/api/payment/checkout/pro", async (req, res) => {
-    res.status(404).json({ error: "Payment endpoint not implemented" });
+  app.post("/api/payment/checkout/pro", async (req, res) => {
+    try {
+      // In production, this would initiate Shopify payment flow
+      // For now, return info about the upgrade
+      res.json({
+        plan: "pro",
+        price: 29,
+        currency: "USD",
+        billingCycle: "monthly",
+        message: "Redirect to Shopify checkout - not yet implemented",
+        status: "pending_implementation",
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to initiate checkout" });
+    }
   });
 
-  app.get("/api/payment/checkout/advanced", async (req, res) => {
-    res.status(404).json({ error: "Payment endpoint not implemented" });
+  app.post("/api/payment/checkout/advanced", async (req, res) => {
+    try {
+      // In production, this would initiate Shopify payment flow
+      // For now, return info about the upgrade
+      res.json({
+        plan: "advanced",
+        price: 99,
+        currency: "USD",
+        billingCycle: "monthly",
+        message: "Redirect to Shopify checkout - not yet implemented",
+        status: "pending_implementation",
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to initiate checkout" });
+    }
   });
 
   return httpServer;

@@ -46,7 +46,8 @@ export default function SignUpPage() {
     try {
       const { confirmPassword, ...signUpData } = data;
       
-      await apiRequest("POST", "/api/auth/sign-up", signUpData);
+      const response = await apiRequest("POST", "/api/auth/sign-up", signUpData);
+      const jsonResponse = await response.json();
       
       // Set user auth key to indicate user is logged in
       localStorage.setItem("storedoctor_user_auth_v1", JSON.stringify({ email: signUpData.email }));
@@ -56,7 +57,7 @@ export default function SignUpPage() {
         description: "Account created successfully",
       });
 
-      // Navigate to onboarding/connect store
+      // New users always go to connect-store (hasStores will be false)
       navigate("/onboarding/connect-store");
     } catch (error) {
       toast({

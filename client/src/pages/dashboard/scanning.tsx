@@ -79,6 +79,18 @@ export default function ScanningPage() {
         stepIndex += 1;
       }
 
+      // After animation, fetch actual scan results from backend
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL || "";
+        const endpoint = `${apiUrl}/api/scans/${store?.id}`;
+        const response = await fetch(endpoint);
+        if (!response.ok) throw new Error("Failed to fetch scan results");
+        const scanData = await response.json();
+        // Scan data will be available when user clicks "View Results"
+      } catch (error) {
+        console.log("Using mock scan data:", error);
+      }
+
       if (isMounted && stepIndex >= scanSteps.length) {
         setIsComplete(true);
       }

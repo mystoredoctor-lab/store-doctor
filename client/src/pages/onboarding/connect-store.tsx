@@ -95,8 +95,8 @@ export default function ConnectStorePage() {
 
   const handleScanStore = async (storeId: string) => {
     try {
-      // Initiate scan
-      const response = await apiRequest("POST", `/api/scans/${storeId}`, {
+      // Initiate scan using correct endpoint
+      const response = await apiRequest("POST", `/api/stores/${storeId}/scans`, {
         type: "full",
       });
       

@@ -36,6 +36,7 @@ export default function SignInPage() {
     setIsLoading(true);
     try {
       const response = await apiRequest("POST", "/api/auth/sign-in", data);
+      const jsonResponse = await response.json();
       
       // Set user auth key to indicate user is logged in
       localStorage.setItem("storedoctor_user_auth_v1", JSON.stringify({ email: data.email }));
@@ -45,8 +46,12 @@ export default function SignInPage() {
         description: "Signed in successfully",
       });
 
-      // Navigate to onboarding/connect store
-      navigate("/onboarding/connect-store");
+      // Smart redirect based on whether user has stores
+      if (jsonResponse.hasStores) {
+        navigate("/dashboard");
+      } else {
+        navigate("/onboarding/connect-store");
+      }
     } catch (error) {
       toast({
         title: "Error",
