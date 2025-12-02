@@ -10,10 +10,12 @@ Rebuild StoreDoctor Shopify app as a fully functional web application using Vite
 
 ## Current Status (Dec 2, 2025)
 - **Frontend UI:** Complete (landing page, dashboard, admin panel, blog, auth system)
-- **Authentication:** Sign In/Sign Up with Gmail OAuth + password show/hide
+- **Authentication:** Sign In/Sign Up with Gmail OAuth + password show/hide (Fixed logout in all locations)
 - **Free Plan Enforcement:** Mock data shows 1 store only (Free plan limit)
 - **Upgrade Flow:** Professional animated modal for plan limits
 - **Dashboard:** Shows data only after scan (no mock scan data)
+- **Quick Actions Card:** Removed from dashboard
+- **Mock Data Limitation:** Always redirects to connect-store on login (will redirect to dashboard when backend checks for existing stores)
 
 ## Key Features Implemented
 - Complete landing page with hero, features, pricing sections
@@ -64,14 +66,21 @@ Rebuild StoreDoctor Shopify app as a fully functional web application using Vite
 - `storedoctor-theme` - Theme preference
 
 ## Backend Routes (Frontend Ready)
-- `POST /api/auth/sign-in` - Login
-- `POST /api/auth/sign-up` - Create account
+- `POST /api/auth/sign-in` - Login (should return user + existing stores)
+- `POST /api/auth/sign-up` - Create account (should return user + existing stores)
+- `POST /api/auth/logout` - Logout
 - `GET /api/auth/google` - Gmail OAuth
 - `GET /api/stores` - Fetch user stores
 - `POST /api/stores` - Connect new store
 - `GET /api/stores/:storeId` - Get store details
 - `POST /api/scans/:storeId` - Start scan
 - `GET /api/scans?storeId=X` - Fetch scan results
+
+## Known Mock Data Limitations (Will Fix with Backend)
+1. **Login always redirects to connect-store** - Frontend doesn't check if user already has stores. Backend sign-in should return `hasStores` flag to redirect to dashboard if true.
+2. **Only 3 critical issues show** - Mock data hardcoded. Real backend will generate actual issues via Llama 3.3 70B AI scanning.
+3. **No plan-based filtering in database** - Plan tier checks are client-side only. Backend should enforce plan limits at query level.
+4. **Stats/scores are hardcoded** - Will pull real data from Supabase once backend scanning is implemented.
 
 ## Tech Stack
 - Frontend: React 18 + TypeScript + Tailwind CSS
