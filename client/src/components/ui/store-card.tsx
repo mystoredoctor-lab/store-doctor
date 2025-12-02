@@ -40,7 +40,7 @@ export function StoreCard({ store, onRunScan }: StoreCardProps) {
   };
 
   const status = (store.status as keyof typeof statusConfig) || "pending";
-  const config = statusConfig[status];
+  const config = statusConfig[status] || statusConfig.pending;
   const StatusIcon = config.icon;
 
   return (
