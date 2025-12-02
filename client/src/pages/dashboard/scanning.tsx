@@ -81,17 +81,7 @@ export default function ScanningPage() {
         stepIndex += 1;
       }
 
-      // After animation, fetch actual scan results from backend
-      if (lastScanId && isMounted) {
-        try {
-          const response = await apiRequest("GET", `/api/scans/${lastScanId}`);
-          if (!response.ok) throw new Error("Failed to fetch scan results");
-          // Scan data will be available when user clicks "View Results"
-        } catch (error) {
-          console.log("Using mock scan data:", error);
-        }
-      }
-
+      // After animation completes, mark as done
       if (isMounted && stepIndex >= scanSteps.length) {
         setIsComplete(true);
       }
@@ -102,7 +92,7 @@ export default function ScanningPage() {
     return () => {
       isMounted = false;
     };
-  }, [scanId, isComplete, store?.id, userPlan, lastScanId, toast]);
+  }, [scanId, isComplete, store?.id, userPlan, toast]);
 
   const formatTime = (seconds: number) => {
     return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;

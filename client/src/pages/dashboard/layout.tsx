@@ -33,14 +33,10 @@ const handleLogout = async () => {
   
   // Clear user context and all localStorage keys
   clearUserContext();
-  localStorage.removeItem("storedoctor_connected_stores_v1");
-  localStorage.removeItem("storedoctor_admin_auth_v1");
-  localStorage.removeItem("storedoctor-theme");
-  localStorage.removeItem("storedoctor_scan_usage_v1");
-  localStorage.removeItem("storedoctor_scan_limits_v1");
+  localStorage.clear();
   
-  // Force redirect to home
-  window.location.href = "/";
+  // Force redirect to sign-in page (not home)
+  window.location.href = "/auth/sign-in";
 };
 
 const notifications = [
