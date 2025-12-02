@@ -17,16 +17,18 @@ import { Bell, Settings, User, LogOut, Check } from "lucide-react";
 import { mockUser } from "@/lib/data";
 import { Link, useLocation } from "wouter";
 import { clearUserContext } from "@/lib/planManager";
-import { apiRequest } from "@/lib/queryClient";
 
 const handleLogout = async () => {
+  // Try to call backend logout endpoint (non-blocking)
   try {
-    // Call backend logout endpoint
-    await apiRequest("POST", "/api/auth/logout", {}).catch(() => {
-      // Silently fail if backend logout doesn't work - still clear frontend
+    await fetch("/api/auth/logout", { 
+      method: "POST",
+      credentials: "include",
+    }).catch(() => {
+      // Silently fail if backend logout doesn't work
     });
   } catch (error) {
-    console.error("Logout failed:", error);
+    // Silently fail
   }
   
   // Clear user context and all localStorage keys
@@ -34,6 +36,10 @@ const handleLogout = async () => {
   localStorage.removeItem("storedoctor_connected_stores_v1");
   localStorage.removeItem("storedoctor_admin_auth_v1");
   localStorage.removeItem("storedoctor-theme");
+  localStorage.removeItem("storedoctor_scan_usage_v1");
+  localStorage.removeItem("storedoctor_scan_limits_v1");
+  
+  // Force redirect to home
   window.location.href = "/";
 };
 
