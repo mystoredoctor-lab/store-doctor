@@ -12,19 +12,14 @@ export function useAuth() {
   }, []);
 
   const logout = useCallback(() => {
-    // Clear all auth data
+    // Clear all auth data from localStorage
     localStorage.removeItem("storedoctor_user_auth_v1");
     localStorage.removeItem("storedoctor_connected_stores_v1");
     localStorage.removeItem("storedoctor_plan_v1");
     localStorage.removeItem("storedoctor_admin_auth_v1");
     
-    // Update state immediately
-    setIsLoggedIn(false);
-    
-    // Redirect after state update
-    setTimeout(() => {
-      window.location.href = "/";
-    }, 50);
+    // Force a complete page reload to re-check localStorage
+    window.location.reload();
   }, []);
 
   return { isLoggedIn, isLoading, logout, setIsLoggedIn };
