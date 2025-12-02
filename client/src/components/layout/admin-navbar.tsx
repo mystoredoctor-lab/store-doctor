@@ -33,7 +33,16 @@ export function AdminNavbar() {
     } catch (error) {
       console.error("Logout failed:", error);
     }
+    // Clear admin auth
     clearAdminAuth();
+    // Clear all user auth data from localStorage
+    localStorage.removeItem("storedoctor_user_auth_v1");
+    localStorage.removeItem("storedoctor_connected_stores_v1");
+    localStorage.removeItem("storedoctor_plan_v1");
+    // Notify other parts of app
+    window.dispatchEvent(new Event("logout"));
+    // Redirect to home
+    window.location.href = "/";
   };
 
   return (

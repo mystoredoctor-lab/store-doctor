@@ -36,6 +36,26 @@ export function Navbar() {
     // Check if user is logged in by checking for user authentication
     const userAuth = localStorage.getItem("storedoctor_user_auth_v1");
     setIsLoggedIn(!!userAuth);
+
+    // Listen for logout events from other parts of the app
+    const handleLogout = () => {
+      setIsLoggedIn(false);
+    };
+
+    // Listen for storage changes (when localStorage is cleared)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "storedoctor_user_auth_v1" && !e.newValue) {
+        setIsLoggedIn(false);
+      }
+    };
+
+    window.addEventListener("logout", handleLogout);
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("logout", handleLogout);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
   return (

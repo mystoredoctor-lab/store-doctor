@@ -84,6 +84,13 @@ export function DashboardSidebar() {
                 } catch (error) {
                   console.error("Logout failed:", error);
                 }
+                // Clear all user auth data from localStorage
+                localStorage.removeItem("storedoctor_user_auth_v1");
+                localStorage.removeItem("storedoctor_connected_stores_v1");
+                localStorage.removeItem("storedoctor_plan_v1");
+                // Notify other tabs/windows
+                window.dispatchEvent(new Event("logout"));
+                // Redirect to home
                 window.location.href = "/";
               }}
               data-testid="button-logout"
