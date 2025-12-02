@@ -95,13 +95,8 @@ export function DashboardSidebar() {
                 localStorage.removeItem("storedoctor_plan_v1");
                 localStorage.removeItem("storedoctor_admin_auth_v1");
                 
-                // Notify other tabs/windows
-                window.dispatchEvent(new Event("logout"));
-                
-                // Small delay to ensure storage is cleared
-                setTimeout(() => {
-                  navigate("/");
-                }, 100);
+                // Full page reload to ensure navbar checks localStorage
+                window.location.href = "/";
               }}
               data-testid="button-logout"
             >
