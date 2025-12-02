@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Loader2 } from "lucide-react";
 import { Link } from "wouter";
+import { setUserContext } from "@/lib/planManager";
 
 const signInSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -38,8 +39,15 @@ export default function SignInPage() {
       const response = await apiRequest("POST", "/api/auth/sign-in", data);
       const jsonResponse = await response.json();
       
-      // Set user auth key to indicate user is logged in
-      localStorage.setItem("storedoctor_user_auth_v1", JSON.stringify({ email: data.email }));
+      // Store user context from backend response
+      if (jsonResponse.user) {
+        setUserContext({
+          id: jsonResponse.user.id || data.email,
+          email: jsonResponse.user.email,
+          name: jsonResponse.user.name,
+          plan: jsonResponse.user.plan || "free",
+        });
+      }
       
       toast({
         title: "Success",

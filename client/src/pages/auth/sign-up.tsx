@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { Link } from "wouter";
+import { setUserContext } from "@/lib/planManager";
 
 const signUpSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -49,8 +50,15 @@ export default function SignUpPage() {
       const response = await apiRequest("POST", "/api/auth/sign-up", signUpData);
       const jsonResponse = await response.json();
       
-      // Set user auth key to indicate user is logged in
-      localStorage.setItem("storedoctor_user_auth_v1", JSON.stringify({ email: signUpData.email }));
+      // Store user context from backend response
+      if (jsonResponse.user) {
+        setUserContext({
+          id: jsonResponse.user.id || signUpData.email,
+          email: jsonResponse.user.email,
+          name: jsonResponse.user.name,
+          plan: jsonResponse.user.plan || "free",
+        });
+      }
       
       toast({
         title: "Success",

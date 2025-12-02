@@ -44,6 +44,21 @@ app.use(
 
 app.use(express.urlencoded({ extended: false }));
 
+// ============ AUTHENTICATION MIDDLEWARE ============
+// This middleware sets req.userId from session/request
+app.use((req: any, res, next) => {
+  // Check for userId in session or auth header
+  if (req.session?.userId) {
+    req.userId = req.session.userId;
+  } else if (req.headers.authorization) {
+    // Handle bearer token if needed in future
+    const token = req.headers.authorization.replace("Bearer ", "");
+    req.userId = token;
+  }
+  // Otherwise userId will be set by sign-in/sign-up endpoints
+  next();
+});
+
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
     hour: "numeric",

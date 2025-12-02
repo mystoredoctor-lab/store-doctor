@@ -19,7 +19,9 @@ import { Label } from "@/components/ui/label";
 import { mockStoresByPlan, mockUser } from "@/lib/data";
 import { Plus, Search, Store, Shield, Zap, BarChart3, Lock, Zap as ZapIcon, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { getUserPlan } from "@/lib/planManager";
+import { getUserPlan, getUserContext } from "@/lib/planManager";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useQuery } from "@tanstack/react-query";
 import type { Store as StoreType } from "@shared/schema";
 
 export const STORES_STORAGE_KEY = "storedoctor_connected_stores_v1";
@@ -35,25 +37,38 @@ export default function StoresPage() {
   const { toast } = useToast();
   const userPlan = getUserPlan();
 
-  // Initialize stores from localStorage or use plan-specific mock data
-  useEffect(() => {
-    const stored = localStorage.getItem(STORES_STORAGE_KEY);
-    const planStores = mockStoresByPlan[userPlan as "free" | "pro" | "advanced"] || mockStoresByPlan.free;
-    if (stored) {
+  // Fetch stores from backend
+  const { data: backendStores = [], isLoading: isLoadingBackendStores } = useQuery<StoreType[]>({
+    queryKey: ["/api/stores"],
+    queryFn: async () => {
       try {
-        setStores(JSON.parse(stored));
+        const response = await apiRequest("GET", "/api/stores");
+        if (!response.ok) return [];
+        return response.json();
       } catch {
+        return [];
+      }
+    },
+  });
+
+  // Initialize stores: use backend stores if available, otherwise fall back to localStorage/mock
+  useEffect(() => {
+    if (backendStores.length > 0) {
+      setStores(backendStores);
+    } else {
+      const stored = localStorage.getItem(STORES_STORAGE_KEY);
+      const planStores = mockStoresByPlan[userPlan as "free" | "pro" | "advanced"] || mockStoresByPlan.free;
+      if (stored) {
+        try {
+          setStores(JSON.parse(stored));
+        } catch {
+          setStores(planStores);
+        }
+      } else {
         setStores(planStores);
       }
-    } else {
-      setStores(planStores);
     }
-  }, [userPlan]);
-
-  // Save stores to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem(STORES_STORAGE_KEY, JSON.stringify(stores));
-  }, [stores]);
+  }, [backendStores, userPlan]);
 
   const filteredStores = stores.filter(
     (store) =>
@@ -68,31 +83,35 @@ export default function StoresPage() {
     if (!storeUrl.trim()) return;
 
     setIsConnecting(true);
-    
-    // Simulate connection delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    const newStore: StoreType = {
-      id: `store_${Date.now()}`,
-      userId: mockUser.id,
-      name: storeUrl.split(".")[0] || "New Store",
-      url: storeUrl,
-      shopifyAccessToken: null,
-      healthScore: 0,
-      status: "pending",
-      issuesCount: 0,
-      lastScanAt: null,
-      createdAt: new Date(),
-    };
-
-    setStores([...stores, newStore]);
-    toast({
-      title: "Store connected successfully",
-      description: `${storeUrl} has been added to your stores.`,
-    });
-    setIsConnectDialogOpen(false);
-    setStoreUrl("");
-    setIsConnecting(false);
+    try {
+      // Call backend to create store
+      const response = await apiRequest("POST", "/api/stores", {
+        name: storeUrl.split(".")[0] || "New Store",
+        url: storeUrl,
+      });
+      const newStore = await response.json();
+      
+      // Update stores list
+      setStores([...stores, newStore]);
+      
+      // Invalidate cache so subsequent queries get fresh data
+      queryClient.invalidateQueries({ queryKey: ["/api/stores"] });
+      
+      toast({
+        title: "Store connected successfully",
+        description: `${storeUrl} has been added to your stores.`,
+      });
+      setIsConnectDialogOpen(false);
+      setStoreUrl("");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to connect store",
+        variant: "destructive",
+      });
+    } finally {
+      setIsConnecting(false);
+    }
   };
 
   const handleRunScan = (storeId: string) => {

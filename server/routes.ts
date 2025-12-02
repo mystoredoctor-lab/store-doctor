@@ -16,8 +16,11 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Email and password required" });
       }
       
-      // Mock authentication - store in session
+      // Set userId in request for middleware to use
       (req as any).userId = email;
+      
+      // Store in session for future requests
+      (req as any).session = { userId: email };
       
       // Fetch user's stores for smart redirect
       const stores = await storage.getStoresByUserId(email);
@@ -26,6 +29,7 @@ export async function registerRoutes(
       res.json({
         success: true,
         user: {
+          id: email,
           email,
           plan: "free", // Default plan - will be fetched from DB in production
         },
@@ -44,13 +48,17 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Name, email, and password required" });
       }
       
-      // Mock authentication - store in session
+      // Set userId in request for middleware to use
       (req as any).userId = email;
+      
+      // Store in session for future requests
+      (req as any).session = { userId: email };
       
       // New users start with no stores
       res.json({
         success: true,
         user: {
+          id: email,
           email,
           name,
           plan: "free", // All new users start on free plan
