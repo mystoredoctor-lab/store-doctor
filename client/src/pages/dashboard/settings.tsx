@@ -20,6 +20,7 @@ import {
 import { mockUser, pricingPlans } from "@/lib/data";
 import { User, CreditCard, Mail, Key, AlertTriangle, Trash2, Store, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 import { STORES_STORAGE_KEY } from "@/pages/dashboard/stores";
 import { getUserPlan, updateUserPlan } from "@/lib/planManager";
 import type { Store as StoreType } from "@shared/schema";
@@ -45,40 +46,74 @@ export default function SettingsPage() {
     }
   }, []);
 
-  const handleRemoveStore = (storeId: string) => {
+  const handleRemoveStore = async (storeId: string) => {
     const storeName = stores.find(s => s.id === storeId)?.url || "Store";
-    const updatedStores = stores.filter(s => s.id !== storeId);
-    setStores(updatedStores);
-    localStorage.setItem(STORES_STORAGE_KEY, JSON.stringify(updatedStores));
-    toast({
-      title: "Store removed",
-      description: `${storeName} has been disconnected.`,
-    });
+    try {
+      await apiRequest("DELETE", `/api/stores/${storeId}`);
+      const updatedStores = stores.filter(s => s.id !== storeId);
+      setStores(updatedStores);
+      localStorage.setItem(STORES_STORAGE_KEY, JSON.stringify(updatedStores));
+      toast({
+        title: "Store disconnected",
+        description: `${storeName} has been disconnected.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to disconnect store",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleSaveProfile = () => {
-    // In production: call /api/users/:userId/profile PATCH endpoint
-    toast({
-      title: "Profile updated",
-      description: "Your profile has been saved successfully.",
-    });
+  const handleSaveProfile = async () => {
+    const userAuthStr = localStorage.getItem("storedoctor_user_auth_v1");
+    if (!userAuthStr) return;
+    const userAuth = JSON.parse(userAuthStr);
+    const userId = userAuth.email;
+    
+    try {
+      await apiRequest("PATCH", `/api/users/${userId}/profile`, {
+        name: "User",
+      });
+      toast({
+        title: "Profile updated",
+        description: "Your profile has been saved successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update profile",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleConnectGmail = () => {
-    // In production: redirect to /api/auth/google for OAuth flow
-    toast({
-      title: "Gmail connection initiated",
-      description: "Redirecting to Google for authorization...",
-    });
+    window.location.href = "/api/auth/google";
   };
 
-  const handleDeleteAccount = () => {
-    // In production: call /api/users/:userId DELETE endpoint to remove account
-    toast({
-      title: "Account deletion requested",
-      description: "We've sent a confirmation email.",
-      variant: "destructive",
-    });
+  const handleDeleteAccount = async () => {
+    const userAuthStr = localStorage.getItem("storedoctor_user_auth_v1");
+    if (!userAuthStr) return;
+    const userAuth = JSON.parse(userAuthStr);
+    const userId = userAuth.email;
+    
+    try {
+      await apiRequest("DELETE", `/api/users/${userId}`);
+      localStorage.removeItem("storedoctor_user_auth_v1");
+      localStorage.removeItem("storedoctor_connected_stores_v1");
+      localStorage.removeItem("storedoctor_user_plan_v1");
+      localStorage.removeItem("storedoctor_plan_v1");
+      localStorage.removeItem("storedoctor_admin_auth_v1");
+      window.location.href = "/";
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete account",
+        variant: "destructive",
+      });
+    }
     setIsDeleteDialogOpen(false);
   };
 

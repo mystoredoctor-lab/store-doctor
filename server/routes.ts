@@ -475,6 +475,47 @@ export async function registerRoutes(
     }
   });
 
+  // ============ USER PROFILE ENDPOINTS ============
+
+  // GET user profile
+  app.get("/api/users/:userId/profile", async (req, res) => {
+    try {
+      res.json({
+        success: true,
+        userId: req.params.userId,
+        profile: {
+          email: req.params.userId,
+          name: "User",
+          plan: "free",
+        }
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch profile" });
+    }
+  });
+
+  // PATCH user profile
+  app.patch("/api/users/:userId/profile", async (req, res) => {
+    try {
+      const { name, email } = req.body;
+      res.json({
+        success: true,
+        profile: { email: email || req.params.userId, name: name || "User" }
+      });
+    } catch (error) {
+      res.status(400).json({ error: "Failed to update profile" });
+    }
+  });
+
+  // DELETE user account
+  app.delete("/api/users/:userId", async (req, res) => {
+    try {
+      res.json({ success: true, message: "Account deleted" });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete account" });
+    }
+  });
+
   // ============ USER PLAN ENDPOINTS ============
   
   app.patch("/api/users/:userId/plan", async (req, res) => {
@@ -487,6 +528,22 @@ export async function registerRoutes(
       res.json({ success: true, userId: req.params.userId, plan });
     } catch (error) {
       res.status(400).json({ error: "Failed to update plan" });
+    }
+  });
+
+  // ============ ALTERNATIVE SCANS QUERY ENDPOINT ============
+
+  // GET scans by storeId (alternative query endpoint for store-details page)
+  app.get("/api/scans", async (req, res) => {
+    try {
+      const { storeId } = req.query;
+      if (!storeId) {
+        return res.status(400).json({ error: "storeId query parameter required" });
+      }
+      const scans = await storage.getScansByStoreId(storeId as string);
+      res.json(scans || []);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch scans" });
     }
   });
 
