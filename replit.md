@@ -3,7 +3,12 @@
 ## Project Goal
 Rebuild StoreDoctor Shopify app as a fully functional web application using Vite + React + Express stack.
 
-## Current Status (Nov 30, 2025)
+## Database Configuration
+- **Database:** Supabase PostgreSQL (NOT Replit's built-in database)
+- **Connection:** Use DATABASE_URL from Supabase project settings
+- See .env.example for Supabase connection details
+
+## Current Status (Dec 2, 2025)
 - **Frontend UI:** Complete (landing page, dashboard, admin panel, blog, auth system)
 - **Authentication:** Sign In/Sign Up with Gmail OAuth + password show/hide
 - **Free Plan Enforcement:** Mock data shows 1 store only (Free plan limit)
