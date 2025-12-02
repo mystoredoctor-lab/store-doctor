@@ -16,6 +16,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { Bell, Settings, User, LogOut, Check } from "lucide-react";
 import { mockUser } from "@/lib/data";
 import { Link, useLocation } from "wouter";
+import { useAuth } from "@/hooks/useAuth";
 
 const notifications = [
   { id: 1, message: "Your store scan completed successfully", time: "5 min ago" },
@@ -33,6 +34,7 @@ const handleScrollToTop = () => {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [location] = useLocation();
+  const { logout } = useAuth();
 
   const getBreadcrumb = () => {
     switch (location) {
@@ -144,7 +146,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem 
                     className="text-destructive cursor-pointer"
-                    onClick={() => window.location.href = "/"}
+                    onClick={logout}
                     data-testid="button-header-logout"
                   >
                     <LogOut className="mr-2 h-4 w-4" />

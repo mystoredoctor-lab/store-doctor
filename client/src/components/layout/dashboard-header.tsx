@@ -12,8 +12,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Bell, Settings, User, LogOut } from "lucide-react";
 import { mockUser } from "@/lib/data";
 import { Link } from "wouter";
+import { useAuth } from "@/hooks/useAuth";
 
 export function DashboardHeader() {
+  const { logout } = useAuth();
+
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background/95 backdrop-blur px-6 gap-4">
       <div></div>
@@ -60,7 +63,7 @@ export function DashboardHeader() {
             <DropdownMenuSeparator />
             <DropdownMenuItem 
               className="text-destructive cursor-pointer"
-              onClick={() => window.location.href = "/"}
+              onClick={logout}
             >
               <LogOut className="mr-2 h-4 w-4" />
               Log out
